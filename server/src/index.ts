@@ -1,15 +1,18 @@
 import "reflect-metadata";
+import path from "path";
 import {createConnection} from "typeorm";
-import * as express from "express";
+import express from "express";
 import * as bodyParser from "body-parser";
 import {Request, Response} from "express";
 import {Routes} from "./routes";
 import {User} from "./entity/User";
 
+
 createConnection().then(async connection => {
 
     // create express app
     const app = express();
+    const port = 3000; // default port to listen
     app.use(bodyParser.json());
 
     // register express routes from defined application routes
@@ -26,23 +29,27 @@ createConnection().then(async connection => {
     });
 
     // setup express app here
-    // ...
+
+    app.get( "/", (req, res ) => {
+        res.send("hello world");
+    });
 
     // start express server
-    app.listen(3000);
+    app.listen(port, async () => {
 
     // insert new users for test
     await connection.manager.save(connection.manager.create(User, {
         firstName: "Timber",
         lastName: "Saw",
-        age: 27
+        emailAddress: "timber.saw@gmail.com"
     }));
     await connection.manager.save(connection.manager.create(User, {
         firstName: "Phantom",
         lastName: "Assassin",
-        age: 24
-    }));
-
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
-
+        emailAddress: "phantom.Assassin@gmail.com"
+    })) ;
+    // tslint:disable-next-line:no-console
+    console.log("Express server has started on port 3000. Open http://localhost:3000/ to see results");
+    });
+    // tslint:disable-next-line:no-console
 }).catch(error => console.log(error));

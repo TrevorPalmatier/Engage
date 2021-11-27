@@ -5,7 +5,11 @@
     ],
     "jsRules":{},
     "rules":{
-        "trailing-comma": [false]
+        "trailing-comma": [false],
+        "no-shadowed-variable": [false],
+        "ban-types": [false],
+        "new-parens": [false]
     },
     "rulesDirectory": []
+    
 }
