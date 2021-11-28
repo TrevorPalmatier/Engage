@@ -1,0 +1,41 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = require("typeorm");
+const Prompt_1 = require("./Prompt");
+const User_1 = require("./User");
+let Entry = class Entry {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], Entry.prototype, "id", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => Prompt_1.Prompt, prompt => prompt.entries),
+    __metadata("design:type", Number)
+], Entry.prototype, "prompt", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => User_1.User, user => user.entries),
+    __metadata("design:type", Number)
+], Entry.prototype, "user", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Entry.prototype, "imageLink", void 0);
+__decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", String)
+], Entry.prototype, "text", void 0);
+Entry = __decorate([
+    typeorm_1.Entity()
+], Entry);
+exports.Entry = Entry;
+//# sourceMappingURL=Entry.js.map

@@ -5,16 +5,16 @@
    "username": "postgres",
    "password": "000407949",
    "database": "PhilosophyApp",
-   "synchronize": true,
+   "synchronize": false,
    "logging": false,
-   "entities": [
-      "src/entity/**/*.ts"
+   "entities": [ 
+      "dist/entity/**/*.js"
    ],
    "migrations": [
-      "src/migration/**/*.ts"
+      "dist/migration/**/*.js"
    ],
    "subscribers": [
-      "src/subscriber/**/*.ts"
+      "dist/subscriber/**/*.js"
    ],
    "cli": {
       "entitiesDir": "src/entity",
