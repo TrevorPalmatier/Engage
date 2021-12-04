@@ -16,12 +16,12 @@ export class Prompt {
     @Column()
     backgroundText: string;
 
-    //multiple prompts can be within a block
+    // multiple prompts can be within a block
     @ManyToOne(type => Block, block => block.prompts)
     block: number;
 
     // creates a one-to-many relationship with 'PromptMedia'
-    //multiple media (images, videos) can be within the prompt
+    // multiple media (images, videos) can be within the prompt
     @OneToMany(type =>PromptMedia, promptmedia => promptmedia.prompt)
     media: PromptMedia[];
 
@@ -30,7 +30,7 @@ export class Prompt {
     @OneToMany(type => Entry, entry => entry.prompt)
     entries: Entry[];
 
-    //multiple users can be assigned to multiple prompts
+    // multiple users can be assigned to multiple prompts
     @ManyToMany(type => User, user => user.prompts)
     @JoinTable()
     users: User[];

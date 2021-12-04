@@ -31,11 +31,15 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "emailAddress", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => Entry_1.Entry, entry => entry.user),
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], User.prototype, "password", void 0);
+__decorate([
+    typeorm_1.OneToMany((type) => Entry_1.Entry, (entry) => entry.user),
     __metadata("design:type", Array)
 ], User.prototype, "entries", void 0);
 __decorate([
-    typeorm_1.ManyToMany(type => Prompt_1.Prompt, prompt => prompt.users),
+    typeorm_1.ManyToMany((type) => Prompt_1.Prompt, (prompt) => prompt.users),
     __metadata("design:type", Array)
 ], User.prototype, "prompts", void 0);
 User = __decorate([

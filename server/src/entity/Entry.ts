@@ -8,11 +8,11 @@ export class Entry {
     @PrimaryGeneratedColumn()
     id: number;
 
-    //multiple entries can be submitted to a single prompt
+    // multiple entries can be submitted to a single prompt
     @ManyToOne(type => Prompt, prompt => prompt.entries)
     prompt: number;
 
-    //multiple entries can be submitted by a user
+    // multiple entries can be submitted by a user
     @ManyToOne(type => User, user => user.entries)
     user: number;
 

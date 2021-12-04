@@ -13,7 +13,7 @@ export class Block {
     @Column()
     title: string;
 
-    //a block can contain multiple prompts
+    // a block can contain multiple prompts
     @OneToMany(type => Prompt, prompt => prompt.block)
     prompts: Prompt[];
 }
