@@ -1,15 +1,13 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules":{},
-    "rules":{
-        "trailing-comma": [false],
-        "no-shadowed-variable": [false],
-        "ban-types": [false],
-        "new-parens": [false]
-    },
-    "rulesDirectory": []
-    
+	"defaultSeverity": "error",
+	"extends": ["tslint:recommended"],
+	"jsRules": {},
+	"rules": {
+		"trailing-comma": [false],
+		"no-shadowed-variable": [false],
+		"ban-types": [false],
+		"new-parens": [false],
+		"no-console": [false]
+	},
+	"rulesDirectory": []
 }

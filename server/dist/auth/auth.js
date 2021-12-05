@@ -5,11 +5,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const joi_1 = __importDefault(require("joi"));
 const typeorm_1 = require("typeorm");
 const User_1 = require("../entity/User");
-const repo = typeorm_1.getConnection().getRepository(User_1.User);
+const schema = joi_1.default.object({
+    firstName: joi_1.default.string().alphanum(),
+    lastName: joi_1.default.string().alphanum(),
+    password: joi_1.default.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
+    // repeatPassword: joi.ref('password'),
+    email: joi_1.default.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "edu"] } }),
+});
 const signup = (req, res, next) => {
+    const repo = typeorm_1.getConnection().getRepository(User_1.User);
     // checks if email already exists
+    const inputValid = schema.validate({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: req.body.password,
+        email: req.body.email,
+    });
+    if (inputValid.error) {
+        const invalid = inputValid.error.details[0].type;
+        if (invalid === "string.pattern.base") {
+            return res.status(400).json({
+                message: "Passwords need 8 or more characters and can only contain letters, numbers, and special characters ",
+            });
+        }
+        else if (invalid === "string.empty") {
+            return res.status(400).json({ message: "All fields must be filled" });
+        }
+        else if (invalid === "string.email") {
+            return res.status(400).json({ message: "Please provide a valid email" });
+        }
+        else {
+            return res.status(400).json({ message: inputValid.error.details[0].message });
+        }
+    }
     repo.findOne({
         where: {
             emailAddress: req.body.email,
@@ -17,7 +48,7 @@ const signup = (req, res, next) => {
     })
         .then((dbUser) => {
         if (dbUser) {
-            return res.status(409).json({ message: "email already exists" });
+            return res.status(409).json({ message: "Email already exists" });
         }
         else if (req.body.email && req.body.password) {
             // password hash
@@ -58,7 +89,21 @@ const signup = (req, res, next) => {
 };
 exports.signup = signup;
 const login = (req, res, next) => {
+    const repo = typeorm_1.getConnection().getRepository(User_1.User);
     // checks if email exists
+    const inputValid = schema.validate({
+        password: req.body.password,
+        email: req.body.email,
+    });
+    if (inputValid.error) {
+        const invalid = inputValid.error.details[0].type;
+        if (invalid === "string.empty") {
+            return res.status(400).json({ message: "All fields must be filled" });
+        }
+        else {
+            return res.status(400).json({ message: "Email or Password is incorrect" });
+        }
+    }
     repo.findOne({
         where: {
             emailAddress: req.body.email,
@@ -78,7 +123,13 @@ const login = (req, res, next) => {
                 else if (compareRes) {
                     // password match
                     const token = jsonwebtoken_1.default.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
-                    res.status(200).json({ message: "user logged in", token });
+                    const user = {
+                        firstName: dbUser.firstName,
+                        lastName: dbUser.lastName,
+                        id: dbUser.id,
+                        email: dbUser.emailAddress,
+                    };
+                    res.status(200).json({ user, token });
                 }
                 else {
                     // password doesnt match
@@ -114,28 +165,4 @@ const isAuth = (req, res, next) => {
     }
 };
 exports.isAuth = isAuth;
-// export default (passport: PassportStatic) => {
-// 	passport.serializeUser((user, done) => {
-// 		done(null, user);
-// 	});
-// 	passport.deserializeUser((user, done) => {
-// 		done(null, user);
-// 	});
-// 	passport.use(
-// 		new GoogleStrategy(
-// 			{
-// 				clientID: "293066331831-69iro16m32tme7jcfqchiancv9habper.apps.googleusercontent.com",
-// 				clientSecret: "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",
-// 				callbackURL: "https://localhost:3000/auth/google/callback",
-// 			},
-// 			(token, refreshToken, profile, done) => {
-// 				return done(null, {
-// 					profile,
-// 					token,
-// 					refreshToken,
-// 				});
-// 			}
-// 		)
-// 	);
-// };
 //# sourceMappingURL=auth.js.map

@@ -1,14 +1,43 @@
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import joi from "joi";
 import { getConnection } from "typeorm";
-
-import { UserController } from "../controller/UserController";
 import { User } from "../entity/User";
-const repo = getConnection().getRepository(User);
+
+const schema = joi.object({
+	firstName: joi.string().alphanum(),
+	lastName: joi.string().alphanum(),
+	password: joi.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
+	// repeatPassword: joi.ref('password'),
+	email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "edu"] } }),
+});
 
 const signup = (req: Request, res: Response, next: NextFunction) => {
+	const repo = getConnection().getRepository(User);
 	// checks if email already exists
+	const inputValid = schema.validate({
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		password: req.body.password,
+		email: req.body.email,
+	});
+
+	if (inputValid.error) {
+		const invalid = inputValid.error.details[0].type;
+		if (invalid === "string.pattern.base") {
+			return res.status(400).json({
+				message:
+					"Passwords need 8 or more characters and can only contain letters, numbers, and special characters ",
+			});
+		} else if (invalid === "string.empty") {
+			return res.status(400).json({ message: "All fields must be filled" });
+		} else if (invalid === "string.email") {
+			return res.status(400).json({ message: "Please provide a valid email" });
+		} else {
+			return res.status(400).json({ message: inputValid.error.details[0].message });
+		}
+	}
 
 	repo.findOne({
 		where: {
@@ -17,7 +46,7 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 	})
 		.then((dbUser: User) => {
 			if (dbUser) {
-				return res.status(409).json({ message: "email already exists" });
+				return res.status(409).json({ message: "Email already exists" });
 			} else if (req.body.email && req.body.password) {
 				// password hash
 				bcrypt.hash(req.body.password, 12, (err: Error, passwordHash: any) => {
@@ -54,7 +83,22 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const login = (req: Request, res: Response, next: NextFunction) => {
+	const repo = getConnection().getRepository(User);
 	// checks if email exists
+	const inputValid = schema.validate({
+		password: req.body.password,
+		email: req.body.email,
+	});
+
+	if (inputValid.error) {
+		const invalid = inputValid.error.details[0].type;
+		if (invalid === "string.empty") {
+			return res.status(400).json({ message: "All fields must be filled" });
+		} else {
+			return res.status(400).json({ message: "Email or Password is incorrect" });
+		}
+	}
+
 	repo.findOne({
 		where: {
 			emailAddress: req.body.email,
@@ -72,7 +116,13 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 					} else if (compareRes) {
 						// password match
 						const token = jwt.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
-						res.status(200).json({ message: "user logged in", token });
+						const user = {
+							firstName: dbUser.firstName,
+							lastName: dbUser.lastName,
+							id: dbUser.id,
+							email: dbUser.emailAddress,
+						};
+						res.status(200).json({ user, token });
 					} else {
 						// password doesnt match
 						res.status(401).json({ message: "invalid credentials" });
@@ -106,28 +156,3 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export { signup, login, isAuth };
-
-// export default (passport: PassportStatic) => {
-// 	passport.serializeUser((user, done) => {
-// 		done(null, user);
-// 	});
-// 	passport.deserializeUser((user, done) => {
-// 		done(null, user);
-// 	});
-// 	passport.use(
-// 		new GoogleStrategy(
-// 			{
-// 				clientID: "293066331831-69iro16m32tme7jcfqchiancv9habper.apps.googleusercontent.com",
-// 				clientSecret: "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",
-// 				callbackURL: "https://localhost:3000/auth/google/callback",
-// 			},
-// 			(token, refreshToken, profile, done) => {
-// 				return done(null, {
-// 					profile,
-// 					token,
-// 					refreshToken,
-// 				});
-// 			}
-// 		)
-// 	);
-// };

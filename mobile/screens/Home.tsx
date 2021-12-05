@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
-import { useAppDispatch } from "../app/hooks";
-import { setName, setToken } from "../features/user/userSlice";
+import { useAppDispatch } from "../hooks/store";
+import { logout } from "../features/auth/authSlice";
 
 export default function home() {
 	const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ export default function home() {
 			<Button
 				title='Log Out'
 				onPress={() => {
-					dispatch(setToken({ token: null }));
+					dispatch(logout());
 				}}
 			/>
 		</View>

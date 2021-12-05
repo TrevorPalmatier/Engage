@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Pressable } from "react-native";
-import * as Linking from "expo-linking";
-import axios from "axios";
-import { useAppDispatch } from "../app/hooks";
-import { setName, setToken } from "../features/user/userSlice";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 
 export default function Landing({ navigation }) {
-	const dispatch = useAppDispatch();
-
-	const handleLogIn = () => {
-		navigation.navigate("Home");
-	};
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.titleContainer}>
 				<Text style={styles.title}>Philosophy App</Text>
 			</View>
-			<Pressable
-				style={styles.button}
-				onPress={() => {
-					handleLogIn();
-				}}>
-				<Text style={{ color: "white" }}>Log In</Text>
-			</Pressable>
+			<View style={styles.buttonContainer}>
+				<Pressable
+					style={styles.button}
+					onPress={() => {
+						navigation.navigate("Signup");
+					}}>
+					<Text style={styles.buttonText}>Sign Up</Text>
+				</Pressable>
+				<Pressable
+					style={styles.button}
+					onPress={() => {
+						navigation.navigate("Login");
+					}}>
+					<Text style={styles.buttonText}>Log In</Text>
+				</Pressable>
+			</View>
 		</View>
 	);
 }
@@ -51,12 +50,24 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 35,
 	},
+	buttonContainer: {
+		flexDirection: "column",
+		justifyContent: "space-around",
+		alignItems: "center",
+		width: "100%",
+	},
 	button: {
+		margin: 15,
+		padding: 5,
 		height: 50,
 		width: "60%",
 		backgroundColor: "#33BBFF",
 		alignItems: "center",
 		justifyContent: "center",
 		borderRadius: 5,
+	},
+	buttonText: {
+		color: "white",
+		fontSize: 16,
 	},
 });
