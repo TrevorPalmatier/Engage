@@ -21,6 +21,10 @@ function Register({ navigation }) {
 		} as SignupRequest;
 		signup(payload)
 			.unwrap()
+			.then(() => {
+				Alert.alert("Success", "User has been registered. Please Log-in.");
+				navigation.replace("Login");
+			})
 			.catch((err) => {
 				// console.log(err);
 				setError(err.data.message);
