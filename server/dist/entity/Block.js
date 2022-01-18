@@ -10,6 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
+const Study_1 = require("./Study");
+const Entry_1 = require("./Entry");
+const Slide_1 = require("./Slide");
 const Prompt_1 = require("./Prompt");
 let Block = class Block {
 };
@@ -18,17 +21,30 @@ __decorate([
     __metadata("design:type", Number)
 ], Block.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column({ nullable: true }),
-    __metadata("design:type", String)
-], Block.prototype, "imageLink", void 0);
-__decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], Block.prototype, "title", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => Prompt_1.Prompt, prompt => prompt.block),
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Block.prototype, "backgroundText", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks),
+    __metadata("design:type", Study_1.Study)
+], Block.prototype, "study", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => Slide_1.Slide, slide => slide.block),
     __metadata("design:type", Array)
-], Block.prototype, "prompts", void 0);
+], Block.prototype, "slides", void 0);
+__decorate([
+    typeorm_1.OneToOne(() => Prompt_1.Prompt),
+    typeorm_1.JoinColumn(),
+    __metadata("design:type", Prompt_1.Prompt)
+], Block.prototype, "prompt", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => Entry_1.Entry, entry => entry.block),
+    __metadata("design:type", Array)
+], Block.prototype, "entries", void 0);
 Block = __decorate([
     typeorm_1.Entity()
 ], Block);

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const Prompt_1 = require("./Prompt");
+const Block_1 = require("./Block");
 const User_1 = require("./User");
 let Entry = class Entry {
 };
@@ -19,9 +19,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Entry.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => Prompt_1.Prompt, prompt => prompt.entries),
+    typeorm_1.ManyToOne(type => Block_1.Block, block => block.entries),
     __metadata("design:type", Number)
-], Entry.prototype, "prompt", void 0);
+], Entry.prototype, "block", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => User_1.User, user => user.entries),
     __metadata("design:type", Number)
