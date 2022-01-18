@@ -1,5 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, ManyToOne} from "typeorm";
-import { Prompt } from "./Prompt";
+import { Block } from "./Block";
 import { User } from "./User";
 
 @Entity()
@@ -9,8 +9,8 @@ export class Entry {
     id: number;
 
     // multiple entries can be submitted to a single prompt
-    @ManyToOne(type => Prompt, prompt => prompt.entries)
-    prompt: number;
+    @ManyToOne(type => Block, block => block.entries)
+    block: number;
 
     // multiple entries can be submitted by a user
     @ManyToOne(type => User, user => user.entries)

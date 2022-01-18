@@ -14,11 +14,13 @@ class CreatePromptTable1638044479449 {
     }
     up(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "firstName" character varying NOT NULL, "lastName" character varying NOT NULL, "emailAddress" character varying NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
             yield queryRunner.query(`CREATE TABLE "prompt" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "backgroundText" character varying NOT NULL, "blockId" integer NOT NULL, CONSTRAINT "PK_d8e3aa07a95560a445ad50fb931" PRIMARY KEY ("id"))`);
         });
     }
     down(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield queryRunner.query(`DROP TABLE "user"`);
             yield queryRunner.query(`DROP TABLE "prompt"`);
         });
     }
