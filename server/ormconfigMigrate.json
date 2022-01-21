@@ -5,9 +5,8 @@
 	"logging": false,
     "migrationsRun": true,
     "extra": {
-        "ssl": {
-            "rejectedUnauthorized": false
-        }
+        "ssl": true,
+        "rejectedUnauthorized": false
     },
 	"entities": ["dist/entity/**/*.js"],
 	"migrations": ["dist/migration/**/*.js"],
