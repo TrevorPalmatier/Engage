@@ -6,7 +6,7 @@
     "migrationsRun": true,
     "extra": {
         "ssl": true,
-        "rejectedUnauthorized": false
+        "rejectUnauthorized": false
     },
 	"entities": ["dist/entity/**/*.js"],
 	"migrations": ["dist/migration/**/*.js"],
