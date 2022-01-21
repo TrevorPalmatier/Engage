@@ -76,7 +76,7 @@ const getOptions = async () =>  {
 		migrationsRun: true,
 		extra: {
 			ssl: {
-				rejectedUnauthorized: false,
+				rejectUnauthorized: false,
 			},
 		  },
         entities: ['dist/entity/**/*.js'],
