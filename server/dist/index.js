@@ -13,11 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const body_parser_1 = __importDefault(require("body-parser"));
-const typeorm_1 = require("typeorm");
 const auth_1 = require("./auth/auth");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
+const typeorm_1 = require("typeorm");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 typeorm_1.createConnection()
     .then((connection) => __awaiter(this, void 0, void 0, function* () {
     // create express app
@@ -68,4 +70,42 @@ typeorm_1.createConnection()
     // tslint:disable-next-line:no-console
 }))
     .catch();
+const getOptions = () => __awaiter(this, void 0, void 0, function* () {
+    let connectionOptions;
+    connectionOptions = {
+        type: 'postgres',
+        synchronize: false,
+        logging: false,
+        extra: {
+            ssl: {
+                rejectedUnautorized: false,
+            },
+        },
+        entities: ['dist/entity/**/*.js'],
+        migrations: ["dist/migration/**/*.js"],
+        subscribers: ["dist/subscriber/**/*.js"],
+        cli: {
+            entitiesDir: "src/entity",
+            migrationsDir: "src/migration",
+            subscribersDir: "src/subscriber"
+        }
+    };
+    if (process.env.DATABASE_URL) {
+        Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
+    }
+    else {
+        // gets your default configuration
+        // you could get a specific config by name getConnectionOptions('production')
+        // or getConnectionOptions(process.env.NODE_ENV)
+        connectionOptions = yield typeorm_1.getConnectionOptions();
+    }
+    return connectionOptions;
+});
+const connect2Database = () => __awaiter(this, void 0, void 0, function* () {
+    const typeormconfig = yield getOptions();
+    yield typeorm_1.createConnection(typeormconfig);
+});
+connect2Database().then(() => __awaiter(this, void 0, void 0, function* () {
+    console.log('Connected to database');
+}));
 //# sourceMappingURL=index.js.map
