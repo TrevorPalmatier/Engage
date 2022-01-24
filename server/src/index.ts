@@ -43,14 +43,14 @@ createConnection()
 		// start express server
 		app.listen(process.env.PORT|| 80, async () => {
 			// insert new users for test
-			await connection.manager.save(
-				connection.manager.create(User, {
-					firstName: "Timber",
-					lastName: "Saw",
-					emailAddress: "timber.saw@gmail.com",
-					password: "orange",
-				})
-			);
+			// await connection.manager.save(
+			// 	connection.manager.create(User, {
+			// 		firstName: "Timber",
+			// 		lastName: "Saw",
+			// 		emailAddress: "timber.saw@gmail.com",
+			// 		password: "orange",
+			// 	})
+			// );
 			// await connection.manager.save(
 			// 	connection.manager.create(User, {
 			// 		firstName: "Phantom",

@@ -19,8 +19,8 @@ const signup = (req, res, next) => {
     const repo = typeorm_1.getConnection().getRepository(User_1.User);
     // checks if email already exists
     const inputValid = schema.validate({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        // firstName: req.body.firstName,
+        // lastName: req.body.lastName,
         password: req.body.password,
         email: req.body.email,
     });
@@ -60,8 +60,8 @@ const signup = (req, res, next) => {
                     return repo
                         .save({
                         emailAddress: req.body.email,
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
+                        // firstName: req.body.firstName,
+                        // lastName: req.body.lastName,
                         password: passwordHash,
                     })
                         .then(() => {
@@ -124,8 +124,8 @@ const login = (req, res, next) => {
                     // password match
                     const token = jsonwebtoken_1.default.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
                     const user = {
-                        firstName: dbUser.firstName,
-                        lastName: dbUser.lastName,
+                        // firstName: dbUser.firstName,
+                        // lastName: dbUser.lastName,
                         id: dbUser.id,
                         email: dbUser.emailAddress,
                     };

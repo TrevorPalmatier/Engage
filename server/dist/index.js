@@ -14,7 +14,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = require("./auth/auth");
-const User_1 = require("./entity/User");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
@@ -49,12 +48,14 @@ typeorm_1.createConnection()
     // start express server
     app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
         // insert new users for test
-        yield connection.manager.save(connection.manager.create(User_1.User, {
-            firstName: "Timber",
-            lastName: "Saw",
-            emailAddress: "timber.saw@gmail.com",
-            password: "orange",
-        }));
+        // await connection.manager.save(
+        // 	connection.manager.create(User, {
+        // 		firstName: "Timber",
+        // 		lastName: "Saw",
+        // 		emailAddress: "timber.saw@gmail.com",
+        // 		password: "orange",
+        // 	})
+        // );
         // await connection.manager.save(
         // 	connection.manager.create(User, {
         // 		firstName: "Phantom",

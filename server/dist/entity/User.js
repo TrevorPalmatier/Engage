@@ -21,14 +21,6 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], User.prototype, "firstName", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], User.prototype, "lastName", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
 ], User.prototype, "emailAddress", void 0);
 __decorate([
     typeorm_1.Column(),

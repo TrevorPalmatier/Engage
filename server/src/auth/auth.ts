@@ -17,8 +17,8 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 	const repo = getConnection().getRepository(User);
 	// checks if email already exists
 	const inputValid = schema.validate({
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
+		// firstName: req.body.firstName,
+		// lastName: req.body.lastName,
 		password: req.body.password,
 		email: req.body.email,
 	});
@@ -56,8 +56,8 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 						return repo
 							.save({
 								emailAddress: req.body.email,
-								firstName: req.body.firstName,
-								lastName: req.body.lastName,
+								// firstName: req.body.firstName,
+								// lastName: req.body.lastName,
 								password: passwordHash,
 							})
 							.then(() => {
@@ -117,8 +117,8 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 						// password match
 						const token = jwt.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
 						const user = {
-							firstName: dbUser.firstName,
-							lastName: dbUser.lastName,
+							// firstName: dbUser.firstName,
+							// lastName: dbUser.lastName,
 							id: dbUser.id,
 							email: dbUser.emailAddress,
 						};
