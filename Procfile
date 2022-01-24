@@ -1,1 +1,1 @@
-web: cd server &&  npm cache clean --force && npm i && npm run start
+web: cd server  && npm i && node .
