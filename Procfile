@@ -1,1 +1,1 @@
-web: cd server  && npm i && node .
+web: cd server && npm i && npm install --save @types/bcryptjs && node .
