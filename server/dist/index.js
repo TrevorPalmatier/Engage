@@ -24,7 +24,7 @@ typeorm_1.createConnection()
     .then((connection) => __awaiter(this, void 0, void 0, function* () {
     // create express app
     const app = express_1.default();
-    const port = 3000; // default port to listen
+    // const port = 3000; // default port to listen
     app.use(cors_1.default());
     app.use(body_parser_1.default.json());
     // register express routes from defined application routes
@@ -46,7 +46,7 @@ typeorm_1.createConnection()
     app.post("/signup", auth_1.signup);
     app.post("/private", auth_1.isAuth);
     // start express server
-    app.listen(port, () => __awaiter(this, void 0, void 0, function* () {
+    app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
         // insert new users for test
         // await connection.manager.save(
         // 	connection.manager.create(User, {
@@ -70,42 +70,42 @@ typeorm_1.createConnection()
     // tslint:disable-next-line:no-console
 }))
     .catch();
-const getOptions = () => __awaiter(this, void 0, void 0, function* () {
-    let connectionOptions;
-    connectionOptions = {
-        type: 'postgres',
-        synchronize: false,
-        logging: false,
-        extra: {
-            ssl: {
-                rejectedUnautorized: false,
-            },
-        },
-        entities: ['dist/entity/**/*.js'],
-        migrations: ["dist/migration/**/*.js"],
-        subscribers: ["dist/subscriber/**/*.js"],
-        cli: {
-            entitiesDir: "src/entity",
-            migrationsDir: "src/migration",
-            subscribersDir: "src/subscriber"
-        }
-    };
-    if (process.env.DATABASE_URL) {
-        Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
-    }
-    else {
-        // gets your default configuration
-        // you could get a specific config by name getConnectionOptions('production')
-        // or getConnectionOptions(process.env.NODE_ENV)
-        connectionOptions = yield typeorm_1.getConnectionOptions();
-    }
-    return connectionOptions;
-});
-const connect2Database = () => __awaiter(this, void 0, void 0, function* () {
-    const typeormconfig = yield getOptions();
-    yield typeorm_1.createConnection(typeormconfig);
-});
-connect2Database().then(() => __awaiter(this, void 0, void 0, function* () {
-    console.log('Connected to database');
-}));
+// const getOptions = async () =>  {
+//     let connectionOptions: ConnectionOptions;
+//     connectionOptions = {
+//         type: 'postgres',
+//         synchronize: false,
+//         logging: false,
+// 		migrationsRun: false,
+// 		extra: {
+// 			ssl: {
+// 				rejectUnauthorized: false,
+// 			},
+// 		  },
+//         entities: ['dist/entity/**/*.js'],
+// 	    migrations: ["dist/migration/**/*.js"],
+// 	    subscribers: ["dist/subscriber/**/*.js"],
+// 	    cli: {
+// 	        entitiesDir: "src/entity",
+// 		    migrationsDir: "src/migration",
+// 		    subscribersDir: "src/subscriber"
+// 	    }
+//     };
+//     if (process.env.DATABASE_URL) {
+//         Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
+//       } else {
+//         // gets your default configuration
+//         // you could get a specific config by name getConnectionOptions('production')
+//         // or getConnectionOptions(process.env.NODE_ENV)
+//         connectionOptions = await getConnectionOptions();
+//       }
+//       return connectionOptions;
+// };
+// const connect2Database = async (): Promise<void> => {
+//     const typeormconfig = await getOptions();
+//     await createConnection(typeormconfig);
+// };
+// connect2Database().then(async () => {
+//     console.log('Connected to database');
+// });
 //# sourceMappingURL=index.js.map
