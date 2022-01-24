@@ -70,43 +70,4 @@ typeorm_1.createConnection()
     // tslint:disable-next-line:no-console
 }))
     .catch();
-const getOptions = () => __awaiter(this, void 0, void 0, function* () {
-    let connectionOptions;
-    connectionOptions = {
-        type: 'postgres',
-        synchronize: false,
-        logging: false,
-        migrationsRun: false,
-        extra: {
-            ssl: {
-                rejectUnauthorized: false,
-            },
-        },
-        entities: ['dist/entity/**/*.js'],
-        migrations: ["dist/migration/**/*.js"],
-        subscribers: ["dist/subscriber/**/*.js"],
-        cli: {
-            entitiesDir: "src/entity",
-            migrationsDir: "src/migration",
-            subscribersDir: "src/subscriber"
-        }
-    };
-    if (process.env.DATABASE_URL) {
-        Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
-    }
-    else {
-        // gets your default configuration
-        // you could get a specific config by name getConnectionOptions('production')
-        // or getConnectionOptions(process.env.NODE_ENV)
-        connectionOptions = yield typeorm_1.getConnectionOptions();
-    }
-    return connectionOptions;
-});
-const connect2Database = () => __awaiter(this, void 0, void 0, function* () {
-    const typeormconfig = yield getOptions();
-    yield typeorm_1.createConnection(typeormconfig);
-});
-connect2Database().then(() => __awaiter(this, void 0, void 0, function* () {
-    console.log('Connected to database');
-}));
 //# sourceMappingURL=index.js.map
