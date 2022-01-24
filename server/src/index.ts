@@ -43,14 +43,14 @@ createConnection()
 		// start express server
 		app.listen(process.env.PORT|| 80, async () => {
 			// insert new users for test
-			// await connection.manager.save(
-			// 	connection.manager.create(User, {
-			// 		firstName: "Timber",
-			// 		lastName: "Saw",
-			// 		emailAddress: "timber.saw@gmail.com",
-			// 		password: "orange",
-			// 	})
-			// );
+			await connection.manager.save(
+				connection.manager.create(User, {
+					firstName: "Timber",
+					lastName: "Saw",
+					emailAddress: "timber.saw@gmail.com",
+					password: "orange",
+				})
+			);
 			// await connection.manager.save(
 			// 	connection.manager.create(User, {
 			// 		firstName: "Phantom",
@@ -67,44 +67,44 @@ createConnection()
 	.catch();
 
 
-// const getOptions = async () =>  {
-//     let connectionOptions: ConnectionOptions;
-//     connectionOptions = {
-//         type: 'postgres',
-//         synchronize: false,
-//         logging: false,
-// 		migrationsRun: false,
-// 		extra: {
-// 			ssl: {
-// 				rejectUnauthorized: false,
-// 			},
-// 		  },
-//         entities: ['dist/entity/**/*.js'],
-// 	    migrations: ["dist/migration/**/*.js"],
-// 	    subscribers: ["dist/subscriber/**/*.js"],
-// 	    cli: {
-// 	        entitiesDir: "src/entity",
-// 		    migrationsDir: "src/migration",
-// 		    subscribersDir: "src/subscriber"
-// 	    }
-//     };
-//     if (process.env.DATABASE_URL) {
-//         Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
-//       } else {
-//         // gets your default configuration
-//         // you could get a specific config by name getConnectionOptions('production')
-//         // or getConnectionOptions(process.env.NODE_ENV)
-//         connectionOptions = await getConnectionOptions();
-//       }
+const getOptions = async () =>  {
+    let connectionOptions: ConnectionOptions;
+    connectionOptions = {
+        type: 'postgres',
+        synchronize: false,
+        logging: false,
+		migrationsRun: false,
+		extra: {
+			ssl: {
+				rejectUnauthorized: false,
+			},
+		  },
+        entities: ['dist/entity/**/*.js'],
+	    migrations: ["dist/migration/**/*.js"],
+	    subscribers: ["dist/subscriber/**/*.js"],
+	    cli: {
+	        entitiesDir: "src/entity",
+		    migrationsDir: "src/migration",
+		    subscribersDir: "src/subscriber"
+	    }
+    };
+    if (process.env.DATABASE_URL) {
+        Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
+      } else {
+        // gets your default configuration
+        // you could get a specific config by name getConnectionOptions('production')
+        // or getConnectionOptions(process.env.NODE_ENV)
+        connectionOptions = await getConnectionOptions();
+      }
 
-//       return connectionOptions;
-// };
+      return connectionOptions;
+};
 
-// const connect2Database = async (): Promise<void> => {
-//     const typeormconfig = await getOptions();
-//     await createConnection(typeormconfig);
-// };
+const connect2Database = async (): Promise<void> => {
+    const typeormconfig = await getOptions();
+    await createConnection(typeormconfig);
+};
 
-// connect2Database().then(async () => {
-//     console.log('Connected to database');
-// });
+connect2Database().then(async () => {
+    console.log('Connected to database');
+});

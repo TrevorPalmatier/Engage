@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = require("./auth/auth");
+const User_1 = require("./entity/User");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
@@ -48,14 +49,12 @@ typeorm_1.createConnection()
     // start express server
     app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
         // insert new users for test
-        // await connection.manager.save(
-        // 	connection.manager.create(User, {
-        // 		firstName: "Timber",
-        // 		lastName: "Saw",
-        // 		emailAddress: "timber.saw@gmail.com",
-        // 		password: "orange",
-        // 	})
-        // );
+        yield connection.manager.save(connection.manager.create(User_1.User, {
+            firstName: "Timber",
+            lastName: "Saw",
+            emailAddress: "timber.saw@gmail.com",
+            password: "orange",
+        }));
         // await connection.manager.save(
         // 	connection.manager.create(User, {
         // 		firstName: "Phantom",
@@ -70,42 +69,43 @@ typeorm_1.createConnection()
     // tslint:disable-next-line:no-console
 }))
     .catch();
-// const getOptions = async () =>  {
-//     let connectionOptions: ConnectionOptions;
-//     connectionOptions = {
-//         type: 'postgres',
-//         synchronize: false,
-//         logging: false,
-// 		migrationsRun: false,
-// 		extra: {
-// 			ssl: {
-// 				rejectUnauthorized: false,
-// 			},
-// 		  },
-//         entities: ['dist/entity/**/*.js'],
-// 	    migrations: ["dist/migration/**/*.js"],
-// 	    subscribers: ["dist/subscriber/**/*.js"],
-// 	    cli: {
-// 	        entitiesDir: "src/entity",
-// 		    migrationsDir: "src/migration",
-// 		    subscribersDir: "src/subscriber"
-// 	    }
-//     };
-//     if (process.env.DATABASE_URL) {
-//         Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
-//       } else {
-//         // gets your default configuration
-//         // you could get a specific config by name getConnectionOptions('production')
-//         // or getConnectionOptions(process.env.NODE_ENV)
-//         connectionOptions = await getConnectionOptions();
-//       }
-//       return connectionOptions;
-// };
-// const connect2Database = async (): Promise<void> => {
-//     const typeormconfig = await getOptions();
-//     await createConnection(typeormconfig);
-// };
-// connect2Database().then(async () => {
-//     console.log('Connected to database');
-// });
+const getOptions = () => __awaiter(this, void 0, void 0, function* () {
+    let connectionOptions;
+    connectionOptions = {
+        type: 'postgres',
+        synchronize: false,
+        logging: false,
+        migrationsRun: false,
+        extra: {
+            ssl: {
+                rejectUnauthorized: false,
+            },
+        },
+        entities: ['dist/entity/**/*.js'],
+        migrations: ["dist/migration/**/*.js"],
+        subscribers: ["dist/subscriber/**/*.js"],
+        cli: {
+            entitiesDir: "src/entity",
+            migrationsDir: "src/migration",
+            subscribersDir: "src/subscriber"
+        }
+    };
+    if (process.env.DATABASE_URL) {
+        Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
+    }
+    else {
+        // gets your default configuration
+        // you could get a specific config by name getConnectionOptions('production')
+        // or getConnectionOptions(process.env.NODE_ENV)
+        connectionOptions = yield typeorm_1.getConnectionOptions();
+    }
+    return connectionOptions;
+});
+const connect2Database = () => __awaiter(this, void 0, void 0, function* () {
+    const typeormconfig = yield getOptions();
+    yield typeorm_1.createConnection(typeormconfig);
+});
+connect2Database().then(() => __awaiter(this, void 0, void 0, function* () {
+    console.log('Connected to database');
+}));
 //# sourceMappingURL=index.js.map
