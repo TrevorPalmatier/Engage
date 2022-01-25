@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, Pressable, Dimensions, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { uploadImage } from "../app/services/images";
 
 export default function Caption({ route, navigation }) {
 	const [description, setDescription] = useState("");
 
 	const aspectRatio = route.params.height / route.params.width;
 	const maxWidth = Dimensions.get("window").width * 0.9;
+	const imgUri = route.params.uri;
+	const imgName = route.params.name;
+	const imgType = route.params.type;
 	const imgWidth = Math.min(route.params.width, maxWidth);
 	const imgHeight = Math.min(route.params.height, maxWidth * aspectRatio);
+
+	const uploadPhoto = async () => {
+		Alert.alert("Success", "Your entry was submited.");					
+		const source = {uri: imgUri, type: imgType, name: imgName };
+		uploadImage(source);
+		navigation.navigate("Select");
+	}
+
 
 	return (
 		<KeyboardAwareScrollView
@@ -38,10 +50,7 @@ export default function Caption({ route, navigation }) {
 					</Pressable>
 					<Pressable
 						style={styles.button}
-						onPress={() => {
-							Alert.alert("Success", "Your entry was submited.");
-							navigation.navigate("Select");
-						}}>
+						onPress={uploadPhoto}>
 						<Text style={[styles.text, { color: "white" }]}>Submit</Text>
 					</Pressable>
 				</View>
