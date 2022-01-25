@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, Pressable, Dimensions, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { uploadImage } from "../app/services/images";
+// import { uploadImage } from "../app/services/images";
 
 export default function Caption({ route, navigation }) {
 	const [description, setDescription] = useState("");
@@ -13,6 +13,26 @@ export default function Caption({ route, navigation }) {
 	const imgType = route.params.type;
 	const imgWidth = Math.min(route.params.width, maxWidth);
 	const imgHeight = Math.min(route.params.height, maxWidth * aspectRatio);
+
+
+	const [error, setError] = useState("");
+	const [photo, setPhoto] = useState(null);
+
+ 	const uploadImage = (photo) => {
+			const data = new FormData();
+			data.append("file", photo);
+			data.append("upload_preset", "engageapp");
+			data.append('cloud_name', 'engageapp');
+			fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
+				method: "POST",
+				body: data
+			}).then(res => res.json()).
+			then(data => {
+				setPhoto(data.secure_url)
+		}).catch(err => {
+			Alert.alert("An Error Occured While Uploading");
+		})
+	};
 
 	const uploadPhoto = async () => {
 		Alert.alert("Success", "Your entry was submited.");					
