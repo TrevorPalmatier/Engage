@@ -21,7 +21,7 @@ export default function Capture() {
 	);
 }
 
-function CaptureScreen({ navigation }) {
+export function CaptureScreen({ navigation }) {
 	const [image, setImage] = useState(null);
 
 	useEffect(() => {

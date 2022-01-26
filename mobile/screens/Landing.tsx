@@ -5,7 +5,7 @@ export default function Landing({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.titleContainer}>
-				<Text style={styles.title}>Philosophy App</Text>
+				<Text style={styles.title}>Engage</Text>
 			</View>
 			<View style={styles.buttonContainer}>
 				<Pressable

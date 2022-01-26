@@ -6,6 +6,7 @@ import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
+import { User } from "./entity/User";
 
 createConnection()
 	.then(async (connection) => {

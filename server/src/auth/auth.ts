@@ -5,26 +5,28 @@ import joi from "joi";
 import { getConnection } from "typeorm";
 import { User } from "../entity/User";
 
-const schema = joi.object({
-	firstName: joi.string().alphanum(),
-	lastName: joi.string().alphanum(),
-	password: joi.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
-	// repeatPassword: joi.ref('password'),
-	email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "edu"] } }),
-});
+const schema = joi
+	.object({
+		password: joi.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
+		// repeatPassword: joi.ref('password'),
+		email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "edu"] } }),
+		repassword: joi.ref("password"),
+	})
+	.with("password", "repassword");
 
 const signup = (req: Request, res: Response, next: NextFunction) => {
 	const repo = getConnection().getRepository(User);
+	console.log(req.body);
 	// checks if email already exists
 	const inputValid = schema.validate({
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
 		password: req.body.password,
 		email: req.body.email,
+		repassword: req.body.repassword,
 	});
 
 	if (inputValid.error) {
 		const invalid = inputValid.error.details[0].type;
+
 		if (invalid === "string.pattern.base") {
 			return res.status(400).json({
 				message:
@@ -34,8 +36,10 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 			return res.status(400).json({ message: "All fields must be filled" });
 		} else if (invalid === "string.email") {
 			return res.status(400).json({ message: "Please provide a valid email" });
+		} else if (invalid === "any.only") {
+			return res.status(400).json({ message: "Passwords do not match" });
 		} else {
-			return res.status(400).json({ message: inputValid.error.details[0].message });
+			return res.status(400).json({ message: "An unknown error occured" });
 		}
 	}
 
@@ -51,7 +55,7 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 				// password hash
 				bcrypt.hash(req.body.password, 12, (err: Error, passwordHash: any) => {
 					if (err) {
-						return res.status(500).json({ message: "couldnt hash the password" });
+						return res.status(500).json({ message: "Couldn't hash the password" });
 					} else if (passwordHash) {
 						return repo
 							.save({
@@ -61,12 +65,12 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 								password: passwordHash,
 							})
 							.then(() => {
-								res.status(200).json({ message: "user created" });
+								res.status(200).json({ message: "User created" });
 							})
 							.catch((err: Error) => {
 								// tslint:disable-next-line:no-console
 								console.log(err);
-								res.status(502).json({ message: "error while creating the user" });
+								res.status(502).json({ message: "Error while creating the user" });
 							});
 					}
 				});
@@ -117,8 +121,6 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 						// password match
 						const token = jwt.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
 						const user = {
-							firstName: dbUser.firstName,
-							lastName: dbUser.lastName,
 							id: dbUser.id,
 							email: dbUser.emailAddress,
 						};

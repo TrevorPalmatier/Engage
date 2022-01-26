@@ -13,12 +13,12 @@ import Landing from "./screens/Landing";
 import Waiting from "./screens/Waiting";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+import CameraScreen from "./screens/CameraScreen";
+import Caption from "./screens/Caption";
 import Prompt from "./screens/Prompt";
-import Backstory from "./screens/Backstory";
-import Capture from "./screens/Capture";
 
 const Stack = createNativeStackNavigator();
-const PromptTabs = createBottomTabNavigator();
+const PromptStack = createNativeStackNavigator();
 
 export default function App() {
 	return (
@@ -60,13 +60,13 @@ function PromptTabScreens({ route, navigation }) {
 		});
 	}, [navigation]);
 	return (
-		<PromptTabs.Navigator
+		<PromptStack.Navigator
 			screenOptions={{
 				headerShown: false,
 			}}>
-			<PromptTabs.Screen name='Prompt' component={Prompt} />
-			<PromptTabs.Screen name='Story' component={Backstory} />
-			<PromptTabs.Screen name='Capture' component={Capture} />
-		</PromptTabs.Navigator>
+			<PromptStack.Screen name='Select' component={Prompt} />
+			<PromptStack.Screen name='Camera' component={CameraScreen} />
+			<PromptStack.Screen name='Submit' component={Caption} />
+		</PromptStack.Navigator>
 	);
 }

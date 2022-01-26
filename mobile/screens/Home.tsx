@@ -52,16 +52,13 @@ export default function home({ navigation }) {
 				style={{ width: "100%" }}
 				horizontal
 				// pagingEnabled
-				snapToInterval={145}
+				snapToInterval={175}
 				showsHorizontalScrollIndicator={false}
 				contentContainerStyle={styles.listContainer}
 				showsVerticalScrollIndicator={false}
 				data={blocks}
 				keyExtractor={(item) => item.key}
 				renderItem={renderItem}></FlatList>
-			<Text style={{ flex: 1, fontSize: 20 }}>
-				Welcome {user.firstName} {user.lastName}
-			</Text>
 		</View>
 	);
 }
@@ -78,8 +75,8 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 	},
 	listContainer: {
-		paddingLeft: Dimensions.get("window").width / 2 - 72.5,
-		paddingRight: Dimensions.get("window").width / 2 - 72.5,
+		paddingLeft: Dimensions.get("window").width / 2 - 87.5,
+		paddingRight: Dimensions.get("window").width / 2 - 87.5,
 		padding: 30,
 	},
 });

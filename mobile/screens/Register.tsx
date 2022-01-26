@@ -6,18 +6,16 @@ import { SignupRequest, useSignupMutation } from "../app/services/auth";
 function Register({ navigation }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [repassword, setRepassword] = useState("");
 	const [signup, { isLoading }] = useSignupMutation();
 
 	const onSignUp = () => {
 		const payload = {
-			firstName,
-			lastName,
 			email,
 			password,
+			repassword,
 		} as SignupRequest;
 		signup(payload)
 			.unwrap()
@@ -42,18 +40,6 @@ function Register({ navigation }) {
 			<View style={styles.container}>
 				<TextInput
 					style={styles.input}
-					placeholder='First Name'
-					placeholderTextColor='#a6a6a6'
-					onChangeText={(name) => setFirstName(name)}
-				/>
-				<TextInput
-					style={styles.input}
-					placeholder='Last Name'
-					placeholderTextColor='#a6a6a6'
-					onChangeText={(name) => setLastName(name)}
-				/>
-				<TextInput
-					style={styles.input}
 					keyboardType='email-address'
 					placeholder='email'
 					placeholderTextColor='#a6a6a6'
@@ -65,6 +51,13 @@ function Register({ navigation }) {
 					placeholderTextColor='#a6a6a6'
 					secureTextEntry={true}
 					onChangeText={(pw) => setPassword(pw)}
+				/>
+				<TextInput
+					style={styles.input}
+					placeholder='re-enter password'
+					placeholderTextColor='#a6a6a6'
+					secureTextEntry={true}
+					onChangeText={(pw) => setRepassword(pw)}
 				/>
 				<View style={error ? styles.errorBox : styles.blank}>
 					<Text style={styles.errorText}>{error}</Text>

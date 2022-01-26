@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable, Dimensions } from "react-native";
 
 export default function Block({ title, image, navigation }) {
 	return (
@@ -20,8 +20,8 @@ export default function Block({ title, image, navigation }) {
 
 const styles = StyleSheet.create({
 	blockContainer: {
-		width: 125,
-		height: 125,
+		width: 155,
+		height: 155,
 		shadowRadius: 4,
 		shadowOpacity: 0.45,
 		shadowOffset: {
