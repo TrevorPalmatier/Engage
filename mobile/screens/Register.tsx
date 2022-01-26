@@ -24,7 +24,7 @@ function Register({ navigation }) {
 				navigation.replace("Login");
 			})
 			.catch((err) => {
-				// console.log(err);
+				console.log(err);
 				setError(err.data.message);
 			});
 	};

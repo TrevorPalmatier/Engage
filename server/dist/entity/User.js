@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const Prompt_1 = require("./Prompt");
+const Study_1 = require("./Study");
 const Entry_1 = require("./Entry");
 let User = class User {
 };
@@ -18,14 +18,6 @@ __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], User.prototype, "firstName", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], User.prototype, "lastName", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
@@ -39,9 +31,9 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "entries", void 0);
 __decorate([
-    typeorm_1.ManyToMany((type) => Prompt_1.Prompt, (prompt) => prompt.users),
+    typeorm_1.ManyToMany((type) => Study_1.Study, study => study.users),
     __metadata("design:type", Array)
-], User.prototype, "prompts", void 0);
+], User.prototype, "studies", void 0);
 User = __decorate([
     typeorm_1.Entity()
 ], User);

@@ -60,8 +60,6 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 						return repo
 							.save({
 								emailAddress: req.body.email,
-								firstName: req.body.firstName,
-								lastName: req.body.lastName,
 								password: passwordHash,
 							})
 							.then(() => {

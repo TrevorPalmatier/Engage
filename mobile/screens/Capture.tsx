@@ -41,12 +41,12 @@ export function CaptureScreen({ navigation }) {
 			allowsEditing: true,
 			aspect: [4, 3],
 			quality: 1,
+			base64: true
 		});
-
 		if (!result.cancelled) {
-			setImage((result as ImageInfo).uri);
+			setImage((result as ImageInfo).uri);		
 			const photo = result as ImageInfo;
-			navigation.navigate("Submit", { uri: photo.uri, width: photo.width, height: photo.height });
+			navigation.navigate("Submit", { uri: photo.uri, width: photo.width, height: photo.height, type: photo.type, name: photo.uri.substring(photo.uri.lastIndexOf('/') + 1, photo.uri.length) });
 		}
 	};
 	return (

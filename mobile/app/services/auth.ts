@@ -24,7 +24,7 @@ export interface SignupRequest {
 
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
-		baseUrl: "http://192.168.0.236:3000/",
+		baseUrl: "https://ancient-ridge-25388.herokuapp.com/",
 		prepareHeaders: (headers, { getState }) => {
 			// By default, if we have a token in the store, let's use that for authenticated requests
 			const token = (getState() as RootState).auth.token;

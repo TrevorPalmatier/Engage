@@ -30,11 +30,13 @@ const CameraScreen = (props) => {
 
 	const savePhoto = () => {
 		setPreviewVisible(false);
-
+		//console.log("image", capturedImage);
 		props.navigation.navigate("Submit", {
 			uri: capturedImage.uri,
 			width: capturedImage.width,
 			height: capturedImage.height,
+			type: capturedImage.type,
+			name: capturedImage.uri.substring(capturedImage.uri.lastIndexOf("/") + 1, capturedImage.uri.length),
 		});
 	};
 

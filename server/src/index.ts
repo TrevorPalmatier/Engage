@@ -1,18 +1,24 @@
 import "reflect-metadata";
 import bodyParser from "body-parser";
-import { createConnection } from "typeorm";
 import { login, signup, isAuth } from "./auth/auth";
+import { User } from "./entity/User";
 import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
+<<<<<<< HEAD
 import { User } from "./entity/User";
+=======
+import { getConnectionOptions, ConnectionOptions, createConnection} from "typeorm";
+import dotenv from 'dotenv';
+dotenv.config();
+>>>>>>> ee19759016c22488e516a443a19d2fa87f7022d1
 
 createConnection()
 	.then(async (connection) => {
 		// create express app
 		const app = express();
-		const port = 3000; // default port to listen
+		// const port = 3000; // default port to listen
 		app.use(cors());
 		app.use(bodyParser.json());
 
@@ -39,7 +45,7 @@ createConnection()
 		app.post("/private", isAuth);
 
 		// start express server
-		app.listen(port, async () => {
+		app.listen(process.env.PORT|| 80, async () => {
 			// insert new users for test
 			// await connection.manager.save(
 			// 	connection.manager.create(User, {
@@ -63,3 +69,4 @@ createConnection()
 		// tslint:disable-next-line:no-console
 	})
 	.catch();
+
