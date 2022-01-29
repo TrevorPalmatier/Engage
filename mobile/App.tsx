@@ -16,6 +16,7 @@ import Register from "./screens/Register";
 import CameraScreen from "./screens/CameraScreen";
 import Caption from "./screens/Caption";
 import Prompt from "./screens/Prompt";
+import Studies from "./screens/Studies";
 
 const Stack = createNativeStackNavigator();
 const PromptStack = createNativeStackNavigator();
@@ -37,6 +38,7 @@ function Main() {
 			<Stack.Navigator>
 				{user ? (
 					<>
+						<Stack.Screen name='Studies' component={Studies} />
 						<Stack.Screen name='Home' component={Home} />
 						<Stack.Screen name='PromptTabs' component={PromptTabScreens} />
 					</>
