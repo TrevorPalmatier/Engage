@@ -1,1 +1,1 @@
-web: cd server && npm i bcryptjs && npm i && node .
+web: cd server && npm i && node .
