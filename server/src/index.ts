@@ -6,13 +6,9 @@ import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
-<<<<<<< HEAD
-import { User } from "./entity/User";
-=======
 import { getConnectionOptions, ConnectionOptions, createConnection} from "typeorm";
 import dotenv from 'dotenv';
 dotenv.config();
->>>>>>> ee19759016c22488e516a443a19d2fa87f7022d1
 
 createConnection()
 	.then(async (connection) => {

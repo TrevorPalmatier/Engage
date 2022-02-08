@@ -21,11 +21,6 @@ const signup = (req, res, next) => {
     console.log(req.body);
     // checks if email already exists
     const inputValid = schema.validate({
-<<<<<<< HEAD
-=======
-        // firstName: req.body.firstName,
-        // lastName: req.body.lastName,
->>>>>>> ee19759016c22488e516a443a19d2fa87f7022d1
         password: req.body.password,
         email: req.body.email,
         repassword: req.body.repassword,
@@ -69,8 +64,6 @@ const signup = (req, res, next) => {
                     return repo
                         .save({
                         emailAddress: req.body.email,
-                        // firstName: req.body.firstName,
-                        // lastName: req.body.lastName,
                         password: passwordHash,
                     })
                         .then(() => {
@@ -133,11 +126,6 @@ const login = (req, res, next) => {
                     // password match
                     const token = jsonwebtoken_1.default.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
                     const user = {
-<<<<<<< HEAD
-=======
-                        // firstName: dbUser.firstName,
-                        // lastName: dbUser.lastName,
->>>>>>> ee19759016c22488e516a443a19d2fa87f7022d1
                         id: dbUser.id,
                         email: dbUser.emailAddress,
                     };

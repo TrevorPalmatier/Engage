@@ -17,10 +17,13 @@ export class Block {
     @Column()
     backgroundText: string;
 
+    @Column()
+    mediaURL: string;
+
     // multiple blocks can be assigned to a Study
     @ManyToOne(type => Study, study => study.blocks)
     study: Study;
-    
+
     // multiple slides can be within a block
     @OneToMany(type=>Slide, slide => slide.block)
     slides: Slide[];
