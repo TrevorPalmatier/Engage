@@ -32,7 +32,7 @@ const CreateBlock = () => {
     const postPrompt = async () => {
         console.log(block?.promptTitle);
 
-        const promptData = {title: block?.promptTitle, promptText: block?.promptText};
+        const promptData = {title: block?.promptTitle, promptText: "no"};
         const requestOptionsPrompt = {
             method: "post",
             headers: { "Content-Type": "application/json"},
