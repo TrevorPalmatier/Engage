@@ -15,7 +15,9 @@ createConnection()
 		// create express app
 		const app = express();
 		// const port = 3000; // default port to listen
-		app.use(cors());
+		app.use(cors({
+			origin: 'https://localhost:3000',
+		}));
 		app.use(bodyParser.json());
 
 		// register express routes from defined application routes

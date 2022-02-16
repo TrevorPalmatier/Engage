@@ -25,7 +25,9 @@ typeorm_1.createConnection()
     // create express app
     const app = express_1.default();
     // const port = 3000; // default port to listen
-    app.use(cors_1.default());
+    app.use(cors_1.default({
+        origin: 'https://localhost:3000',
+    }));
     app.use(body_parser_1.default.json());
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
