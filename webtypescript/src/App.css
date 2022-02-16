@@ -1,0 +1,81 @@
+.App {
+  text-align: center;
+  justify-content: space-around;
+  display:flex;
+  flex-direction: column;
+  line-height: 3.0;
+  height: 150px;
+  width: 100%;
+  margin-top: 10px;
+  /* background-color: thistle; */
+}
+
+.Navigation{
+  flex-direction: column;
+  background-color: blueviolet;
+}
+
+.viewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+}
+
+.divider{
+  width:10px;
+  height:auto;
+  display:inline-block;
+}
+
+.buttonText{
+  width: 15%;
+  height: 10%;
+  font-size: large;
+}
+.wrapper {
+  padding: 5px 20px;
+}
+
+.wrapper fieldset {
+  margin: 20px 0;
+}
+
+.photo {
+  height: 200px;
+  width: 200px;
+}
+
+.createRect {
+  height: auto;
+  width: 100%;
+  justify-content: center;
+  border: 2px;
+  border-style: solid;
+  border-color: rgb(187, 187, 187);
+  padding: 5px 20px;
+}
+
+.textBox {
+  height: 40px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.fullWidthButton {
+  width: 100%;
+  height:auto;
+}
