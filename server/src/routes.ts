@@ -1,5 +1,9 @@
-import {UserController} from "./controller/UserController";
+import { UserController } from "./controller/UserController";
 import { StudyController } from "./controller/StudyController";
+import { SlideController } from "./controller/SlideController";
+import { BlockController } from "./controller/BlockController";
+import { PromptController } from "./controller/PromptController";
+import { EntryController } from "./controller/EntryController";
 
 export const Routes = [{
     method: "get",
@@ -41,4 +45,85 @@ export const Routes = [{
     route: "/studies/:id",
     controller: StudyController,
     action: "remove"
-}];
+}, {
+    method: "get",
+    route: "/slides",
+    controller: SlideController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/slides/:id",
+    controller: SlideController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/slides",
+    controller: SlideController,
+    action: "save"
+}, {
+    method: "delete",
+    route: "/slides/:id",
+    controller: SlideController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/blocks",
+    controller: BlockController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/blocks/:id",
+    controller: BlockController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/blocks",
+    controller: BlockController,
+    action: "save"
+}, {
+    method: "delete",
+    route: "/blocks/:id",
+    controller: BlockController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/entries",
+    controller: EntryController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/entries/:id",
+    controller: EntryController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/entries",
+    controller: EntryController,
+    action: "save"
+}, {
+    method: "delete",
+    route: "/entries/:id",
+    controller: EntryController,
+    action: "remove"
+}, {
+    method: "get",
+    route: "/prompts",
+    controller: PromptController,
+    action: "all"
+}, {
+    method: "get",
+    route: "/prompts/:id",
+    controller: PromptController,
+    action: "one"
+}, {
+    method: "post",
+    route: "/prompts",
+    controller: PromptController,
+    action: "save"
+}, {
+    method: "delete",
+    route: "/prompts/:id",
+    controller: PromptController,
+    action: "remove"
+}
+];

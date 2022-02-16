@@ -15,9 +15,6 @@ export class Block {
     title: string;
 
     @Column()
-    backgroundText: string;
-
-    @Column()
     mediaURL: string;
 
     // multiple blocks can be assigned to a Study

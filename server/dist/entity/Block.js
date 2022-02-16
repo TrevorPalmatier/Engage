@@ -27,10 +27,6 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], Block.prototype, "backgroundText", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
 ], Block.prototype, "mediaURL", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks),
