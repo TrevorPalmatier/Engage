@@ -1,6 +1,7 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Block} from "../entity/Block";
+import bodyParser from "body-parser";
 
 export class BlockController {
 
@@ -16,7 +17,11 @@ export class BlockController {
 
     async save(request: Request, response: Response, next: NextFunction) {
         const details = request.body;
-        return this.blockRepository.save({title: details.title, "promptId": details.prompt.id, "mediaURL": details.mediaURL });
+        const newBlock = await this.blockRepository.create({
+            title: details.title, prompt: details.prompt , "mediaURL": details.mediaURL
+          });
+        await this.blockRepository.save(newBlock);
+        return newBlock;
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {

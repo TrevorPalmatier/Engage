@@ -27,7 +27,11 @@ class BlockController {
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const details = request.body;
-            return this.blockRepository.save({ title: details.title, "promptId": details.prompt.id, "mediaURL": details.mediaURL });
+            const newBlock = yield this.blockRepository.create({
+                title: details.title, prompt: details.prompt, "mediaURL": details.mediaURL
+            });
+            yield this.blockRepository.save(newBlock);
+            return newBlock;
         });
     }
     remove(request, response, next) {
