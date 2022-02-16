@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTitle, 
     cancelled, enableDisableBlockEdit, selectBlock } from "../features/blocksSlice";
 import { addSlide } from "../features/slideSlice";
+import { roundToInt, Int } from "../int";
+import { InferencePriority } from "typescript";
 
 
 const CreateBlock = () => {
@@ -17,11 +19,11 @@ const CreateBlock = () => {
     // const [promptText, setPromptText] = useState("");
     // const [slides, setSlides] = useState<any>([]);
     const [selectedImage, setSelectedImage] = useState(false);
-    const [promptId, setPromptId] = useState();
-    const [blockId, setBlockId] = useState();
-    const [isBlockId, didBlockId] = useState(false);
-    const [isPromptId, didPromptId] = useState(false);
+    const [responsePrompt, setResPrompt] = useState({});
+    const [blockId, setBlockId] = useState("");
 
+
+    //console.log(promptId);
     const dispatch = useAppDispatch();
 
     const block  = useAppSelector(selectBlock);
@@ -32,68 +34,72 @@ const CreateBlock = () => {
     const postPrompt = async () => {
         console.log(block?.promptTitle);
 
-        const promptData = {title: block?.promptTitle, promptText: "no"};
+        const promptData = {"title": block?.promptTitle, "promptText": block?.promptText};
         const requestOptionsPrompt = {
-            method: "post",
+            method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(promptData),
 
         };
-
-        fetch("/prompts", requestOptionsPrompt)
+  // "allowedHosts": "all", 
+  // "proxy": "https://ancient-ridge-25388.herokuapp.com"
+      //  setPromptId(2);
+        const response = await fetch("https://ancient-ridge-25388.herokuapp.com/prompts", requestOptionsPrompt)
             .then(response => response.json())
-            .then(info =>  setPromptId(info.id))
+            //.then(info => setPromptId(2))
+            //.then((response) => response.json().log())
+           // .then((info) => {info.log(); postBlock();}) 
+            .then((res) => {setResPrompt({id: res.id, title: res.title, promptText: res.text}); postBlock();})
+            .then(() => console.log(responsePrompt))
             .catch((err) => console.log(err));
-
+        //console.log(response.title);
+        
         console.log("posted prompt");
     }
 
-    const postBlock = async() => {
-        
-        const blockData = {title: block?.title, promptId: promptId, mediaURL: block?.imageLink }
+    const postBlock = () => {
+        console.log(responsePrompt);
+        const blockData = {title: block?.title, "prompt": {id: 50, title: block?.promptTitle, "promptText": block?.promptText}, "mediaURL": block?.imageLink }
         const requestOptionsBlock = {
             method: "post",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(blockData)
         };
 
-        fetch("/blocks", requestOptionsBlock)
+        return fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
             .then(response => response.json())
-            .then(info => setBlockId(info.id))
+            .then(async info => await setBlockId(info.id))
+            .then(() => postSlides())
             .then(() => console.log("blockPosted"))
             .catch((err) => console.log(err));  
-        
     }
 
-    const postSlides = async () => {
+    const postSlides =  () => {
         console.log("posting slides");
         slides.map(async (slide) => {
-            const slideData = {title: slide.title, backgroundText: slide.backgroundText, blockId: blockId}
+            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "blockId": blockId}
             const requestOptionsSlide = {
                 method: "post",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(slideData)
             };
 
-           fetch("/slides", requestOptionsSlide)
+           fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
             .then(response => response.json())
             .catch((err) => console.log(err));
         });
     }
 
-    const handleSubmit =  async () => {
+    const handleSubmit =  () => {
         //somehow upload to backend
-         await postPrompt();
-         await postBlock();
-         await postSlides();
-    
+        postPrompt();
     };
 
 
    /**
      * Selects image to be uploaded
      */
-    const selectImage = async(event: any) => {
+    const selectImage = (event: any) => {
         
         if (event.target.files && event.target.files[0]) {
             let img = event.target.files[0];
@@ -103,7 +109,7 @@ const CreateBlock = () => {
             data.append("upload_preset", "engageapp");
             data.append("cloud_name", "engageapp");
 
-            const uploadImage = await fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
+            fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
                 method: "POST",
                 body: data,
             })
@@ -113,6 +119,7 @@ const CreateBlock = () => {
             // setPhoto(img);
             // setSelectedImage(URL.createObjectURL(img));  
             setSelectedImage(true);
+            console.log("fetching");
         }
     };
 
@@ -160,7 +167,7 @@ const CreateBlock = () => {
                         <label>
                             Prompt: 
                             <br/>
-                            <textarea cols={150} defaultValue={block?.promptText} name="prompt" onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptTitle: e.target.value}))}}/>
+                            <textarea cols={150} defaultValue={block?.promptText} name="prompt" onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
                         </label>
                     </fieldset>
                 </div>

@@ -8,7 +8,7 @@ const ViewStudies = () => {
   const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    fetch("/studies")
+    fetch("/api/studies")
     .then(res => { return res.json()})
     .then(data => {setData(data)})
 

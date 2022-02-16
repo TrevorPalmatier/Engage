@@ -50,8 +50,8 @@ const CreateSlide = ({id}) => {
                     </fieldset>
                     <fieldset>
                         <label>
-                            Upload Front Cover for Block: 
-                            <input type="file" onChange={handleImages} multiple />
+                            Upload images to display on the slide: 
+                            <input type="file"  multiple />
                         </label>
                     </fieldset>
                     {uploaded &&
