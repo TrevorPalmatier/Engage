@@ -15,7 +15,8 @@ export class BlockController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        return this.blockRepository.save(request.body);
+        const details = request.body;
+        return this.blockRepository.save({title: details.title, "promptId": details.prompt.id, "mediaURL": details.mediaURL });
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
