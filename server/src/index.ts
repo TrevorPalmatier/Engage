@@ -62,7 +62,7 @@ createConnection()
 			// 	})
 			// );
 			// tslint:disable-next-line:no-console
-			console.log("Express server has started on port 3000. Open http://localhost:3000/ to see results");
+			console.log("Express server on https://ancient-ridge-25388.herokuapp.com/");
 		});
 		// tslint:disable-next-line:no-console
 	})
