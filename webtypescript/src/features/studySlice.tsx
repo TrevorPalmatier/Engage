@@ -7,14 +7,14 @@ import { RootState } from "../store";
 interface StudyState {
     title: string,
     imageLink: string,
-    photo: string,
+    selectedImage: boolean,
     submitted: boolean,
 }
 
 const initialState : StudyState = {
     title: "",
     imageLink: "",
-    photo: "",
+    selectedImage: false,
     submitted: false,
 }
 
@@ -24,10 +24,12 @@ const studySlice = createSlice({
     reducers: {
         setTitle: (state, {payload}) => {
             state.title = payload.title;
+            return state;
         },
         setImage: (state, { payload }) => {
             state.imageLink = payload.imageLink;
-            // state.photo = payload.photo;
+            state.selectedImage = true;
+            return state;
         }, 
         cancelled: (state) => {
             state = initialState;

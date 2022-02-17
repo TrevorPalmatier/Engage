@@ -3,7 +3,7 @@ import internal from "stream";
 import { RootState } from "../store";
 import blocksSlice from "./blocksSlice";
 
-interface SlideState {
+export interface SlideState {
     blockId: number,
     id: number,
     title: string,
@@ -31,7 +31,8 @@ const slideSlice = createSlice({
                 id: nextSlideId(state),
                 title: "",
                 backgroundText:"",
-            })
+            });
+            return state;
         },
         setTitle: (state, {payload}) => {
             state.map((slide) => {
@@ -39,6 +40,7 @@ const slideSlice = createSlice({
                     slide.title = payload.title;
                 }
             })
+            return state;
         }, 
         setText: (state, {payload}) => {
             state.map((slide) => {
@@ -46,14 +48,20 @@ const slideSlice = createSlice({
                     slide.backgroundText = payload.text;
                 }
             })
+            return state;
         },
-        cancelled: (state, {payload}) => {
+        cancelSlides: (state) => {
+            state = initialState;
+            return state;
+        },
+        cancel: (state, {payload}) => {
             state = state.filter((slide) => slide.id != payload.id);
+            return state;
         }
     }
 });
 
 
 export default slideSlice.reducer;
-export const { addSlide, setText, setTitle, cancelled  } = slideSlice.actions;
+export const { addSlide, setText, setTitle, cancel, cancelSlides } = slideSlice.actions;
 //export const selectSlides = (state: RootState) => state.study.block.slides;

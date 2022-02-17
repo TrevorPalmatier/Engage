@@ -3,12 +3,14 @@ import internal from "stream";
 import { RootState } from "../store";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setImage } from "./studySlice";
+
  
 
 interface BlockState {
     id: number,
     title: string,
     imageLink: string,
+    selectedImage: boolean,
     promptTitle: string,
     promptText: string,
     edit: boolean,
@@ -34,9 +36,10 @@ const blocksSlice = createSlice({
                     id: nextId(state),
                     title: "",
                     imageLink: "",
+                    selectedImage: false,
                     promptTitle: "",
                     promptText:  "",
-                    edit: true
+                    edit: true,
                 }
              ]
             console.log(state[0].edit);
@@ -54,6 +57,7 @@ const blocksSlice = createSlice({
             state.map((block) => {
                 if(block.id == payload.id){
                     block.imageLink = payload.imageLink;
+                    block.selectedImage = true;
                 }
             });
             return state;
@@ -73,9 +77,13 @@ const blocksSlice = createSlice({
                 }
             })
             return state;
-        }, 
+        },
         cancelled: (state, {payload}) => {
             state = state.filter((block) => block.id != payload.id);
+            return state;
+        },
+        cancelBlocks: (state) => {
+            state = initialState;
             return state;
         },
         enableDisableBlockEdit: (state, {payload}) =>{
@@ -92,6 +100,6 @@ const blocksSlice = createSlice({
 
 
 export default blocksSlice.reducer;
-export const { addBlock, setBlockTitle, setBlockPromptText, setBlockPromptTitle, setBlockImageLink, cancelled, enableDisableBlockEdit } = blocksSlice.actions;
+export const { addBlock, setBlockTitle, setBlockPromptText, setBlockPromptTitle, setBlockImageLink, cancelBlocks, cancelled, enableDisableBlockEdit } = blocksSlice.actions;
 export const selectBlock = (state: RootState) => state.persistedReducer.study.blocks.find(({edit}) => edit === true);
 // export const selectSlides = (state: RootState) => { state.slides.every((slide) => slide.blockId == selectBlock)}

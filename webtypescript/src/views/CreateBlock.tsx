@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import '../App.css';
 import NavbarScroller from "../Components/NavbarScroller";
 import CreateSlide from "./CreateSlide";
@@ -6,78 +6,82 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTitle, 
     cancelled, enableDisableBlockEdit, selectBlock } from "../features/blocksSlice";
-import { addSlide } from "../features/slideSlice";
-import { roundToInt, Int } from "../int";
-import { InferencePriority } from "typescript";
+import { addSlide, cancel} from "../features/slideSlice";
+import studySlice from "../features/studySlice";
 
-
+/**
+ * A block is an object that holds a prompt and multiple slides and assigned to a study.
+ * 
+ * This renders the ability to create a block with a form. It also holds the ability 
+ * to create multiple sldies for each block. 
+ * @returns a rendering of a block 
+ */
 const CreateBlock = () => {
-    // const [blockTitle, setTitle] = useState("");
-    // const [photo, setPhoto] = useState("");
-    // const [image, setSelectedImage] = useState("");
-    // const [promptTitle, setPromptTitle] = useState("");
-    // const [promptText, setPromptText] = useState("");
-    // const [slides, setSlides] = useState<any>([]);
-    const [selectedImage, setSelectedImage] = useState(false);
-    const [responsePrompt, setResPrompt] = useState({});
-    const [blockId, setBlockId] = useState("");
+    //states for each block
+    const [responsePrompt, setResPrompt] = useState({});        //holds prompt response from post request
+    const [blockId, setBlockId] = useState("");                 
 
+    //set up redux for the block and slides
+    const dispatch = useAppDispatch();      //calls on reducers actions
+    const block  = useAppSelector(selectBlock);     //selects data to be persisted from a block
+    const slides = useAppSelector(state => state.persistedReducer.slides.filter(slide => slide.blockId == block?.id));      //selects slides for a specific block
 
-    //console.log(promptId);
-    const dispatch = useAppDispatch();
-
-    const block  = useAppSelector(selectBlock);
-    const slides = useAppSelector(state => state.persistedReducer.slides.filter(slide => slide.blockId == block?.id));
-
+    //allows navigation
     const navigate = useNavigate();
 
+    /**
+     * This method calls a request to post the prompt to the api
+     */
     const postPrompt = async () => {
-        console.log(block?.promptTitle);
+        const promptData = {"title": block?.promptTitle, "promptText": block?.promptText};  //data to be posted
 
-        const promptData = {"title": block?.promptTitle, "promptText": block?.promptText};
+        //the request options to post the prompt
         const requestOptionsPrompt = {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(promptData),
 
         };
-  // "allowedHosts": "all", 
-  // "proxy": "https://ancient-ridge-25388.herokuapp.com"
-      //  setPromptId(2);
+
+        //does the actual post request
+// *** Need to figure out how to save the post response information before continuing with the "postBlock()" method
         const response = await fetch("https://ancient-ridge-25388.herokuapp.com/prompts", requestOptionsPrompt)
             .then(response => response.json())
-            //.then(info => setPromptId(2))
-            //.then((response) => response.json().log())
-           // .then((info) => {info.log(); postBlock();}) 
-            .then((res) => {setResPrompt({id: res.id, title: res.title, promptText: res.text}); postBlock();})
+            .then((res) => {setResPrompt({id: res.id, title: res.title, promptText: res.text}); postBlock();})  //calls the postBlock() method 
             .then(() => console.log(responsePrompt))
             .catch((err) => console.log(err));
-        //console.log(response.title);
-        
-        console.log("posted prompt");
-    }
+    };
 
+    /**
+     * This method calls a request to post the block to the api
+     */
     const postBlock = () => {
-        console.log(responsePrompt);
+        //block data to be posted
         const blockData = {title: block?.title, "prompt": {id: 50, title: block?.promptTitle, "promptText": block?.promptText}, "mediaURL": block?.imageLink }
+        
+        //post request options for the block
         const requestOptionsBlock = {
             method: "post",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(blockData)
         };
 
-        return fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
+// *** Again need to save the block id before calling the "postSlides()" function
+        fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
             .then(response => response.json())
             .then(async info => await setBlockId(info.id))
             .then(() => postSlides())
             .then(() => console.log("blockPosted"))
             .catch((err) => console.log(err));  
-    }
+    };
 
+    /**
+     * This method is able post the slides for the block to the api
+     */
     const postSlides =  () => {
-        console.log("posting slides");
+        //loops through all the slides and does a post request for each one
         slides.map(async (slide) => {
-            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "blockId": blockId}
+            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "blockId": blockId}  //slide data
             const requestOptionsSlide = {
                 method: "post",
                 headers: { "Content-Type": "application/json"},
@@ -86,54 +90,64 @@ const CreateBlock = () => {
 
            fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
             .then(response => response.json())
+            .then(() => console.log("posted slides"))
             .catch((err) => console.log(err));
         });
+
+        
     }
 
+    /**
+     * Method is called when the user pushes the "Create" button 
+     */
     const handleSubmit =  () => {
-        //somehow upload to backend
         postPrompt();
     };
 
-
    /**
-     * Selects image to be uploaded
+     * This method selects the image for the cover of the block
+     * 
+     * For now once the image is choose it will upload to the file system: cloudinary
      */
     const selectImage = (event: any) => {
         
         if (event.target.files && event.target.files[0]) {
             let img = event.target.files[0];
 
+            //creates the data for the post to cloudinary
             const data = new FormData();
             data.append("file", img);
             data.append("upload_preset", "engageapp");
             data.append("cloud_name", "engageapp");
 
+            //posts to cloudinary here
             fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
                 method: "POST",
                 body: data,
             })
-                .then(response => response.json())
-                .then(info => dispatch(setBlockImageLink({imageLink: info.secure_url})))
-
-            // setPhoto(img);
-            // setSelectedImage(URL.createObjectURL(img));  
-            setSelectedImage(true);
-            console.log("fetching");
+            .then(response => response.json())
+            .then(info => dispatch(setBlockImageLink({imageLink: info.secure_url})));
         }
     };
 
+    //creates new slide element and adds it through the reducer
     const handleNewSlide = () => {
         dispatch(addSlide({blockId: block?.id}));
+        dispatch(addSlide({slide: slides}))
     };
 
+    //handles discarding the block and slides when cancelled
     const handleCancel = () => {
+        //cancel the block and any slide
         dispatch(cancelled({id: block?.id}))
-        navigate("../createstudy");
+        slides.map((slide) => {
+            dispatch(cancel({id: slide.id}))
+        })
+        navigate("../createstudy");     //redirects to "Create Study" page
     }
 
-   
-   // setSlides([<CreateSlide/>]);
+    //renders the element
+    //inserted defaultVlaue to use persist data even if page is refreshed 
     return (
         <div>
             <NavbarScroller/>
@@ -145,45 +159,51 @@ const CreateBlock = () => {
                 <fieldset>
                     <label>
                         Name of Block:  
-                        <input type="text" defaultValue={block?.title} name="name_of_block" onChange={e=>{dispatch(setBlockTitle({id: block?.id, title: e.target.value}))}} />
+                        <input type="text" defaultValue={block?.title} name="name_of_block"
+                            onChange={e=>{dispatch(setBlockTitle({id: block?.id, title: e.target.value}))}} />
                     </label>
                 </fieldset>
                 <fieldset>
                     <label>
                         Upload Front Cover for Block: 
-                        <input type="file" name="image" onChange={selectImage} />
+                        <input type="file" defaultValue={block?.imageLink} name="image" onChange={selectImage} />
                     </label>
                 </fieldset>
+                    {block?.selectedImage && 
+                        <img className="photo"  src={block?.imageLink} />
+                    }
                 <br/>
                 <div className="createRect">
                     <h2>Create Prompt</h2>
                     <fieldset>
                         <label>
                             Title of Prompt: 
-                            <input type="text" defaultValue={block?.promptTitle} name="title_of_prompt" onChange={e=>{dispatch(setBlockPromptTitle({id: block?.id, promptTitle: e.target.value}))}}/>
+                            <input type="text" defaultValue={block?.promptTitle} name="title_of_prompt" 
+                                onChange={e=>{dispatch(setBlockPromptTitle({id: block?.id, promptTitle: e.target.value}))}}/>
                         </label>
                     </fieldset>
                     <fieldset>
                         <label>
                             Prompt: 
                             <br/>
-                            <textarea cols={150} defaultValue={block?.promptText} name="prompt" onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
+                            <textarea cols={150} defaultValue={block?.promptText} name="prompt" 
+                                onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
                         </label>
                     </fieldset>
                 </div>
                 <br/>
                 <div>
                     {
-                        slides.map((slide) => {
-                            return (
-                            <div>
-                                <div className="createRect">
-                                    <CreateSlide key={slide.id} id={slide.id}/>
-                                </div>
-                                <br/>
+                    slides.map((slide) => {
+                        return (
+                        <div>
+                            <div className="createRect">
+                                <CreateSlide key={slide.id} id={slide.id}/>
                             </div>
-                            )
-                        })
+                            <br/>
+                        </div>
+                        )
+                    })
                     }
                 </div>
                 <div>
