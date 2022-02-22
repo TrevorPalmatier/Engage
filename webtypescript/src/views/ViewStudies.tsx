@@ -8,7 +8,7 @@ const ViewStudies = () => {
   const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    fetch("/api/studies")
+    fetch("https://ancient-ridge-25388.herokuapp.com/studies")
     .then(res => { return res.json()})
     .then(data => {setData(data)})
 
@@ -21,9 +21,10 @@ const ViewStudies = () => {
         <h1>View the Studies here!</h1>
         <div>
           <table>
+            <tbody>
             {data.map((study:any ) => (
               
-                <tr key={study.id}>
+                <tr key={study.id} onClick= {() => console.log(study.id + " clicked")}>
                     <td align="center">
                       <div>
                         <img className='photo' src={study.imageLink}></img>
@@ -37,6 +38,7 @@ const ViewStudies = () => {
                 </tr>
                 
             ))}
+            </tbody>
             </table>
         </div>
     </div>

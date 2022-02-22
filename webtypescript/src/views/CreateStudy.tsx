@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setTitle, setImage, cancelled, selectStudy} from "../features/studySlice";
 import { addBlock } from "../features/blocksSlice";
+import { RootState } from "../store";
 
 /** 
  * Notes for things to maybe implement:
@@ -36,6 +37,7 @@ const CreateStudy = () => {
     //is called when the study want to be create with the "submit" button
 // *** Still have to figure out how to make it synchronous
     const handleSubmit = async(event: any ) => {
+        //post the STUDY data
         const postData = {title: study.title, imageLink: study.imageLink};
         const requestOptions = {
             method: "POST",
@@ -43,10 +45,18 @@ const CreateStudy = () => {
             body: JSON.stringify(postData)
         };
 
-        const postStudy = await fetch("/studies", requestOptions)
+        const postStudy = await fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions)
             .then(response => response.json())
             .then(() => console.log("Posted to Backend"));
 
+        //get blocks for the study
+        // const blocks = useAppSelector((state:RootState) => state.persistedReducer.study.blocks);
+
+
+        // const postBlocks = await fetch("https://ancient-ridge-25388.herokuapp.com/blocks", 
+        //     {
+
+        //     })
         navigate("../");   //go back to home when finished      
     };
   

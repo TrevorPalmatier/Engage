@@ -8,6 +8,7 @@ import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTit
     cancelled, enableDisableBlockEdit, selectBlock } from "../features/blocksSlice";
 import { addSlide, cancel} from "../features/slideSlice";
 import studySlice from "../features/studySlice";
+import { request } from "https";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -47,7 +48,7 @@ const CreateBlock = () => {
 // *** Need to figure out how to save the post response information before continuing with the "postBlock()" method
         const response = await fetch("https://ancient-ridge-25388.herokuapp.com/prompts", requestOptionsPrompt)
             .then(response => response.json())
-            .then((res) => {setResPrompt({id: res.id, title: res.title, promptText: res.text}); postBlock();})  //calls the postBlock() method 
+            .then(async (res) => {await setResPrompt(res.id); postBlock();})  //calls the postBlock() method 
             .then(() => console.log(responsePrompt))
             .catch((err) => console.log(err));
     };
@@ -65,7 +66,7 @@ const CreateBlock = () => {
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(blockData)
         };
-
+        console.log(responsePrompt);
 // *** Again need to save the block id before calling the "postSlides()" function
         fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
             .then(response => response.json())
