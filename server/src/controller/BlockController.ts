@@ -16,12 +16,7 @@ export class BlockController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        const details = request.body;
-        const newBlock = await this.blockRepository.create({
-            title: details.title, prompt: details.prompt , "mediaURL": details.mediaURL
-          });
-        await this.blockRepository.save(newBlock);
-        return newBlock;
+        return this.blockRepository.save(request.body);
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {

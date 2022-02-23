@@ -2,7 +2,6 @@ import { UserController } from "./controller/UserController";
 import { StudyController } from "./controller/StudyController";
 import { SlideController } from "./controller/SlideController";
 import { BlockController } from "./controller/BlockController";
-import { PromptController } from "./controller/PromptController";
 import { EntryController } from "./controller/EntryController";
 
 export const Routes = [{
@@ -104,26 +103,6 @@ export const Routes = [{
     method: "delete",
     route: "/entries/:id",
     controller: EntryController,
-    action: "remove"
-}, {
-    method: "get",
-    route: "/prompts",
-    controller: PromptController,
-    action: "all"
-}, {
-    method: "get",
-    route: "/prompts/:id",
-    controller: PromptController,
-    action: "one"
-}, {
-    method: "post",
-    route: "/prompts",
-    controller: PromptController,
-    action: "save"
-}, {
-    method: "delete",
-    route: "/prompts/:id",
-    controller: PromptController,
     action: "remove"
 }
 ];
