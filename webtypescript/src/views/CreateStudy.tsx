@@ -45,7 +45,7 @@ const CreateStudy = () => {
             body: JSON.stringify(postData)
         };
 
-        const postStudy = await fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions)
+        const postStudy = await fetch("/studies", requestOptions)
             .then(response => response.json())
             .then(() => console.log("Posted to Backend"));
 

@@ -19,7 +19,6 @@ import { request } from "https";
  */
 const CreateBlock = () => {
     //states for each block
-    const [responsePrompt, setResPrompt] = useState({});        //holds prompt response from post request
     const [blockId, setBlockId] = useState("");                 
 
     //set up redux for the block and slides
@@ -31,34 +30,11 @@ const CreateBlock = () => {
     const navigate = useNavigate();
 
     /**
-     * This method calls a request to post the prompt to the api
-     */
-    const postPrompt = async () => {
-        const promptData = {"title": block?.promptTitle, "promptText": block?.promptText};  //data to be posted
-
-        //the request options to post the prompt
-        const requestOptionsPrompt = {
-            method: "POST",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(promptData),
-
-        };
-
-        //does the actual post request
-// *** Need to figure out how to save the post response information before continuing with the "postBlock()" method
-        const response = await fetch("/prompts", requestOptionsPrompt)
-            .then(response => response.json())
-            .then(async (res) => {await setResPrompt(res.id); postBlock();})  //calls the postBlock() method 
-            .then(() => console.log(responsePrompt))
-            .catch((err) => console.log(err));
-    };
-
-    /**
      * This method calls a request to post the block to the api
      */
     const postBlock = () => {
         //block data to be posted
-        const blockData = {title: block?.title, "prompt": {id: 50, title: block?.promptTitle, "promptText": block?.promptText}, "mediaURL": block?.imageLink }
+        const blockData = {title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink }
         
         //post request options for the block
         const requestOptionsBlock = {
@@ -66,14 +42,15 @@ const CreateBlock = () => {
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(blockData)
         };
-        console.log(responsePrompt);
-// *** Again need to save the block id before calling the "postSlides()" function
+
+// ***  need to save the block id before calling the "postSlides()" function
         fetch("/blocks", requestOptionsBlock)
             .then(response => response.json())
             .then(async info => await setBlockId(info.id))
-            .then(() => postSlides())
+            // .then(() => postSlides())
             .then(() => console.log("blockPosted"))
             .catch((err) => console.log(err));  
+        navigate("../createstudy");
     };
 
     /**
@@ -89,12 +66,12 @@ const CreateBlock = () => {
                 body: JSON.stringify(slideData)
             };
 
-           fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
+           fetch("/slides", requestOptionsSlide)
             .then(response => response.json())
             .then(() => console.log("posted slides"))
             .catch((err) => console.log(err));
         });
-
+        navigate("../createslide");
         
     }
 
@@ -102,7 +79,7 @@ const CreateBlock = () => {
      * Method is called when the user pushes the "Create" button 
      */
     const handleSubmit =  () => {
-        postPrompt();
+        postBlock();
     };
 
    /**
@@ -127,7 +104,8 @@ const CreateBlock = () => {
                 body: data,
             })
             .then(response => response.json())
-            .then(info => dispatch(setBlockImageLink({imageLink: info.secure_url})));
+            .then(info => dispatch(setBlockImageLink({id: block?.id, imageLink: info.secure_url})));
+
         }
     };
 
@@ -167,7 +145,7 @@ const CreateBlock = () => {
                 <fieldset>
                     <label>
                         Upload Front Cover for Block: 
-                        <input type="file" defaultValue={block?.imageLink} name="image" onChange={selectImage} />
+                        <input type="file" name="image" onChange={selectImage} />
                     </label>
                 </fieldset>
                     {block?.selectedImage && 
