@@ -46,7 +46,7 @@ const CreateBlock = () => {
 
         //does the actual post request
 // *** Need to figure out how to save the post response information before continuing with the "postBlock()" method
-        const response = await fetch("https://ancient-ridge-25388.herokuapp.com/prompts", requestOptionsPrompt)
+        const response = await fetch("/prompts", requestOptionsPrompt)
             .then(response => response.json())
             .then(async (res) => {await setResPrompt(res.id); postBlock();})  //calls the postBlock() method 
             .then(() => console.log(responsePrompt))
@@ -68,7 +68,7 @@ const CreateBlock = () => {
         };
         console.log(responsePrompt);
 // *** Again need to save the block id before calling the "postSlides()" function
-        fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
+        fetch("/blocks", requestOptionsBlock)
             .then(response => response.json())
             .then(async info => await setBlockId(info.id))
             .then(() => postSlides())
