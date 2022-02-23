@@ -8,7 +8,7 @@ const ViewStudies = () => {
   const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    fetch("/studies")
+    fetch("https://ancient-ridge-25388.herokuapp.com/studies")
     .then(res => { return res.json()})
     .then(data => {setData(data)})
 

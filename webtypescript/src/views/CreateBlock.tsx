@@ -24,53 +24,6 @@ const CreateBlock = () => {
     //allows navigation
     const navigate = useNavigate();
 
-    /**
-     * This method calls a request to post the block to the api
-     */
-    const postBlock = () => {
-        //block data to be posted
-        const blockData = {title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink }
-        
-        //post request options for the block
-        const requestOptionsBlock = {
-            method: "post",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(blockData)
-        };
-
-// ***  need to save the block id before calling the "postSlides()" function
-        fetch("https://intense-ravine-75218.herokuapp.com/https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
-            .then(response => response.json())
-           // .then(async info => await setBlockId(info.id))
-            .then(res => {console.log(res); return res})
-            .then(info => postSlides(info))
-            .then(() => console.log("blockPosted"))
-            .catch((err) => console.log(err));  
-     //   navigate("../createstudy");
-    };
-
-    /**
-     * This method is able post the slides for the block to the api
-     */
-    const postSlides =  (info) => {
-        //loops through all the slides and does a post request for each one
-        console.log("id of block: " + info.id)
-        slides.map(async (slide) => {
-            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": info}  //slide data
-            const requestOptionsSlide = {
-                method: "post",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(slideData)
-            };
-
-           fetch("https://intense-ravine-75218.herokuapp.com/https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
-            .then(response => response.json())
-            .then(() => console.log("posted slides"))
-            .catch((err) => console.log(err));
-        });
-       // navigate("../createslide");
-        
-    }
 
     /**
      * Method is called when the user pushes the "Create" button 
