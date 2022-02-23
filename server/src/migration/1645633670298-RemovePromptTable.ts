@@ -11,8 +11,8 @@ export class RemovePromptTable1645633670298 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "block" DROP CONSTRAINT "REL_5953472c3421397515c38e0b5f"`);
         await queryRunner.query(`ALTER TABLE "block" DROP COLUMN "promptId"`);
         await queryRunner.query(`ALTER TABLE "entry" DROP COLUMN "blockId"`);
-        await queryRunner.query(`DROP TABLE "prompt"`);
         await queryRunner.query(`DROP TABLE "prompt_media"`);
+        await queryRunner.query(`DROP TABLE "prompt"`);
         await queryRunner.query(`ALTER TABLE "entry" ADD "blockId" integer`);
         await queryRunner.query(`ALTER TABLE "block" ADD "promptTitle" character varying NOT NULL`);
         await queryRunner.query(`ALTER TABLE "block" ADD "promptText" character varying NOT NULL`);

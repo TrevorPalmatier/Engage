@@ -21,8 +21,8 @@ class RemovePromptTable1645633670298 {
             yield queryRunner.query(`ALTER TABLE "block" DROP CONSTRAINT "REL_5953472c3421397515c38e0b5f"`);
             yield queryRunner.query(`ALTER TABLE "block" DROP COLUMN "promptId"`);
             yield queryRunner.query(`ALTER TABLE "entry" DROP COLUMN "blockId"`);
-            yield queryRunner.query(`DROP TABLE "prompt"`);
             yield queryRunner.query(`DROP TABLE "prompt_media"`);
+            yield queryRunner.query(`DROP TABLE "prompt"`);
             yield queryRunner.query(`ALTER TABLE "entry" ADD "blockId" integer`);
             yield queryRunner.query(`ALTER TABLE "block" ADD "promptTitle" character varying NOT NULL`);
             yield queryRunner.query(`ALTER TABLE "block" ADD "promptText" character varying NOT NULL`);
