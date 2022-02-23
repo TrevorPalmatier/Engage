@@ -7,8 +7,6 @@ import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTitle, 
     cancelled, enableDisableBlockEdit, selectBlock } from "../features/blocksSlice";
 import { addSlide, cancel} from "../features/slideSlice";
-import studySlice from "../features/studySlice";
-import { request } from "https";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -18,10 +16,7 @@ import { request } from "https";
  * @returns a rendering of a block 
  */
 const CreateBlock = () => {
-    //states for each block
-    const [blockId, setBlockId] = useState("");                 
-
-    //set up redux for the block and slides
+     //set up redux for the block and slides
     const dispatch = useAppDispatch();      //calls on reducers actions
     const block  = useAppSelector(selectBlock);     //selects data to be persisted from a block
     const slides = useAppSelector(state => state.persistedReducer.slides.filter(slide => slide.blockId == block?.id));      //selects slides for a specific block
@@ -44,42 +39,44 @@ const CreateBlock = () => {
         };
 
 // ***  need to save the block id before calling the "postSlides()" function
-        fetch("/blocks", requestOptionsBlock)
+        fetch("https://intense-ravine-75218.herokuapp.com/https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
             .then(response => response.json())
-            .then(async info => await setBlockId(info.id))
-            // .then(() => postSlides())
+           // .then(async info => await setBlockId(info.id))
+            .then(res => {console.log(res); return res})
+            .then(info => postSlides(info))
             .then(() => console.log("blockPosted"))
             .catch((err) => console.log(err));  
-        navigate("../createstudy");
+     //   navigate("../createstudy");
     };
 
     /**
      * This method is able post the slides for the block to the api
      */
-    const postSlides =  () => {
+    const postSlides =  (info) => {
         //loops through all the slides and does a post request for each one
+        console.log("id of block: " + info.id)
         slides.map(async (slide) => {
-            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "blockId": blockId}  //slide data
+            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": info}  //slide data
             const requestOptionsSlide = {
                 method: "post",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(slideData)
             };
 
-           fetch("/slides", requestOptionsSlide)
+           fetch("https://intense-ravine-75218.herokuapp.com/https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
             .then(response => response.json())
             .then(() => console.log("posted slides"))
             .catch((err) => console.log(err));
         });
-        navigate("../createslide");
+       // navigate("../createslide");
         
     }
 
     /**
      * Method is called when the user pushes the "Create" button 
      */
-    const handleSubmit =  () => {
-        postBlock();
+    const handleSubmit =  (e) => {
+        navigate("../createstudy");
     };
 
    /**
@@ -112,7 +109,7 @@ const CreateBlock = () => {
     //creates new slide element and adds it through the reducer
     const handleNewSlide = () => {
         dispatch(addSlide({blockId: block?.id}));
-        dispatch(addSlide({slide: slides}))
+        //dispatch(addSlide({slide: slides}))
     };
 
     //handles discarding the block and slides when cancelled
@@ -171,22 +168,17 @@ const CreateBlock = () => {
                     </fieldset>
                 </div>
                 <br/>
-                <div>
                     {
                     slides.map((slide) => {
                         return (
-                        <div>
-                            <div className="createRect">
-                                <CreateSlide key={slide.id} id={slide.id}/>
-                            </div>
-                            <br/>
+                        <div key={slide.id} className="createRect">
+                            <CreateSlide key={slide.id} id={slide.id}/>
                         </div>
                         )
                     })
                     }
-                </div>
                 <div>
-                    <button className="fullWidthButton" onClick={handleNewSlide}>+ Create New Slide</button>
+                    <button type="button" onClick={handleNewSlide}>+ Create New Slide</button>
                 </div>
                 <br/>
                 <div>

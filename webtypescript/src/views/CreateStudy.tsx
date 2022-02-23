@@ -4,7 +4,7 @@ import NavbarScroller from "../Components/NavbarScroller";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setTitle, setImage, cancelled, selectStudy} from "../features/studySlice";
-import { addBlock } from "../features/blocksSlice";
+import blocksSlice, { addBlock } from "../features/blocksSlice";
 import { RootState } from "../store";
 
 /** 
@@ -24,9 +24,14 @@ const CreateStudy = () => {
     const dispatch = useAppDispatch();
     const study = useAppSelector(selectStudy);
     const imageLink = study.imageLink;
+    const blocks = useAppSelector((state:RootState) => state.persistedReducer.study.blocks);  //get blocks for the study
+    const slides = useAppSelector(state => state.persistedReducer.slides);      //selects slides for a specific block
+        
     
     const navigate = useNavigate();     //allows navigation within app
 
+    console.log(blocks.length);
+    console.log("slides:" + slides.length);
     //goes to create a block
     //maybe change this to not a route?
     const goToCreateBlock = () => {
@@ -36,7 +41,8 @@ const CreateStudy = () => {
 
     //is called when the study want to be create with the "submit" button
 // *** Still have to figure out how to make it synchronous
-    const handleSubmit = async(event: any ) => {
+    const handleSubmit = (event) => {
+        event.preventDefault();
         //post the STUDY data
         const postData = {title: study.title, imageLink: study.imageLink};
         const requestOptions = {
@@ -45,22 +51,62 @@ const CreateStudy = () => {
             body: JSON.stringify(postData)
         };
 
-        const postStudy = await fetch("/studies", requestOptions)
+        fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions)
             .then(response => response.json())
+            .then(info => postBlocks(info))
             .then(() => console.log("Posted to Backend"));
 
-        //get blocks for the study
-        // const blocks = useAppSelector((state:RootState) => state.persistedReducer.study.blocks);
+    }
+    
+    const postBlocks = (studyInfo) => {
+        blocks.map((block) => {
+            
+            //block data to be posted
+            const blockData = {title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink, study: studyInfo }
+            
+            //post request options for the block
+            const requestOptionsBlock = {
+                method: "post",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(blockData)
+            };
 
+    // ***  need to save the block id before calling the "postSlides()" function
+            fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
+                .then(response => response.json())
+                .then(info => postSlides(block?.id, info))
+                .then(() => console.log("blockPosted"))
+                .catch((err) => console.log(err));      
+        });
 
-        // const postBlocks = await fetch("https://ancient-ridge-25388.herokuapp.com/blocks", 
-        //     {
-
-        //     })
         navigate("../");   //go back to home when finished      
     };
   
-    
+     /**
+     * This method is able post the slides for the block to the api
+     */
+    const postSlides =  (blockId, blockInfo) => {
+        //loops through all the slides and does a post request for each one
+        console.log("id of block: " + blockInfo.Id)
+        slides.map((slide) => {
+            if(slide.blockId == blockId){
+                const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": blockInfo}  //slide data
+                const requestOptionsSlide = {
+                    method: "post",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify(slideData)
+                };
+
+            fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
+                .then(response => response.json())
+                .then(() => console.log("posted slides" ))
+                .catch((err) => console.log(err));      
+            }                                                                                                    
+        });
+       // navigate("../createslide");
+        
+    }
+
     /**
      * Selects image to be uploaded to cloudinary
      */
@@ -110,10 +156,18 @@ const CreateStudy = () => {
                     </fieldset>
                     <br/>
                     {study.selectedImage && 
-                        <img className="photo" defaultValue={study.imageLink} src={study.imageLink} />
+                        <img className="photo"  src={study.imageLink} />
                     }
                     <div>
                         <h2>Study's Blocks</h2>
+                        {blocks.map((block) =>{
+                            return (
+                            <div  key={block.id}>
+                                <img className="photo" defaultValue={block.imageLink} src={block.imageLink} />
+                                <p>{block.title}</p>
+                            </div>
+                            )
+                        })}
                         <button onClick={goToCreateBlock}> Add Block </button>
                     </div>     
                     <br/>       

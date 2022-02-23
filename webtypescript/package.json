@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "main": "./index.tsx",
-  "proxy": "https://ancient-ridge-25388.herokuapp.com/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
