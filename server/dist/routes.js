@@ -5,6 +5,7 @@ const StudyController_1 = require("./controller/StudyController");
 const SlideController_1 = require("./controller/SlideController");
 const BlockController_1 = require("./controller/BlockController");
 const EntryController_1 = require("./controller/EntryController");
+const BlockStudyController_1 = require("./controller/BlockStudyController");
 exports.Routes = [{
         method: "get",
         route: "/users",
@@ -105,6 +106,11 @@ exports.Routes = [{
         route: "/entries/:id",
         controller: EntryController_1.EntryController,
         action: "remove"
+    }, {
+        method: "get",
+        route: "/blocksbystudy/:id",
+        controller: BlockStudyController_1.BlockStudyController,
+        action: "all"
     }
 ];
 //# sourceMappingURL=routes.js.map
