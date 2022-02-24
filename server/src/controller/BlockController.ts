@@ -15,6 +15,7 @@ export class BlockController {
         return this.blockRepository.findOne(request.params.id);
     }
 
+
     async save(request: Request, response: Response, next: NextFunction) {
         return this.blockRepository.save(request.body);
     }
