@@ -8,6 +8,7 @@ export class BlockStudyController {
     private studyRepository = getRepository(Study);
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.blockRepository.find({study: request.body.study});
+        const study = await this.studyRepository.findOne(request.params.id);
+        return study.blocks;
     }
 }
