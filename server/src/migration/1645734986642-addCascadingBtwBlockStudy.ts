@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
 export class AddCascadingBtwBlockStudy1645734986642 implements MigrationInterface {
-    name = 'addCascadingBtwBlockStudy1645734986642'
+    name = 'AddCascadingBtwBlockStudy1645734986642'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "block" DROP CONSTRAINT "FK_f0c42c160a7d9dcea7c08b61b5f"`);

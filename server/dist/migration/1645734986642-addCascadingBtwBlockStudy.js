@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 class AddCascadingBtwBlockStudy1645734986642 {
     constructor() {
-        this.name = 'addCascadingBtwBlockStudy1645734986642';
+        this.name = 'AddCascadingBtwBlockStudy1645734986642';
     }
     up(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -26,4 +26,4 @@ class AddCascadingBtwBlockStudy1645734986642 {
     }
 }
 exports.AddCascadingBtwBlockStudy1645734986642 = AddCascadingBtwBlockStudy1645734986642;
-//# sourceMappingURL=1645734986642-addCascadingBtwBlockStudy.js.map
+//# sourceMappingURL=1645734986642-AddCascadingBtwBlockStudy.js.map
