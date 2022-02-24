@@ -11,7 +11,7 @@ export class StudyController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.studyRepository.findOne(request.params.id);
+        return this.studyRepository.findOne(request.params.id, {relations: ["blocks"]});
     }
 
     async save(request: Request, response: Response, next: NextFunction) {

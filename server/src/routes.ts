@@ -3,7 +3,6 @@ import { StudyController } from "./controller/StudyController";
 import { SlideController } from "./controller/SlideController";
 import { BlockController } from "./controller/BlockController";
 import { EntryController } from "./controller/EntryController";
-import { BlockStudyController } from "./controller/BlockStudyController";
 
 export const Routes = [{
     method: "get",
@@ -105,10 +104,5 @@ export const Routes = [{
     route: "/entries/:id",
     controller: EntryController,
     action: "remove"
-}, {
-    method: "get",
-    route: "/blocksbystudy/:id",
-    controller: BlockStudyController,
-    action: "all"
 }
 ];
