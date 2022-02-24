@@ -107,7 +107,7 @@ export const Routes = [{
     action: "remove"
 }, {
     method: "get",
-    route: "/blocksbystudy/:studyid",
+    route: "/blocksbystudy",
     controller: BlockStudyController,
     action: "all"
 }
