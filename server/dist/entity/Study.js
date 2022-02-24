@@ -27,7 +27,9 @@ __decorate([
     __metadata("design:type", String)
 ], Study.prototype, "title", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => Block_1.Block, block => block.study),
+    typeorm_1.OneToMany(type => Block_1.Block, block => block.study, {
+        cascade: true,
+    }),
     __metadata("design:type", Array)
 ], Study.prototype, "blocks", void 0);
 __decorate([

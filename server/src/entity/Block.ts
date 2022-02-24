@@ -23,7 +23,9 @@ export class Block {
     promptText: string;
 
     // multiple blocks can be assigned to a Study
-    @ManyToOne(type => Study, study => study.blocks)
+    @ManyToOne(type => Study, study => study.blocks, {
+        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+    })
     study: Study;
 
     // multiple slides can be within a block

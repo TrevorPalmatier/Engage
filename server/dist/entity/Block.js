@@ -36,7 +36,9 @@ __decorate([
     __metadata("design:type", String)
 ], Block.prototype, "promptText", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks),
+    typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks, {
+        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+    }),
     __metadata("design:type", Study_1.Study)
 ], Block.prototype, "study", void 0);
 __decorate([
