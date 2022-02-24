@@ -18,10 +18,8 @@ class BlockStudyController {
     }
     all(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const study = this.studyRepository.findOne(request.params.id);
-            const blocks = (yield study).blocks;
-            console.log(blocks.length);
-            return study;
+            const study = yield this.studyRepository.findOne(request.params.id);
+            return this.blockRepository.find({ study });
         });
     }
 }
