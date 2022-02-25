@@ -21,7 +21,7 @@ class BlockController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.findOne(request.params.id);
+            return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
         });
     }
     save(request, response, next) {

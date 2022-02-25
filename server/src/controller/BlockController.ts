@@ -12,7 +12,7 @@ export class BlockController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.blockRepository.findOne(request.params.id);
+        return this.blockRepository.findOne(request.params.id, { relations: ["slides"]});
     }
 
 
