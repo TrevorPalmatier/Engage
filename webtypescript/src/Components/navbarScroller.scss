@@ -1,0 +1,43 @@
+.NavbarScroller {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    z-index: 3;
+    transition: all 1s ease;
+    font-family: Verdana, 'Geneva', Tahoma, sans-serif;
+    background-color: black;
+    color:white;
+
+    .left{
+        display: flex;
+        flex-direction: row;
+        flex: 0.8;
+        justify-content:flex-start;
+        margin-left: 50px;
+    }
+    
+    .left p {
+        font-weight: 100;
+        font-size: larger;
+    }
+
+    .right{
+        flex: 0.2;
+        height: inherit;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-right: 50px;
+        margin-top: 25px;
+        list-style-type: none;
+    }
+}
+.NavbarScroller div li a{
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
