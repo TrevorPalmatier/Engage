@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import '../App.css';
 import NavbarScroller from "../Components/NavbarScroller";
 import styled from "styled-components";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cancelled } from "../features/studySlice";
 import { cancelBlocks} from "../features/blocksSlice";
 import { cancelSlides } from "../features/slideSlice";
@@ -26,7 +26,8 @@ const Home = () =>  {
   const navigate = useNavigate(); //sets up navigation
 
   const goToCreateStudy = () => {
-    navigate("/createstudy");
+    const edit = false;
+    navigate(`/createstudy/${edit}`);
   }
 
   const  goToViewStudy = () => {

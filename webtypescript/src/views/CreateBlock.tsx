@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import NavbarScroller from "../Components/NavbarScroller";
 import CreateSlide from "./CreateSlide";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTitle, 
-    cancelled, enableDisableBlockEdit, selectBlock } from "../features/blocksSlice";
-import { addSlide, cancel} from "../features/slideSlice";
+    cancelled, enableDisableBlockEdit, selectBlock, cancelBlocks } from "../features/blocksSlice";
+import { addSlide, cancel, cancelSlides} from "../features/slideSlice";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -23,15 +23,71 @@ const CreateBlock = () => {
 
     //allows navigation
     const navigate = useNavigate();
-
+    const params = useParams();
 
     /**
      * Method is called when the user pushes the "Create" button 
      */
     const handleSubmit =  (e) => {
-        navigate("../createstudy");
-    };
+        e.preventDefault();
 
+        if(params.studyid == null){
+            navigate("../createstudy");
+        }else{
+            const id = params.studyid;
+            fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${id}`)
+            .then(res => res.json())
+            .then(data => postBlocks({title: data.title, "imageLink": data.imageLink, id:  data.id}))
+        }
+    };
+const postBlocks = (studyInfo) => {
+            
+        //block data to be posted
+        const blockData = {title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink, study: studyInfo }
+        
+        //post request options for the block
+        const requestOptionsBlock = {
+            method: "post",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(blockData)
+        };
+
+// ***  need to save the block id before calling the "postSlides()" function
+        fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
+            .then(response => response.json())
+            .then(info => postSlides(block?.id, info))
+            .then(() => console.log("blockPosted"))
+            .catch((err) => console.log(err));      
+
+        dispatch(cancelSlides());
+        dispatch(cancelBlocks());
+        navigate(`../viewblocks/${params.studyid}`);   //go back to viewing blocks     
+    };
+  
+     /**
+     * This method is able post the slides for the block to the api
+     */
+    const postSlides =  (blockId, blockInfo) => {
+        //loops through all the slides and does a post request for each one
+        console.log("id of block: " + blockInfo.Id)
+        slides.map((slide) => {
+            if(slide.blockId == blockId){
+                const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": blockInfo}  //slide data
+                const requestOptionsSlide = {
+                    method: "post",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify(slideData)
+                };
+
+            fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
+                .then(response => response.json())
+                .then(() => console.log("posted slides" ))
+                .catch((err) => console.log(err));      
+            }                                                                                                    
+        });
+       // navigate("../createslide");
+        
+    }
    /**
      * This method selects the image for the cover of the block
      * 
@@ -67,12 +123,14 @@ const CreateBlock = () => {
 
     //handles discarding the block and slides when cancelled
     const handleCancel = () => {
-        //cancel the block and any slide
         dispatch(cancelled({id: block?.id}))
-        slides.map((slide) => {
-            dispatch(cancel({id: slide.id}))
-        })
-        navigate("../createstudy");     //redirects to "Create Study" page
+        dispatch(cancelSlides());
+        //cancel the block and any slide
+        if(params.studyid == null){
+            navigate("../createstudy");     //redirects to "Create Study" page
+        }else{
+            navigate(`../viewblocks/${params.studyid}`);
+        }
     }
 
     //renders the element

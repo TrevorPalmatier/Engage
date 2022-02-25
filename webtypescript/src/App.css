@@ -42,10 +42,14 @@
 }
 
 .buttonText{
-  width: 15%;
-  height: 10%;
+  background-color: rgb(151, 151, 151);
+  color:black;
+  border-style: ridge;
   font-size: large;
+  border-radius: 5%;
+  font-family: FreeMono;
 }
+
 .wrapper {
   padding: 5px 20px;
 }
@@ -55,8 +59,10 @@
 }
 
 .photo {
-  height: 200px;
-  width: 200px;
+  max-width:200px;
+  max-height:200px;
+  width: auto;
+  height: auto;
 }
 
 .createRect {
@@ -78,4 +84,27 @@
 .fullWidthButton {
   width: 100%;
   height:auto;
+}
+  
+.pageHeader {
+  padding: 40px 40px 0px 40px ;
+  text-align: center;
+  font-weight: 600;
+  font-size: 60px;
+  display: flex;
+  place-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.addPadding {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.page {
+  font-family: Verdana, 'Geneva', Tahoma, sans-serif;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
 }
