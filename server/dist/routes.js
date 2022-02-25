@@ -46,7 +46,7 @@ exports.Routes = [{
         controller: StudyController_1.StudyController,
         action: "remove"
     }, {
-        method: "update",
+        method: "put",
         route: "/studies/:id",
         controller: StudyController_1.StudyController,
         action: "update"

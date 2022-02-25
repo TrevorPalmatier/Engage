@@ -45,7 +45,7 @@ export const Routes = [{
     controller: StudyController,
     action: "remove"
 },{
-    method: "update",
+    method: "put",
     route: "/studies/:id",
     controller: StudyController,
     action: "update"
