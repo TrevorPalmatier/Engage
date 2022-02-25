@@ -1,15 +1,16 @@
 .NavbarScroller {
     width: 100%;
-    height: auto;
+    height: 50px;
     display: flex;
     flex-direction: row;
     position: fixed;
     top: 0;
-    z-index: 3;
-    transition: all 1s ease;
+    // z-index: 3;
+    // transition: all 1s ease;
     font-family: Verdana, 'Geneva', Tahoma, sans-serif;
     background-color: black;
     color:white;
+    place-items: center;
 
     .left{
         display: flex;
@@ -26,17 +27,17 @@
 
     .right{
         flex: 0.2;
-        height: inherit;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         margin-right: 50px;
-        margin-top: 25px;
         list-style-type: none;
+        position:relative;
     }
 }
 .NavbarScroller div li a{
     display: block;
+
     color: white;
     text-align: center;
     text-decoration: none;

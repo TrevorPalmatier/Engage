@@ -138,6 +138,7 @@ const postBlocks = (studyInfo) => {
     return (
         <div>
             <NavbarScroller/>
+            <div className="page">
             <div className = "viewHeader">
                 <h1>Create a Block</h1>
             </div>
@@ -197,6 +198,7 @@ const postBlocks = (studyInfo) => {
                     <button className ="center"onClick={handleCancel}>Cancel</button>
                 </div>
                </form>
+            </div>
             </div>
         </div>
     )

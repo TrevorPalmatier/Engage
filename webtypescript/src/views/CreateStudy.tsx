@@ -155,7 +155,8 @@ const CreateStudy = () => {
     //renders the form to create a study
     return (
         <div>
-            <NavbarScroller/>     
+            <NavbarScroller/>   
+            <div className='page'> 
             <div className = "wrapper">
                 <h1>Create a Study</h1>
                 <form onSubmit={handleSubmit}>
@@ -197,6 +198,7 @@ const CreateStudy = () => {
                     </div>
                 </form>
             </div>  
+            </div> 
         </div>
     )
 }

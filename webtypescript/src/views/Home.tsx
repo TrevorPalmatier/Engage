@@ -36,8 +36,9 @@ const Home = () =>  {
 
   //renders home screen
   return (
-    <div>
+    <div >
       <NavbarScroller/>
+      <div className="page">
         <div className="viewHeader">
           <h1>Engage</h1>
         </div>
@@ -47,6 +48,7 @@ const Home = () =>  {
           <button  className="buttonText" onClick={goToCreateStudy} background-color="bg-dark">Create Study</button>
         <div className="divider"/>
           <button onClick={goToViewStudy} className="buttonText">View Studies</button>
+        </div>
         </div>
     </div>
   )

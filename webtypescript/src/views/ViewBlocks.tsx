@@ -49,7 +49,7 @@ const ViewBlocks = () => {
   return (
     <div>
        <NavbarScroller/>
-       <div className='blocksPage'>    
+       <div className='page'>    
         <div className='pageHeader'>
           <p>Study: {study.title}</p>
         </div>

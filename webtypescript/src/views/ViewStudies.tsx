@@ -37,7 +37,7 @@ const ViewStudies = () => {
     return (
      <div> 
         <NavbarScroller/>
-        <div className='studiesPage'>
+        <div className='page'>
           <div className='pageHeader'>
             <p>Studies</p>
           </div>
