@@ -35,6 +35,11 @@ class StudyController {
             yield this.studyRepository.remove(userToRemove);
         });
     }
+    update(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.studyRepository.update(request.params.id, request.body);
+        });
+    }
 }
 exports.StudyController = StudyController;
 //# sourceMappingURL=StudyController.js.map

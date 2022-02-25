@@ -23,4 +23,7 @@ export class StudyController {
         await this.studyRepository.remove(userToRemove);
     }
 
+    async update(request: Request, response: Response, next: NextFunction) {
+        return  this.studyRepository.update(request.params.id, request.body);
+    }
 }
