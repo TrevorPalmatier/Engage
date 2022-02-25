@@ -33,6 +33,12 @@
         margin-right: 50px;
         list-style-type: none;
         position:relative;
+
+        .nav-link{
+            &:hover{
+                color: grey;
+            }
+        }
     }
 }
 .NavbarScroller div li a{
@@ -41,4 +47,6 @@
     color: white;
     text-align: center;
     text-decoration: none;
+
+
 }

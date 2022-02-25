@@ -7,13 +7,8 @@
   height: 150px;
   width: 100%;
   margin-top: 10px;
-  /* background-color: thistle; */
 }
 
-.Navigation{
-  flex-direction: column;
-  background-color: blueviolet;
-}
 
 .viewHeader {
     display: flex;
@@ -35,19 +30,20 @@
   height: auto;
 }
 
-.divider{
-  width:10px;
-  height:auto;
-  display:inline-block;
-}
 
 .buttonText{
-  background-color: rgb(151, 151, 151);
-  color:black;
-  border-style: ridge;
-  font-size: large;
-  border-radius: 5%;
-  font-family: FreeMono;
+  border: 5px;
+  border-style: double;
+  border-color: white;
+  border-radius: 6px;
+  background-color: black;
+  color:white;
+  padding: 5px, 10px 5px 10px;
+  font-weight: 100;
+}
+
+.buttonText:hover{
+  opacity: .7;
 }
 
 .wrapper {

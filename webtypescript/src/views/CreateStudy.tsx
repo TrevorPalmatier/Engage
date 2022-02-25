@@ -188,13 +188,13 @@ const CreateStudy = () => {
                                 </div>
                                 )
                             })}
-                            <button onClick={goToCreateBlock}> Add Block </button>
+                            <button onClick={goToCreateBlock} className="buttonText"> Add Block </button>
                      </div>  
                     }   
                     <br/>       
                     <div>
-                        <button type="submit">Create</button>
-                        <button onClick={cancel}>Cancel</button>
+                        <button type="submit" className="buttonText">Create</button>
+                        <button onClick={cancel} className="buttonText">Cancel</button>
                     </div>
                 </form>
             </div>  
