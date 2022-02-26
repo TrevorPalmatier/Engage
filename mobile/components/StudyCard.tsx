@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-export default function CharacterCard(props) {
+export default function StudyCard(props) {
 	const handleClick = () => {
-		props.select(props.index);
+		props.select(props.id);
 	};
 
 	const handleDelete = () => {

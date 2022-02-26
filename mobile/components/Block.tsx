@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Pressable, Dimensions } from "react-native";
 
-export default function Block({ title, image, navigation }) {
+export default function Block({ id, title, image, navigation }) {
 	return (
 		<View style={styles.blockContainer}>
 			<Pressable
 				style={styles.center}
 				onPress={() => {
-					navigation.navigate("PromptTabs", { title: title });
+					navigation.navigate("PromptTabs", { title, blockId: id });
 				}}>
 				<Image style={styles.image} source={{ uri: image }} />
 				<View style={styles.textContainer}>
