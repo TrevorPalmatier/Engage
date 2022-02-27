@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../Styling/ViewBlocks.scss';
-import '../App.css';
+import '../App.scss';
 import { useAppDispatch } from '../hooks/store';
 import { addBlock } from '../features/blocksSlice';
 import { setTitle } from '../features/studySlice';

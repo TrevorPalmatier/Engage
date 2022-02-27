@@ -1,5 +1,5 @@
 import React from "react";
-import '../App.css';
+import '../App.scss';
 import { useNavigate } from "react-router-dom";
 import { setText, setTitle, cancel, addSlide } from "../features/slideSlice";
 import { useAppSelector, useAppDispatch } from "../hooks/store";

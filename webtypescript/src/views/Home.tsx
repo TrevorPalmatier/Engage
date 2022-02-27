@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import '../App.css';
+import '../App.scss';
 import NavbarScroller from "../Components/NavbarScroller";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
