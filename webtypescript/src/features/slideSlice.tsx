@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import internal from "stream";
+import { isConstructorDeclaration } from "typescript";
 import { RootState } from "../store";
 import blocksSlice from "./blocksSlice";
 
@@ -47,6 +48,7 @@ const slideSlice = createSlice({
                 backgroundText: payload.backgroundText,
                 new: false
             });
+            console.log("slide");
             return state;
         },
 
