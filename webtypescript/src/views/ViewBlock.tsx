@@ -31,13 +31,16 @@ const ViewBlock = () => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
     const goToEditBlock = () => {
       dispatch(addOldBlock({id: block.id, title: block.title, imagelink: block.mediaURL, promptTitle: block.promptTitle, promptText: block.promptText}));
       block.slides.map((slide) => {
-        dispatch(addOldSlide({id: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }))
+        dispatch(addOldSlide({blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
+        fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${params.id}`)
       });
       navigate(`/createblock/${block.studyid}/${block.id}`);
     }
+
     return (
      
         <div>
