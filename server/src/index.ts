@@ -6,8 +6,8 @@ import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
-import { getConnectionOptions, ConnectionOptions, createConnection} from "typeorm";
-import dotenv from 'dotenv';
+import { getConnectionOptions, ConnectionOptions, createConnection } from "typeorm";
+import dotenv from "dotenv";
 dotenv.config();
 
 createConnection()
@@ -15,9 +15,11 @@ createConnection()
 		// create express app
 		const app = express();
 		// const port = 3000; // default port to listen
-		app.use(cors({
-			origin: '*',
-		}));
+		app.use(
+			cors({
+				origin: "*",
+			})
+		);
 		app.use(bodyParser.json());
 
 		// register express routes from defined application routes
@@ -43,7 +45,7 @@ createConnection()
 		app.post("/private", isAuth);
 
 		// start express server
-		app.listen(process.env.PORT|| 80, async () => {
+		app.listen(process.env.PORT || 80, async () => {
 			// insert new users for test
 			// await connection.manager.save(
 			// 	connection.manager.create(User, {
@@ -67,4 +69,3 @@ createConnection()
 		// tslint:disable-next-line:no-console
 	})
 	.catch();
-

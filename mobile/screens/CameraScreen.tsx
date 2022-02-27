@@ -21,7 +21,7 @@ const CameraScreen = (props) => {
 
 	const takePicture = async () => {
 		// if(!camera) return
-		const photo = await camera.takePictureAsync();
+		const photo = await camera.takePictureAsync({ base64: true });
 		// console.log(photo);
 		// setStartCamera(false);
 		setPreviewVisible(true);
@@ -32,11 +32,7 @@ const CameraScreen = (props) => {
 		setPreviewVisible(false);
 		//console.log("image", capturedImage);
 		props.navigation.navigate("Submit", {
-			uri: capturedImage.uri,
-			width: capturedImage.width,
-			height: capturedImage.height,
-			type: capturedImage.type,
-			name: capturedImage.uri.substring(capturedImage.uri.lastIndexOf("/") + 1, capturedImage.uri.length),
+			photo: capturedImage,
 		});
 	};
 

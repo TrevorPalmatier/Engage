@@ -19,6 +19,12 @@ class StudyController {
             return this.studyRepository.find();
         });
     }
+    blocks(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const study = this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
+            return (yield study).blocks;
+        });
+    }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });

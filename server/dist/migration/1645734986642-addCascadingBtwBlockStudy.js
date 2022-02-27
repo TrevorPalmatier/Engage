@@ -26,4 +26,4 @@ class AddCascadingBtwBlockStudy1645734986642 {
     }
 }
 exports.AddCascadingBtwBlockStudy1645734986642 = AddCascadingBtwBlockStudy1645734986642;
-//# sourceMappingURL=1645734986642-AddCascadingBtwBlockStudy.js.map
+//# sourceMappingURL=1645734986642-addCascadingBtwBlockStudy.js.map

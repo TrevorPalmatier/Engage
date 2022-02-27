@@ -24,6 +24,16 @@ class UserController {
             return this.userRepository.findOne(request.params.id);
         });
     }
+    studies(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = this.userRepository
+                .createQueryBuilder("user")
+                .leftJoinAndSelect("user.studies", "study")
+                .where("user.id = :id", { id: request.params.id })
+                .getOne();
+            return (yield result).studies;
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.userRepository.save(request.body);

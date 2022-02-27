@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { api } from "./services/auth";
+import { api } from "./services/engage";
 import userReducer from "../features/user/userSlice";
 import authReducer from "../features/auth/authSlice";
 

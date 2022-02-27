@@ -19,6 +19,16 @@ class BlockController {
             return this.blockRepository.find();
         });
     }
+    slides(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const promptAndSlides = this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+            const result = [
+                ...(yield promptAndSlides).slides,
+                { id: -1, title: (yield promptAndSlides).promptTitle, backgroundText: (yield promptAndSlides).promptText },
+            ];
+            return result;
+        });
+    }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });

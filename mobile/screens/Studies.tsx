@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert, Button, Pressable } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { logout, selectCurrentUser } from "../features/auth/authSlice";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/core";
 import StudyCard from "../components/StudyCard";
+import { useStudiesQuery } from "../app/services/engage";
 
 export default function CharacterSelectScreen({ navigation }) {
-	const studies = [
-		{ id: 1, data: { name: "Study 1" } },
-		{ id: 2, data: { name: "Study 2" } },
-	];
-
 	const dispatch = useAppDispatch();
+	const user = useAppSelector(selectCurrentUser);
+	const { data = [], isFetching } = useStudiesQuery(user.id);
+
+	useEffect(() => {
+		// console.log(data);
+	}, [data]);
 
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
@@ -33,8 +35,8 @@ export default function CharacterSelectScreen({ navigation }) {
 		// navigation.navigate("CharacterCreation");
 	};
 
-	const handleSelectStudy = () => {
-		navigation.navigate("Home");
+	const handleSelectStudy = (id) => {
+		navigation.navigate("Home", { id });
 	};
 
 	const handleDeleteStudy = () => {
@@ -45,8 +47,9 @@ export default function CharacterSelectScreen({ navigation }) {
 		return (
 			<StudyCard
 				key={item.id}
+				id={item.id}
 				index={index}
-				name={item.data.name}
+				name={item.title}
 				select={handleSelectStudy}
 				delete={handleDeleteStudy}
 			/>
@@ -54,40 +57,50 @@ export default function CharacterSelectScreen({ navigation }) {
 	};
 
 	return (
-		<View style={styles.main}>
-			{/* <ScrollView
+		<>
+			{isFetching ? (
+				<View style={styles.main}>
+					<Text>Is loading</Text>
+				</View>
+			) : (
+				<View style={styles.main}>
+					{/* <ScrollView
 				style={{ width: "100%", backgroundColor: "#404040" }}
 				contentContainerStyle={styles.container}
 				showsVerticalScrollIndicator={false}>
 				{characters.map((character, index) => {
 					return (
 						<CharacterCard
-							key={character.id}
-							index={index}
-							name={character.data().name}
-							select={selectCharacter}
+						key={character.id}
+						index={index}
+						name={character.data().name}
+						select={selectCharacter}
 						/>
-					);
-				})}
-			</ScrollView> */}
-			<FlatList
-				ItemSeparatorComponent={Platform.OS !== "android" && (() => <View style={[styles.separator]} />)}
-				style={{ width: "100%" }}
-				// contentContainerStyle={styles.container}
-				showsVerticalScrollIndicator={false}
-				data={studies}
-				renderItem={renderItem}
-			/>
-			<View style={styles.buttonContainer}>
-				<TouchableOpacity
-					style={styles.button}
-					onPress={() => {
-						handleAddStudy();
-					}}>
-					<Text style={[{ color: "white", fontSize: 18 }]}>Join Study</Text>
-				</TouchableOpacity>
-			</View>
-		</View>
+						);
+					})}
+				</ScrollView> */}
+					<FlatList
+						ItemSeparatorComponent={
+							Platform.OS !== "android" && (() => <View style={[styles.separator]} />)
+						}
+						style={{ width: "100%" }}
+						// contentContainerStyle={styles.container}
+						showsVerticalScrollIndicator={false}
+						data={data as any}
+						renderItem={renderItem}
+					/>
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity
+							style={styles.button}
+							onPress={() => {
+								handleAddStudy();
+							}}>
+							<Text style={[{ color: "white", fontSize: 18 }]}>Join Study</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+			)}
+		</>
 	);
 }
 

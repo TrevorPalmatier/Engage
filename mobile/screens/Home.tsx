@@ -2,28 +2,32 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Button, FlatList, Platform, Image, Dimensions, ActivityIndicator } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { logout, selectCurrentUser } from "../features/auth/authSlice";
+import { useBlocksQuery } from "../app/services/engage";
 import Block from "../components/Block";
+import Slide from "../components/Slide";
 const img = require("../assets/landscape.jpg");
 const imgURI = Image.resolveAssetSource(img).uri;
 
-export default function home({ navigation }) {
-	const [isLoading, setIsLoading] = useState(true);
-	const user = useAppSelector(selectCurrentUser);
+export default function home({ route, navigation }) {
+	const { id } = route.params;
+	// const [isLoading, setIsLoading] = useState(true);
+	// const user = useAppSelector(selectCurrentUser);
 	const dispatch = useAppDispatch();
+	const { data = [], isFetching } = useBlocksQuery(id);
 
-	const blocks = [
-		{ title: "Landscapes", image: imgURI, key: 1 },
-		{ title: "Landscapes", image: imgURI, key: 2 },
-		{ title: "Landscapes", image: imgURI, key: 3 },
-		{ title: "Landscapes", image: imgURI, key: 4 },
-		{ title: "Landscapes", image: imgURI, key: 5 },
-		{ title: "Landscapes", image: imgURI, key: 6 },
-		{ title: "Landscapes", image: imgURI, key: 7 },
-		{ title: "Landscapes", image: imgURI, key: 8 },
-		{ title: "Landscapes", image: imgURI, key: 9 },
-		{ title: "Landscapes", image: imgURI, key: 10 },
-		{ title: "Landscapes", image: imgURI, key: 11 },
-	];
+	// const blocks = [
+	// 	{ title: "Landscapes", image: imgURI, key: 1 },
+	// 	{ title: "Landscapes", image: imgURI, key: 2 },
+	// 	{ title: "Landscapes", image: imgURI, key: 3 },
+	// 	{ title: "Landscapes", image: imgURI, key: 4 },
+	// 	{ title: "Landscapes", image: imgURI, key: 5 },
+	// 	{ title: "Landscapes", image: imgURI, key: 6 },
+	// 	{ title: "Landscapes", image: imgURI, key: 7 },
+	// 	{ title: "Landscapes", image: imgURI, key: 8 },
+	// 	{ title: "Landscapes", image: imgURI, key: 9 },
+	// 	{ title: "Landscapes", image: imgURI, key: 10 },
+	// 	{ title: "Landscapes", image: imgURI, key: 11 },
+	// ];
 
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
@@ -41,8 +45,8 @@ export default function home({ navigation }) {
 
 	const renderItem = ({ item, index }) => {
 		const title = item.title;
-		const image = item.image;
-		return <Block title={title as String} image={image as String} navigation={navigation} />;
+		const image = item.mediaURL;
+		return <Block id={item.id} title={title as String} image={image as String} navigation={navigation} />;
 	};
 
 	return (
@@ -56,8 +60,8 @@ export default function home({ navigation }) {
 				showsHorizontalScrollIndicator={false}
 				contentContainerStyle={styles.listContainer}
 				showsVerticalScrollIndicator={false}
-				data={blocks}
-				keyExtractor={(item) => item.key}
+				data={data as any}
+				keyExtractor={(item) => item.id}
 				renderItem={renderItem}></FlatList>
 		</View>
 	);

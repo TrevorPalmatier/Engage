@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet, Alert, Text, Pressable } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { SignupRequest, useSignupMutation } from "../app/services/auth";
+import { SignupRequest, useSignupMutation } from "../app/services/engage";
 
 function Register({ navigation }) {
 	const [loading, setLoading] = useState(true);

@@ -40,13 +40,21 @@ export function CaptureScreen({ navigation }) {
 			mediaTypes: PhotoPicker.MediaTypeOptions.All,
 			allowsEditing: true,
 			aspect: [4, 3],
-			quality: 1,
-			base64: true
+			// quality: 1,
+			base64: true,
 		});
 		if (!result.cancelled) {
-			setImage((result as ImageInfo).uri);		
+			setImage((result as ImageInfo).uri);
 			const photo = result as ImageInfo;
-			navigation.navigate("Submit", { uri: photo.uri, width: photo.width, height: photo.height, type: photo.type, name: photo.uri.substring(photo.uri.lastIndexOf('/') + 1, photo.uri.length) });
+			const base64 = `data:image/jpg;base64,${photo.base64}`;
+			navigation.navigate("Submit", {
+				picker: base64,
+				uri: photo.uri,
+				width: photo.width,
+				height: photo.height,
+				type: photo.type,
+				name: photo.uri.substring(photo.uri.lastIndexOf("/") + 1, photo.uri.length),
+			});
 		}
 	};
 	return (

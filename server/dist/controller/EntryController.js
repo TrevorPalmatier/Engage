@@ -26,7 +26,15 @@ class EntryController {
     }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.entryRepository.save(request.body);
+            // console.log(request.body);
+            // return { message: "you are a dumbo" };
+            const entry = new Entry_1.Entry();
+            const body = request.body;
+            entry.user = body.userId;
+            entry.block = body.blockId;
+            entry.imageLink = body.imageLink;
+            entry.text = body.text;
+            return this.entryRepository.save(entry);
         });
     }
     remove(request, response, next) {

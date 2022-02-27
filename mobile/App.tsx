@@ -66,9 +66,9 @@ function PromptTabScreens({ route, navigation }) {
 			screenOptions={{
 				headerShown: false,
 			}}>
-			<PromptStack.Screen name='Select' component={Prompt} />
+			<PromptStack.Screen name='Select' component={Prompt} initialParams={{ blockId: route.params.blockId }} />
 			<PromptStack.Screen name='Camera' component={CameraScreen} />
-			<PromptStack.Screen name='Submit' component={Caption} />
+			<PromptStack.Screen name='Submit' component={Caption} initialParams={{ blockId: route.params.blockId }} />
 		</PromptStack.Navigator>
 	);
 }

@@ -26,7 +26,7 @@ typeorm_1.createConnection()
     const app = express_1.default();
     // const port = 3000; // default port to listen
     app.use(cors_1.default({
-        origin: '*',
+        origin: "*",
     }));
     app.use(body_parser_1.default.json());
     // register express routes from defined application routes

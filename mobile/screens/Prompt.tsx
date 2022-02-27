@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, Dimensions, ScrollView, Pressable, Platform } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	ImageBackground,
+	Dimensions,
+	ScrollView,
+	Pressable,
+	Platform,
+	Image,
+} from "react-native";
 import * as PhotoPicker from "expo-image-picker";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { usePromptAndSlidesQuery } from "../app/services/engage";
+import Slide from "../components/Slide";
+const img = require("../assets/landscape.jpg");
+const imgURI = Image.resolveAssetSource(img).uri;
 
 export default function Prompt({ route, navigation }) {
 	const [image, setImage] = useState(null);
+	const blockId = route.params.blockId;
+	const { data = [], isFetching } = usePromptAndSlidesQuery(blockId);
 
 	const help = useHeaderHeight();
 
@@ -26,23 +42,32 @@ export default function Prompt({ route, navigation }) {
 			allowsEditing: true,
 			aspect: [4, 3],
 			quality: 1,
+			base64: true,
 		});
 
 		if (!result.cancelled) {
 			setImage((result as ImageInfo).uri);
 			const photo = result as ImageInfo;
-			navigation.navigate("Submit", { uri: photo.uri, width: photo.width, height: photo.height });
+			// console.log(photo);
+			const base64 = `data:image/jpg;base64,${photo.base64}`;
+			navigation.navigate("Submit", { photo });
 		}
 	};
 
 	return (
-		<View style={[styles.center, { height: Dimensions.get("screen").height - help }]}>
+		<View style={[{ height: Dimensions.get("screen").height - help }]}>
 			<ScrollView
 				horizontal
 				alwaysBounceHorizontal={false}
 				pagingEnabled={true}
 				showsHorizontalScrollIndicator={false}>
-				<ImageBackground style={[styles.background]} source={require("../assets/background.jpg")}>
+				{(data as any[]).map((slide) => {
+					if (slide.id !== -1)
+						return (
+							<Slide key={slide.id} slideId={slide.id} title={slide.title} text={slide.backgroundText} />
+						);
+				})}
+				{/* <ImageBackground style={[styles.background]} source={require("../assets/background.jpg")}>
 					<View style={styles.textContainer}>
 						<Text style={styles.text}>
 							This is a Prompt. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi autem sint
@@ -58,9 +83,13 @@ export default function Prompt({ route, navigation }) {
 						excepturi tenetur! Dolor, autem, ea necessitatibus perspiciatis obcaecati laboriosam, vitae
 						soluta aperiam iusto et iure in illum.
 					</Text>
-				</View>
+				</View> */}
 				<View style={[styles.center, styles.container]}>
-					<Text style={[styles.text3]}>Submit a response:</Text>
+					<Text style={[styles.text3]}>
+						{data[(data as any[]).length - 1]
+							? data[(data as any[]).length - 1].backgroundText
+							: "Submit a response"}
+					</Text>
 					<Pressable
 						style={styles.button}
 						onPress={() => {
@@ -109,7 +138,6 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	container: {
-		padding: 15,
 		flex: 1,
 		// backgroundColor: "#101010",
 	},

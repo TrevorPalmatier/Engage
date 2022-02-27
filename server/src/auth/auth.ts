@@ -5,7 +5,7 @@ import joi from "joi";
 import { getConnection } from "typeorm";
 import { User } from "../entity/User";
 
-const schema = joi
+const signupSchema = joi
 	.object({
 		password: joi.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
 		// repeatPassword: joi.ref('password'),
@@ -14,11 +14,16 @@ const schema = joi
 	})
 	.with("password", "repassword");
 
+const loginSchema = joi.object({
+	password: joi.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
+	// repeatPassword: joi.ref('password'),
+	email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "edu"] } }),
+});
+
 const signup = (req: Request, res: Response, next: NextFunction) => {
 	const repo = getConnection().getRepository(User);
-	console.log(req.body);
 	// checks if email already exists
-	const inputValid = schema.validate({
+	const inputValid = signupSchema.validate({
 		password: req.body.password,
 		email: req.body.email,
 		repassword: req.body.repassword,
@@ -87,7 +92,7 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 const login = (req: Request, res: Response, next: NextFunction) => {
 	const repo = getConnection().getRepository(User);
 	// checks if email exists
-	const inputValid = schema.validate({
+	const inputValid = loginSchema.validate({
 		password: req.body.password,
 		email: req.body.email,
 	});
@@ -125,7 +130,7 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 						res.status(200).json({ user, token });
 					} else {
 						// password doesnt match
-						res.status(401).json({ message: "invalid credentials" });
+						res.status(401).json({ message: "Email or Password is incorrect" });
 					}
 				});
 			}
