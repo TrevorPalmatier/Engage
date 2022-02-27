@@ -33,12 +33,21 @@
         margin-right: 50px;
         list-style-type: none;
         position:relative;
+
+        .nav-link{
+            color: white;
+
+            &:hover{
+                color: grey;
+            }
+        }
     }
 }
-.NavbarScroller div li a{
-    display: block;
 
-    color: white;
-    text-align: center;
-    text-decoration: none;
-}
+// .NavbarScroller div li a{
+//     display: block;
+
+//     color: white;
+//     text-align: center;
+//     text-decoration: none;
+// }
