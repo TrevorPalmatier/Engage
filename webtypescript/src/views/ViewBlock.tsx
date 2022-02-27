@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../App.css';
-import '../Styling/ViewBlock.css';
+import '../Styling/ViewBlock.scss';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
