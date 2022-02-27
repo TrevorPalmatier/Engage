@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
-import '../App.scss';
-import '../Styling/ViewStudies.scss';
+import '../App.css';
+import '../Styling/ViewStudies.css';
 import CreateStudy from './CreateStudy';
 import { useNavigate } from 'react-router-dom';
  

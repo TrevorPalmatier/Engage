@@ -38,6 +38,10 @@ const CreateStudy = () => {
         navigate("/createblock");
     };
 
+    const goToViewBlocks = () => {
+        dispatch(cancelled());
+        navigate(`/viewblocks/${params.studyid}`);
+    }
     //is called when the study want to be create with the "submit" button
 // *** Still have to figure out how to make it synchronous
     const handleSubmit = (event) => {
@@ -216,10 +220,16 @@ const CreateStudy = () => {
                         <button onClick={goToCreateBlock}> Add Block </button>
                     </div>  
                     }
+                    {params.edit && 
+                        <div>
+                            <button onClick={goToViewBlocks}> Edit Blocks </button>
+                        </div>
+
+                    }
                     <br/>       
                     <div>
-                        <button type="submit" className="buttonText">Create</button>
-                        <button onClick={cancel} className="buttonText">Cancel</button>
+                        <button type="submit">Create</button>
+                        <button onClick={cancel}>Cancel</button>
                     </div>
                    
                 </form>

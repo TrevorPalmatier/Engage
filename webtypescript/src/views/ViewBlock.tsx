@@ -4,6 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../App.css';
 import '../Styling/ViewBlock.css';
 import FakeScreen from './FakeScreen';
+import { useAppDispatch } from '../hooks/store';
+import { addOldBlock } from '../features/blocksSlice';
+import { addOldSlide } from '../features/slideSlice';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
@@ -27,8 +30,13 @@ const ViewBlock = () => {
       }, []);
 
     const navigate = useNavigate();
-    const goToFakeScreen = () =>{
-      navigate('/fakescreen');
+    const dispatch = useAppDispatch();
+    const goToEditBlock = () => {
+      dispatch(addOldBlock({id: block.id, title: block.title, imagelink: block.mediaURL, promptTitle: block.promptTitle, promptText: block.promptText}));
+      block.slides.map((slide) => {
+        dispatch(addOldSlide({id: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }))
+      });
+      navigate(`/createblock/${block.studyid}/${block.id}`);
     }
     return (
      
@@ -40,7 +48,7 @@ const ViewBlock = () => {
                 <img className='blockImage' src={block.mediaURL}></img>
               </div>
               <div>
-                <h1></h1>
+              <button onClick={goToEditBlock}> Edit Block </button>
               </div>
               <div className='organizeScreens'>
                 {block.slides?.map((slide)=> {

@@ -6,8 +6,10 @@ import blocksSlice from "./blocksSlice";
 export interface SlideState {
     blockId: number,
     id: number,
+    slideId: number,
     title: string,
     backgroundText: string,
+    new: boolean
 
 }
 
@@ -30,11 +32,24 @@ const slideSlice = createSlice({
             state.push({
                 blockId: payload.blockId,
                 id: nextSlideId(state),
+                slideId: -1,
                 title: "",
                 backgroundText:"",
+                new: true
+            });
+            return state;
+        }, addOldSlide: (state, {payload}) => {
+            state.push({
+                blockId: payload.blockId,
+                id: nextSlideId(state),
+                slideId: payload.id,
+                title: payload.title,
+                backgroundText: payload.backgroundText,
+                new: false
             });
             return state;
         },
+
         setTitle: (state, {payload}) => {
             state.map((slide) => {
                 if (slide.id == payload.id){
@@ -64,5 +79,5 @@ const slideSlice = createSlice({
 
 
 export default slideSlice.reducer;
-export const { addSlide, setText, setTitle, cancel, cancelSlides } = slideSlice.actions;
+export const { addSlide, addOldSlide, setText, setTitle, cancel, cancelSlides } = slideSlice.actions;
 //export const selectSlides = (state: RootState) => state.study.block.slides;

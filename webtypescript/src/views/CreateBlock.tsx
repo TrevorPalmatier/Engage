@@ -18,6 +18,8 @@ import { cancelMedia } from "../features/mediaSlideState";
  * @returns a rendering of a block 
  */
 const CreateBlock = () => {
+    const [blockMethod, setMethod] = useState("post");
+
      //set up redux for the block and slides
     const dispatch = useAppDispatch();      //calls on reducers actions
     const block  = useAppSelector(selectBlock);     //selects data to be persisted from a block
@@ -42,14 +44,19 @@ const CreateBlock = () => {
             .then(data => postBlocks({title: data.title, "imageLink": data.imageLink, id:  data.id}))
         }
     };
+    
 const postBlocks = (studyInfo) => {
             
         //block data to be posted
         const blockData = {title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink, study: studyInfo }
         
-        //post request options for the block
+        
+        if(params.blockid != null){
+            setMethod("put");
+        }
+
         const requestOptionsBlock = {
-            method: "post",
+            method: blockMethod,
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(blockData)
         };
@@ -71,24 +78,30 @@ const postBlocks = (studyInfo) => {
      */
     const postSlides =  (blockId, blockInfo) => {
         //loops through all the slides and does a post request for each one
-        console.log("id of block: " + blockInfo.Id)
         slides.map((slide) => {
             if(slide.blockId == blockId){
+
                 const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": blockInfo}  //slide data
-                const requestOptionsSlide = {
+                let requestOptionsSlide = {
                     method: "post",
                     headers: { "Content-Type": "application/json"},
                     body: JSON.stringify(slideData)
                 };
+                if(!slide.new){
+                    requestOptionsSlide = {
+                        method: "put",
+                        headers: { "Content-Type": "application/json"},
+                        body: JSON.stringify(slideData)
+                    };
+                }
+               
 
             fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
                 .then(response => response.json())
                 .then(() => console.log("posted slides" ))
                 .catch((err) => console.log(err));      
             }                                                                                                    
-        });
-       // navigate("../createslide");
-        
+        });  
     }
    /**
      * This method selects the image for the cover of the block

@@ -1,5 +1,5 @@
 import  { useState } from 'react';
-import "./App.scss";
+import "./App.css";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Home  from './views/Home';
@@ -24,7 +24,7 @@ function App() {
           <Route path = "/createstudy/:edit" element = {<CreateStudy/>}/>
           <Route path = "/createstudy/:edit/:studyid" element = {<CreateStudy/>}/>
           <Route path = "/createblock" element ={<CreateBlock/>}/>
-          <Route path = "/createblock/:studyid" element = {<CreateBlock/>}/>
+          <Route path = "/createblock/:studyid/:blockid" element = {<CreateBlock/>}/>
           <Route path = "/viewstudies" element ={<ViewStudies/>}/>
           <Route path = "/viewblocks/:id" element ={<ViewBlocks/>}/>
           <Route path = "/viewblock/:id" element = {<ViewBlock/>}/>

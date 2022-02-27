@@ -1,0 +1,13 @@
+.studyImage {
+    max-width: 10%;
+    height: auto;
+    border-radius: 50%;
+    
+} 
+
+.organizeScreens {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    
+}

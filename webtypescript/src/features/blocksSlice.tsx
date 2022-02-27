@@ -54,7 +54,7 @@ const blocksSlice = createSlice({
                 selectedImage: true,
                 promptTitle: payload.promptTitle,
                 promptText: payload.promptText,
-                edit: false,
+                edit: true,
                 new: false
             }]
             return state;
