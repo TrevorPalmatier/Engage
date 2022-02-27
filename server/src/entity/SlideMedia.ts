@@ -10,6 +10,9 @@ export class SlideMedia {
     @Column()
     mediaUrl: string;
 
+    @Column()
+    type: string;
+
     // multiple medias can be used in a slide
     @ManyToOne(type => Slide, slide => slide.medias,  {
         onUpdate: 'CASCADE', onDelete: 'CASCADE'

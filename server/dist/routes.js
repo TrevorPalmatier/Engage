@@ -5,7 +5,7 @@ const StudyController_1 = require("./controller/StudyController");
 const SlideController_1 = require("./controller/SlideController");
 const BlockController_1 = require("./controller/BlockController");
 const EntryController_1 = require("./controller/EntryController");
-const SlideMedia_1 = require("./controller/SlideMedia");
+const SlideMediaController_1 = require("./controller/SlideMediaController");
 exports.Routes = [
     {
         method: "get",
@@ -169,27 +169,27 @@ exports.Routes = [
     }, {
         method: "get",
         route: "/slidemedia",
-        controller: SlideMedia_1.SlideMediaController,
+        controller: SlideMediaController_1.SlideMediaController,
         action: "all"
     }, {
         method: "get",
         route: "/slidemedia/:id",
-        controller: SlideMedia_1.SlideMediaController,
+        controller: SlideMediaController_1.SlideMediaController,
         action: "one"
     }, {
         method: "post",
         route: "/slidemedia",
-        controller: SlideMedia_1.SlideMediaController,
+        controller: SlideMediaController_1.SlideMediaController,
         action: "save"
     }, {
         method: "delete",
         route: "/slidemedia/:id",
-        controller: SlideMedia_1.SlideMediaController,
+        controller: SlideMediaController_1.SlideMediaController,
         action: "remove"
     }, {
         method: "put",
         route: "/slidemedia/:id",
-        controller: SlideMedia_1.SlideMediaController,
+        controller: SlideMediaController_1.SlideMediaController,
         action: "update"
     },
 ];

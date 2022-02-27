@@ -3,7 +3,7 @@ import { StudyController } from "./controller/StudyController";
 import { SlideController } from "./controller/SlideController";
 import { BlockController } from "./controller/BlockController";
 import { EntryController } from "./controller/EntryController";
-import { SlideMediaController } from "./controller/SlideMedia";
+import { SlideMediaController } from "./controller/SlideMediaController";
 
 export const Routes = [
 	{
