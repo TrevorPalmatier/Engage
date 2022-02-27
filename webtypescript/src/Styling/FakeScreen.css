@@ -1,0 +1,61 @@
+/* The device with borders */
+.smartphone {
+    position: relative;
+    width: 300px;
+    height: 533px;
+    margin: auto;
+    background-color: black;
+    border: 15px black solid;
+    border-top-width: 50px;
+    border-bottom-width:50px;
+    border-radius: 36px;
+  }
+  
+  /* The horizontal line on the top of the device */
+  .smartphone::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 5px;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #333;
+    border-radius: 10px;
+  }
+  
+  /* The circle on the bottom of the device */
+  .smartphone::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 50%;
+    bottom: -55px;
+    transform: translate(-50%, -50%);
+    background: #333;
+    border-radius: 50%;
+  }
+  
+  /* The screen (or content) of the device */
+  .smartphone .content {
+    width: 100%;
+    height: 100%;
+    background: white;
+    overflow: scroll;
+    border: 5px solid black;
+    border-radius: 10px;
+    padding: 5px;
+  }
+
+  .smartphone .content p {
+    text-align: left;
+    word-break:keep-all;
+  }
+  .slideImage {
+    max-width: 50%;
+    height: auto;
+    float: left;
+    }

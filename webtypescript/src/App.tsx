@@ -11,6 +11,7 @@ import ViewBlocks from './views/ViewBlocks';
 import ViewBlock from './views/ViewBlock';
 import CreateSlide from './views/CreateSlide';
 import NavbarScroller from './Components/NavbarScroller';
+import FakeScreen from './views/FakeScreen';
 
 function App() {
 

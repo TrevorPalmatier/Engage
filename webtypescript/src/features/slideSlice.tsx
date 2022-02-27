@@ -7,7 +7,8 @@ export interface SlideState {
     blockId: number,
     id: number,
     title: string,
-    backgroundText: string
+    backgroundText: string,
+
 }
 
 interface SlidesState extends Array<SlideState> {};

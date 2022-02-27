@@ -26,8 +26,7 @@ const Home = () =>  {
   const navigate = useNavigate(); //sets up navigation
 
   const goToCreateStudy = () => {
-    const edit = false;
-    navigate(`/createstudy/${edit}`);
+    navigate(`/createstudy`);
   }
 
   const  goToViewStudy = () => {

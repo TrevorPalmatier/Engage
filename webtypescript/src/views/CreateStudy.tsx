@@ -1,11 +1,12 @@
-import React, {useState} from "react";
-import '../App.scss';
+import React, {useEffect, useState} from "react";
+import '../App.css';
 import NavbarScroller from "../Components/NavbarScroller";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setTitle, setImage, cancelled, selectStudy} from "../features/studySlice";
-import { addBlock } from "../features/blocksSlice";
+import { addBlock, addOldBlock } from "../features/blocksSlice";
 import { RootState } from "../store";
+import '../Styling/CreateStudy.css';
 
 /** 
  * Notes for things to maybe implement:
@@ -18,16 +19,18 @@ import { RootState } from "../store";
  * @returns form to Create a Study
  */
 const CreateStudy = () => {
+    const [blockData, setData] = useState<any>([]);
+
     //sets up reducers and redux
     const dispatch = useAppDispatch();
     const study = useAppSelector(selectStudy);
     const imageLink = study.imageLink;
     const blocks = useAppSelector((state:RootState) => state.persistedReducer.study.blocks);  //get blocks for the study
     const slides = useAppSelector(state => state.persistedReducer.slides);      //selects slides for a specific block
+    const slideMedia = useAppSelector((state => state.persistedReducer.media)); //selects all media for all sldies
         
     const params = useParams();
     const navigate = useNavigate();     //allows navigation within app
-
     //goes to create a block
     //maybe change this to not a route?
     const goToCreateBlock = () => {
@@ -112,12 +115,32 @@ const CreateStudy = () => {
 
             fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
                 .then(response => response.json())
+                .then(info => postSlideMedia(slide.id, info))
                 .then(() => console.log("posted slides" ))
                 .catch((err) => console.log(err));      
             }                                                                                                    
         });
        // navigate("../createslide");
         
+    }
+
+    const postSlideMedia = (slideId, slideInfo) => {
+        slideMedia.map((media) => {
+            if(media.slideId == slideId){
+                const mediaData = {mediaURL: media.url, slide: {slideInfo}};
+                const requestOptionsMedia = {
+                    method: "post",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify(mediaData)
+                };
+
+                fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsMedia)
+                .then(response => response.json())
+                .then(() => console.log("posted media" ))
+                .catch((err) => console.log(err));      
+            }      
+
+        });
     }
 
     /**
@@ -151,7 +174,7 @@ const CreateStudy = () => {
         }
     }
 
-    console.log(study.title);
+    //console.log(study.title);
     //renders the form to create a study
     return (
         <div>
@@ -178,24 +201,27 @@ const CreateStudy = () => {
                         <img className="photo"  src={study.imageLink} />
                     }
                     {!params.edit && 
-                        <div>
-                            <h2>Study's Blocks</h2>
+                    <div>
+                        <h2>Study's Blocks</h2>
+                        <div className="blockGrid">
                             {blocks.map((block) =>{
                                 return (
                                 <div  key={block.id}>
-                                    <img className="photo" defaultValue={block.imageLink} src={block.imageLink} />
+                                    <img className="gridPhoto" defaultValue={block.imageLink} src={block.imageLink} />
                                     <p>{block.title}</p>
                                 </div>
                                 )
                             })}
-                            <button onClick={goToCreateBlock} className="buttonText"> Add Block </button>
-                     </div>  
-                    }   
+                        </div>
+                        <button onClick={goToCreateBlock}> Add Block </button>
+                    </div>  
+                    }
                     <br/>       
                     <div>
                         <button type="submit" className="buttonText">Create</button>
                         <button onClick={cancel} className="buttonText">Cancel</button>
                     </div>
+                   
                 </form>
             </div>  
             </div> 

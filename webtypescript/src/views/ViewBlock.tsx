@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../App.scss';
-import '../Styling/ViewBlock.scss';
+import '../App.css';
+import '../Styling/ViewBlock.css';
+import FakeScreen from './FakeScreen';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
@@ -25,7 +26,10 @@ const ViewBlock = () => {
     
       }, []);
 
-
+    const navigate = useNavigate();
+    const goToFakeScreen = () =>{
+      navigate('/fakescreen');
+    }
     return (
      
         <div>
@@ -34,16 +38,17 @@ const ViewBlock = () => {
               <div className='pageHeader'>
                 <p>Block: {block.title}</p>   
                 <img className='blockImage' src={block.mediaURL}></img>
-                      
               </div>
-            {block.slides?.map((slide)=> {
-              return (
-                <div>
-                  <h5>{slide.title}</h5>
-                  <p>{slide.backgroundText}</p>
-                </div>
-              )
-            })}
+              <div>
+                <h1></h1>
+              </div>
+              <div className='organizeScreens'>
+                {block.slides?.map((slide)=> {
+                  return (
+                    <FakeScreen key={slide.id} id = {slide.id}/>
+                  )
+                })}
+            </div>
             </div>
         </div>
         

@@ -3,6 +3,7 @@ import studyReducer from "./features/studySlice";
 import BlocksReducer from './features/blocksSlice'; 
 import { combineReducers } from 'redux';
 import SlidesReducer from './features/slideSlice';
+import MediaSlideReducer from './features/mediaSlideState';
 import {
     persistStore,
     persistReducer,
@@ -23,7 +24,8 @@ const fullStudyReducer = combineReducers({
 
 const rootReducer = combineReducers({
     study: fullStudyReducer,
-    slides: SlidesReducer
+    slides: SlidesReducer,
+    media: MediaSlideReducer
 });
 
 const persistConfig = {

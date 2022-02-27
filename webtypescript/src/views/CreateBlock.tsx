@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import '../App.scss';
+import '../App.css';
+import '../Styling/CreateBlock.css';
 import NavbarScroller from "../Components/NavbarScroller";
 import CreateSlide from "./CreateSlide";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTitle, 
     cancelled, enableDisableBlockEdit, selectBlock, cancelBlocks } from "../features/blocksSlice";
 import { addSlide, cancel, cancelSlides} from "../features/slideSlice";
+import { cancelMedia } from "../features/mediaSlideState";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -125,6 +127,7 @@ const postBlocks = (studyInfo) => {
     const handleCancel = () => {
         dispatch(cancelled({id: block?.id}))
         dispatch(cancelSlides());
+        dispatch(cancelMedia());
         //cancel the block and any slide
         if(params.studyid == null){
             navigate("../createstudy");     //redirects to "Create Study" page
@@ -164,19 +167,18 @@ const postBlocks = (studyInfo) => {
                 <div className="createRect">
                     <h2>Create Prompt</h2>
                     <fieldset>
-                        <label>
-                            Title of Prompt: 
+                        <label>Title of Prompt:</label>
                             <input type="text" defaultValue={block?.promptTitle} name="title_of_prompt" 
                                 onChange={e=>{dispatch(setBlockPromptTitle({id: block?.id, promptTitle: e.target.value}))}}/>
-                        </label>
+                        
                     </fieldset>
                     <fieldset>
                         <label>
                             Prompt: 
                             <br/>
-                            <textarea cols={150} defaultValue={block?.promptText} name="prompt" 
-                                onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
                         </label>
+                            <textarea className="textArea" defaultValue={block?.promptText} name="prompt" 
+                                onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
                     </fieldset>
                 </div>
                 <br/>

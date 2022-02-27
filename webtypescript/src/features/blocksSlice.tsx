@@ -14,6 +14,7 @@ interface BlockState {
     promptTitle: string,
     promptText: string,
     edit: boolean,
+    new: boolean
 };
 
 interface BlocksState extends Array<BlockState>{};
@@ -40,9 +41,22 @@ const blocksSlice = createSlice({
                     promptTitle: "",
                     promptText:  "",
                     edit: true,
+                    new: true
                 }
              ]
-            console.log(state[0].edit);
+            return state;
+        },
+        addOldBlock: (state, {payload}) => {
+            state = [...state, {
+                id: payload.id,
+                title: payload.title,
+                imageLink: payload.imageLink,
+                selectedImage: true,
+                promptTitle: payload.promptTitle,
+                promptText: payload.promptText,
+                edit: false,
+                new: false
+            }]
             return state;
         },
         setBlockTitle: (state, {payload}) => {
@@ -100,6 +114,6 @@ const blocksSlice = createSlice({
 
 
 export default blocksSlice.reducer;
-export const { addBlock, setBlockTitle, setBlockPromptText, setBlockPromptTitle, setBlockImageLink, cancelBlocks, cancelled, enableDisableBlockEdit } = blocksSlice.actions;
+export const { addBlock, addOldBlock, setBlockTitle, setBlockPromptText, setBlockPromptTitle, setBlockImageLink, cancelBlocks, cancelled, enableDisableBlockEdit } = blocksSlice.actions;
 export const selectBlock = (state: RootState) => state.persistedReducer.study.blocks.find(({edit}) => edit === true);
 // export const selectSlides = (state: RootState) => { state.slides.every((slide) => slide.blockId == selectBlock)}

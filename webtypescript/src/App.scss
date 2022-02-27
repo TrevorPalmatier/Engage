@@ -51,7 +51,7 @@
 }
 
 .wrapper fieldset {
-  margin: 20px 0;
+  margin: 20px;
 }
 
 .photo {
@@ -91,6 +91,7 @@
   place-items: center;
   width: 100%;
   justify-content: center;
+  gap: 25px;
 }
 
 .addPadding {

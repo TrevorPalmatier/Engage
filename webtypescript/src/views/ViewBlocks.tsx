@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../Styling/ViewBlocks.scss';
-import '../App.scss';
+import '../App.css';
+import '../Styling/ViewBlocks.css';
 import { useAppDispatch } from '../hooks/store';
 import { addBlock } from '../features/blocksSlice';
 import { setTitle } from '../features/studySlice';
@@ -52,6 +52,7 @@ const ViewBlocks = () => {
        <div className='page'>    
         <div className='pageHeader'>
           <p>Study: {study.title}</p>
+          <img className='studyImage' src={study.imageLink}/>
         </div>
         <div>
           <button  className="buttonCreateBlock" onClick={editStudy}>Edit Study</button>
