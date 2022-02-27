@@ -57,5 +57,4 @@
     "@types/redux-thunk": "^2.1.0",
     "@types/styled-components": "^5.1.21"
   }
-
 }

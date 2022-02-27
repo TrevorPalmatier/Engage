@@ -24,11 +24,29 @@ class BlockController {
             return this.blockRepository.findOne(request.params.id);
         });
     }
+    slides(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const promptAndSlides = this.blockRepository
+                .createQueryBuilder("block")
+                .leftJoinAndSelect("block.prompt", "prompt")
+                .leftJoinAndSelect("block.slides", "slide")
+                .where("block.id = :id", { id: request.params.id })
+                .getOne();
+            const prompt = (yield promptAndSlides).prompt;
+            const result = [
+                ...(yield promptAndSlides).slides,
+                { id: -1, title: prompt.title, backgroundText: prompt.promptText },
+            ];
+            return result;
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const details = request.body;
             const newBlock = yield this.blockRepository.create({
-                title: details.title, prompt: details.prompt, "mediaURL": details.mediaURL
+                title: details.title,
+                prompt: details.prompt,
+                mediaURL: details.mediaURL,
             });
             yield this.blockRepository.save(newBlock);
             return newBlock;

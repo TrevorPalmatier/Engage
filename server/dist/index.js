@@ -15,7 +15,6 @@ require("reflect-metadata");
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = require("./auth/auth");
 const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -25,9 +24,11 @@ typeorm_1.createConnection()
     // create express app
     const app = express_1.default();
     // const port = 3000; // default port to listen
-    app.use(cors_1.default({
-        origin: '*',
-    }));
+    // app.use(
+    // 	cors({
+    // 		origin: "*",
+    // 	})
+    // );
     app.use(body_parser_1.default.json());
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
@@ -48,7 +49,7 @@ typeorm_1.createConnection()
     app.post("/signup", auth_1.signup);
     app.post("/private", auth_1.isAuth);
     // start express server
-    app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
+    app.listen(process.env.PORT || 8080, () => __awaiter(this, void 0, void 0, function* () {
         // insert new users for test
         // await connection.manager.save(
         // 	connection.manager.create(User, {

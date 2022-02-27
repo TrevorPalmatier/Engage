@@ -24,6 +24,16 @@ class StudyController {
             return this.studyRepository.findOne(request.params.id);
         });
     }
+    blocks(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const study = this.studyRepository
+                .createQueryBuilder("study")
+                .leftJoinAndSelect("study.blocks", "block")
+                .where("study.id = :id", { id: request.params.id })
+                .getOne();
+            return (yield study).blocks;
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.studyRepository.save(request.body);

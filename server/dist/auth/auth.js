@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const joi_1 = __importDefault(require("joi"));
 const typeorm_1 = require("typeorm");
 const User_1 = require("../entity/User");
-const schema = joi_1.default
+const signupSchema = joi_1.default
     .object({
     password: joi_1.default.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
     // repeatPassword: joi.ref('password'),
@@ -16,11 +16,16 @@ const schema = joi_1.default
     repassword: joi_1.default.ref("password"),
 })
     .with("password", "repassword");
+const loginSchema = joi_1.default.object({
+    password: joi_1.default.string().pattern(new RegExp("^[a-zA-Z0-9_!@#$%*&^.,?><+=~(){}\\hjb[\\]]{8,50}$")),
+    // repeatPassword: joi.ref('password'),
+    email: joi_1.default.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "edu"] } }),
+});
 const signup = (req, res, next) => {
     const repo = typeorm_1.getConnection().getRepository(User_1.User);
     console.log(req.body);
     // checks if email already exists
-    const inputValid = schema.validate({
+    const inputValid = signupSchema.validate({
         password: req.body.password,
         email: req.body.email,
         repassword: req.body.repassword,
@@ -92,8 +97,9 @@ const signup = (req, res, next) => {
 exports.signup = signup;
 const login = (req, res, next) => {
     const repo = typeorm_1.getConnection().getRepository(User_1.User);
+    console.log(req.body);
     // checks if email exists
-    const inputValid = schema.validate({
+    const inputValid = loginSchema.validate({
         password: req.body.password,
         email: req.body.email,
     });
@@ -133,7 +139,7 @@ const login = (req, res, next) => {
                 }
                 else {
                     // password doesnt match
-                    res.status(401).json({ message: "invalid credentials" });
+                    res.status(401).json({ message: "Email or Password is incorrect" });
                 }
             });
         }

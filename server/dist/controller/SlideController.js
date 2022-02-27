@@ -24,6 +24,18 @@ class SlideController {
             return this.slideRepository.findOne(request.params.id);
         });
     }
+    media(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (parseInt(request.params.id, 10) === -1)
+                return [];
+            const result = this.slideRepository
+                .createQueryBuilder("slide")
+                .leftJoinAndSelect("slide.medias", "media")
+                .where("slide.id = :id", { id: request.params.id })
+                .getOne();
+            return (yield result).medias;
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.slideRepository.save(request.body);
