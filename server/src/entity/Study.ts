@@ -15,7 +15,9 @@ export class Study {
     title: string;
 
     // a study can be assigned multiple blocks
-    @OneToMany(type => Block, block => block.study)
+    @OneToMany(type => Block, block => block.study, {
+        cascade: true,
+    })
     blocks: Block[];
 
     // multiple users can be assigned to multiple studies

@@ -9,17 +9,13 @@ export class StudyController {
 		return this.studyRepository.find();
 	}
 
-	async one(request: Request, response: Response, next: NextFunction) {
-		return this.studyRepository.findOne(request.params.id);
+	async blocks(request: Request, response: Response, next: NextFunction) {
+		const study = this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
+		return (await study).blocks;
 	}
 
-	async blocks(request: Request, response: Response, next: NextFunction) {
-		const study = this.studyRepository
-			.createQueryBuilder("study")
-			.leftJoinAndSelect("study.blocks", "block")
-			.where("study.id = :id", { id: request.params.id })
-			.getOne();
-		return (await study).blocks;
+	async one(request: Request, response: Response, next: NextFunction) {
+		return this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
@@ -29,5 +25,9 @@ export class StudyController {
 	async remove(request: Request, response: Response, next: NextFunction) {
 		const userToRemove = await this.studyRepository.findOne(request.params.id);
 		await this.studyRepository.remove(userToRemove);
+	}
+
+	async update(request: Request, response: Response, next: NextFunction) {
+		return this.studyRepository.update(request.params.id, request.body);
 	}
 }

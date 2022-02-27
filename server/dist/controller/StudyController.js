@@ -19,19 +19,15 @@ class StudyController {
             return this.studyRepository.find();
         });
     }
-    one(request, response, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.studyRepository.findOne(request.params.id);
-        });
-    }
     blocks(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const study = this.studyRepository
-                .createQueryBuilder("study")
-                .leftJoinAndSelect("study.blocks", "block")
-                .where("study.id = :id", { id: request.params.id })
-                .getOne();
+            const study = this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
             return (yield study).blocks;
+        });
+    }
+    one(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
         });
     }
     save(request, response, next) {
@@ -43,6 +39,11 @@ class StudyController {
         return __awaiter(this, void 0, void 0, function* () {
             const userToRemove = yield this.studyRepository.findOne(request.params.id);
             yield this.studyRepository.remove(userToRemove);
+        });
+    }
+    update(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.studyRepository.update(request.params.id, request.body);
         });
     }
 }

@@ -13,7 +13,6 @@ const typeorm_1 = require("typeorm");
 const Study_1 = require("./Study");
 const Entry_1 = require("./Entry");
 const Slide_1 = require("./Slide");
-const Prompt_1 = require("./Prompt");
 let Block = class Block {
 };
 __decorate([
@@ -29,18 +28,23 @@ __decorate([
     __metadata("design:type", String)
 ], Block.prototype, "mediaURL", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks),
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Block.prototype, "promptTitle", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Block.prototype, "promptText", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks, {
+        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+    }),
     __metadata("design:type", Study_1.Study)
 ], Block.prototype, "study", void 0);
 __decorate([
     typeorm_1.OneToMany(type => Slide_1.Slide, slide => slide.block),
     __metadata("design:type", Array)
 ], Block.prototype, "slides", void 0);
-__decorate([
-    typeorm_1.OneToOne(() => Prompt_1.Prompt),
-    typeorm_1.JoinColumn(),
-    __metadata("design:type", Prompt_1.Prompt)
-], Block.prototype, "prompt", void 0);
 __decorate([
     typeorm_1.OneToMany(type => Entry_1.Entry, entry => entry.block),
     __metadata("design:type", Array)

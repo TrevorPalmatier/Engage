@@ -10,7 +10,6 @@ export default function Caption({ route, navigation }) {
 	const [description, setDescription] = useState("");
 	const user = useAppSelector(selectCurrentUser);
 	const [submitEntry, isLoading] = useSumbitEntryMutation();
-	console.log(route.params.blockId);
 
 	const aspectRatio = route.params.photo.height / route.params.photo.width;
 	const maxWidth = Dimensions.get("window").width * 0.9;

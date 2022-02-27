@@ -4,7 +4,6 @@ const UserController_1 = require("./controller/UserController");
 const StudyController_1 = require("./controller/StudyController");
 const SlideController_1 = require("./controller/SlideController");
 const BlockController_1 = require("./controller/BlockController");
-const PromptController_1 = require("./controller/PromptController");
 const EntryController_1 = require("./controller/EntryController");
 exports.Routes = [
     {
@@ -66,6 +65,12 @@ exports.Routes = [
         route: "/studies/:id",
         controller: StudyController_1.StudyController,
         action: "remove",
+    },
+    {
+        method: "put",
+        route: "/studies/:id",
+        controller: StudyController_1.StudyController,
+        action: "update",
     },
     {
         method: "get",
@@ -149,30 +154,6 @@ exports.Routes = [
         method: "delete",
         route: "/entries/:id",
         controller: EntryController_1.EntryController,
-        action: "remove",
-    },
-    {
-        method: "get",
-        route: "/prompts",
-        controller: PromptController_1.PromptController,
-        action: "all",
-    },
-    {
-        method: "get",
-        route: "/prompts/:id",
-        controller: PromptController_1.PromptController,
-        action: "one",
-    },
-    {
-        method: "post",
-        route: "/prompts",
-        controller: PromptController_1.PromptController,
-        action: "save",
-    },
-    {
-        method: "delete",
-        route: "/prompts/:id",
-        controller: PromptController_1.PromptController,
         action: "remove",
     },
 ];

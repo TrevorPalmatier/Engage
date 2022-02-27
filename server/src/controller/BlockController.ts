@@ -9,34 +9,21 @@ export class BlockController {
 		return this.blockRepository.find();
 	}
 
-	async one(request: Request, response: Response, next: NextFunction) {
-		return this.blockRepository.findOne(request.params.id);
-	}
-
 	async slides(request: Request, response: Response, next: NextFunction) {
-		const promptAndSlides = this.blockRepository
-			.createQueryBuilder("block")
-			.leftJoinAndSelect("block.prompt", "prompt")
-			.leftJoinAndSelect("block.slides", "slide")
-			.where("block.id = :id", { id: request.params.id })
-			.getOne();
-		const prompt = (await promptAndSlides).prompt;
+		const promptAndSlides = this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
 		const result = [
 			...(await promptAndSlides).slides,
-			{ id: -1, title: prompt.title, backgroundText: prompt.promptText },
+			{ id: -1, title: (await promptAndSlides).promptTitle, backgroundText: (await promptAndSlides).promptText },
 		];
 		return result;
 	}
 
+	async one(request: Request, response: Response, next: NextFunction) {
+		return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+	}
+
 	async save(request: Request, response: Response, next: NextFunction) {
-		const details = request.body;
-		const newBlock = await this.blockRepository.create({
-			title: details.title,
-			prompt: details.prompt,
-			mediaURL: details.mediaURL,
-		});
-		await this.blockRepository.save(newBlock);
-		return newBlock;
+		return this.blockRepository.save(request.body);
 	}
 
 	async remove(request: Request, response: Response, next: NextFunction) {

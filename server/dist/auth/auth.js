@@ -23,7 +23,6 @@ const loginSchema = joi_1.default.object({
 });
 const signup = (req, res, next) => {
     const repo = typeorm_1.getConnection().getRepository(User_1.User);
-    console.log(req.body);
     // checks if email already exists
     const inputValid = signupSchema.validate({
         password: req.body.password,
@@ -97,7 +96,6 @@ const signup = (req, res, next) => {
 exports.signup = signup;
 const login = (req, res, next) => {
     const repo = typeorm_1.getConnection().getRepository(User_1.User);
-    console.log(req.body);
     // checks if email exists
     const inputValid = loginSchema.validate({
         password: req.body.password,

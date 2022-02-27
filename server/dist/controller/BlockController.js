@@ -19,37 +19,24 @@ class BlockController {
             return this.blockRepository.find();
         });
     }
-    one(request, response, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.findOne(request.params.id);
-        });
-    }
     slides(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const promptAndSlides = this.blockRepository
-                .createQueryBuilder("block")
-                .leftJoinAndSelect("block.prompt", "prompt")
-                .leftJoinAndSelect("block.slides", "slide")
-                .where("block.id = :id", { id: request.params.id })
-                .getOne();
-            const prompt = (yield promptAndSlides).prompt;
+            const promptAndSlides = this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
             const result = [
                 ...(yield promptAndSlides).slides,
-                { id: -1, title: prompt.title, backgroundText: prompt.promptText },
+                { id: -1, title: (yield promptAndSlides).promptTitle, backgroundText: (yield promptAndSlides).promptText },
             ];
             return result;
         });
     }
+    one(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const details = request.body;
-            const newBlock = yield this.blockRepository.create({
-                title: details.title,
-                prompt: details.prompt,
-                mediaURL: details.mediaURL,
-            });
-            yield this.blockRepository.save(newBlock);
-            return newBlock;
+            return this.blockRepository.save(request.body);
         });
     }
     remove(request, response, next) {

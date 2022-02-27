@@ -1,1 +1,1 @@
-web: cd server && npm i && node .
+web: npm i && cd server && npm i && node .

@@ -1,13 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import NavbarScroller from "../Components/NavbarScroller";
 import CreateSlide from "./CreateSlide";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTitle, 
-    cancelled, enableDisableBlockEdit, selectBlock } from "../features/blocksSlice";
-import { addSlide, cancel} from "../features/slideSlice";
-import studySlice from "../features/studySlice";
+    cancelled, enableDisableBlockEdit, selectBlock, cancelBlocks } from "../features/blocksSlice";
+import { addSlide, cancel, cancelSlides} from "../features/slideSlice";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -17,47 +16,34 @@ import studySlice from "../features/studySlice";
  * @returns a rendering of a block 
  */
 const CreateBlock = () => {
-    //states for each block
-    const [responsePrompt, setResPrompt] = useState({});        //holds prompt response from post request
-    const [blockId, setBlockId] = useState("");                 
-
-    //set up redux for the block and slides
+     //set up redux for the block and slides
     const dispatch = useAppDispatch();      //calls on reducers actions
     const block  = useAppSelector(selectBlock);     //selects data to be persisted from a block
     const slides = useAppSelector(state => state.persistedReducer.slides.filter(slide => slide.blockId == block?.id));      //selects slides for a specific block
 
     //allows navigation
     const navigate = useNavigate();
+    const params = useParams();
 
     /**
-     * This method calls a request to post the prompt to the api
+     * Method is called when the user pushes the "Create" button 
      */
-    const postPrompt = async () => {
-        const promptData = {"title": block?.promptTitle, "promptText": block?.promptText};  //data to be posted
+    const handleSubmit =  (e) => {
+        e.preventDefault();
 
-        //the request options to post the prompt
-        const requestOptionsPrompt = {
-            method: "POST",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(promptData),
-
-        };
-
-        //does the actual post request
-// *** Need to figure out how to save the post response information before continuing with the "postBlock()" method
-        const response = await fetch("https://ancient-ridge-25388.herokuapp.com/prompts", requestOptionsPrompt)
-            .then(response => response.json())
-            .then((res) => {setResPrompt({id: res.id, title: res.title, promptText: res.text}); postBlock();})  //calls the postBlock() method 
-            .then(() => console.log(responsePrompt))
-            .catch((err) => console.log(err));
+        if(params.studyid == null){
+            navigate("../createstudy");
+        }else{
+            const id = params.studyid;
+            fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${id}`)
+            .then(res => res.json())
+            .then(data => postBlocks({title: data.title, "imageLink": data.imageLink, id:  data.id}))
+        }
     };
-
-    /**
-     * This method calls a request to post the block to the api
-     */
-    const postBlock = () => {
+const postBlocks = (studyInfo) => {
+            
         //block data to be posted
-        const blockData = {title: block?.title, "prompt": {id: 50, title: block?.promptTitle, "promptText": block?.promptText}, "mediaURL": block?.imageLink }
+        const blockData = {title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink, study: studyInfo }
         
         //post request options for the block
         const requestOptionsBlock = {
@@ -66,44 +52,42 @@ const CreateBlock = () => {
             body: JSON.stringify(blockData)
         };
 
-// *** Again need to save the block id before calling the "postSlides()" function
+// ***  need to save the block id before calling the "postSlides()" function
         fetch("https://ancient-ridge-25388.herokuapp.com/blocks", requestOptionsBlock)
             .then(response => response.json())
-            .then(async info => await setBlockId(info.id))
-            .then(() => postSlides())
+            .then(info => postSlides(block?.id, info))
             .then(() => console.log("blockPosted"))
-            .catch((err) => console.log(err));  
-    };
+            .catch((err) => console.log(err));      
 
-    /**
+        dispatch(cancelSlides());
+        dispatch(cancelBlocks());
+        navigate(`../viewblocks/${params.studyid}`);   //go back to viewing blocks     
+    };
+  
+     /**
      * This method is able post the slides for the block to the api
      */
-    const postSlides =  () => {
+    const postSlides =  (blockId, blockInfo) => {
         //loops through all the slides and does a post request for each one
-        slides.map(async (slide) => {
-            const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "blockId": blockId}  //slide data
-            const requestOptionsSlide = {
-                method: "post",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(slideData)
-            };
+        console.log("id of block: " + blockInfo.Id)
+        slides.map((slide) => {
+            if(slide.blockId == blockId){
+                const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": blockInfo}  //slide data
+                const requestOptionsSlide = {
+                    method: "post",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify(slideData)
+                };
 
-           fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
-            .then(response => response.json())
-            .then(() => console.log("posted slides"))
-            .catch((err) => console.log(err));
+            fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
+                .then(response => response.json())
+                .then(() => console.log("posted slides" ))
+                .catch((err) => console.log(err));      
+            }                                                                                                    
         });
-
+       // navigate("../createslide");
         
     }
-
-    /**
-     * Method is called when the user pushes the "Create" button 
-     */
-    const handleSubmit =  () => {
-        postPrompt();
-    };
-
    /**
      * This method selects the image for the cover of the block
      * 
@@ -126,24 +110,27 @@ const CreateBlock = () => {
                 body: data,
             })
             .then(response => response.json())
-            .then(info => dispatch(setBlockImageLink({imageLink: info.secure_url})));
+            .then(info => dispatch(setBlockImageLink({id: block?.id, imageLink: info.secure_url})));
+
         }
     };
 
     //creates new slide element and adds it through the reducer
     const handleNewSlide = () => {
         dispatch(addSlide({blockId: block?.id}));
-        dispatch(addSlide({slide: slides}))
+        //dispatch(addSlide({slide: slides}))
     };
 
     //handles discarding the block and slides when cancelled
     const handleCancel = () => {
-        //cancel the block and any slide
         dispatch(cancelled({id: block?.id}))
-        slides.map((slide) => {
-            dispatch(cancel({id: slide.id}))
-        })
-        navigate("../createstudy");     //redirects to "Create Study" page
+        dispatch(cancelSlides());
+        //cancel the block and any slide
+        if(params.studyid == null){
+            navigate("../createstudy");     //redirects to "Create Study" page
+        }else{
+            navigate(`../viewblocks/${params.studyid}`);
+        }
     }
 
     //renders the element
@@ -151,6 +138,7 @@ const CreateBlock = () => {
     return (
         <div>
             <NavbarScroller/>
+            <div className="page">
             <div className = "viewHeader">
                 <h1>Create a Block</h1>
             </div>
@@ -166,7 +154,7 @@ const CreateBlock = () => {
                 <fieldset>
                     <label>
                         Upload Front Cover for Block: 
-                        <input type="file" defaultValue={block?.imageLink} name="image" onChange={selectImage} />
+                        <input type="file" name="image" onChange={selectImage} />
                     </label>
                 </fieldset>
                     {block?.selectedImage && 
@@ -192,22 +180,17 @@ const CreateBlock = () => {
                     </fieldset>
                 </div>
                 <br/>
-                <div>
                     {
                     slides.map((slide) => {
                         return (
-                        <div>
-                            <div className="createRect">
-                                <CreateSlide key={slide.id} id={slide.id}/>
-                            </div>
-                            <br/>
+                        <div key={slide.id} className="createRect">
+                            <CreateSlide key={slide.id} id={slide.id}/>
                         </div>
                         )
                     })
                     }
-                </div>
                 <div>
-                    <button className="fullWidthButton" onClick={handleNewSlide}>+ Create New Slide</button>
+                    <button type="button" onClick={handleNewSlide}>+ Create New Slide</button>
                 </div>
                 <br/>
                 <div>
@@ -215,6 +198,7 @@ const CreateBlock = () => {
                     <button className ="center"onClick={handleCancel}>Cancel</button>
                 </div>
                </form>
+            </div>
             </div>
         </div>
     )

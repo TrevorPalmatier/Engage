@@ -1,32 +1,24 @@
 import * as React from 'react'
-import styled from 'styled-components';
+// import styled from 'styled-components';
+
+import "./navbarScroller.scss"
+
 
 const NavbarScroller = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+    // <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="NavbarScroller">
 
-        <div className="collapse navbar-collapse" id="navbarColor02">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <a className="nav-link active" href="/">Home</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link active" href="/viewstudies">Studies</a>
-            </li>
-            {/* <li className="nav-item">
-              <a className="nav-link" href="/CreateBlock">Blocks</a>
-            </li> */}
-            <li className="nav-item">
-              <a className="nav-link" href="/About">About</a>
-            </li>
-          </ul>
-    </div>
-  </div>
-</nav>
+      <div className="left">
+          <h2>ENGAGE</h2>
+      </div>
+
+      <div className="right">
+        <li><a className="nav-link" href="/">Home</a></li>
+        <li><a className="nav-link" href="/viewstudies">Studies</a></li>
+        <li><a className="nav-link" href="/About">About</a></li>
+      </div>
+    </nav>
   )
 }
 

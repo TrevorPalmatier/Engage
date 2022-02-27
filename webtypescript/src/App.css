@@ -7,13 +7,8 @@
   height: 150px;
   width: 100%;
   margin-top: 10px;
-  /* background-color: thistle; */
 }
 
-.Navigation{
-  flex-direction: column;
-  background-color: blueviolet;
-}
 
 .viewHeader {
     display: flex;
@@ -35,17 +30,22 @@
   height: auto;
 }
 
-.divider{
-  width:10px;
-  height:auto;
-  display:inline-block;
-}
 
 .buttonText{
-  width: 15%;
-  height: 10%;
-  font-size: large;
+  border: 5px;
+  border-style: double;
+  border-color: white;
+  border-radius: 6px;
+  background-color: black;
+  color:white;
+  padding: 5px, 10px 5px 10px;
+  font-weight: 100;
 }
+
+.buttonText:hover{
+  opacity: .7;
+}
+
 .wrapper {
   padding: 5px 20px;
 }
@@ -55,8 +55,10 @@
 }
 
 .photo {
-  height: 200px;
-  width: 200px;
+  max-width:200px;
+  max-height:200px;
+  width: auto;
+  height: auto;
 }
 
 .createRect {
@@ -78,4 +80,28 @@
 .fullWidthButton {
   width: 100%;
   height:auto;
+}
+  
+.pageHeader {
+  padding: 40px 40px 0px 40px ;
+  text-align: center;
+  font-weight: 600;
+  font-size: 60px;
+  display: flex;
+  place-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.addPadding {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.page {
+  font-family: Verdana, 'Geneva', Tahoma, sans-serif;
+  margin-top: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
 }
