@@ -24,7 +24,7 @@ export class Block {
 
     // multiple blocks can be assigned to a Study
     @ManyToOne(type => Study, study => study.blocks, {
-        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+        onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
     })
     study: Study;
 

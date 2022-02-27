@@ -37,7 +37,7 @@ __decorate([
 ], Block.prototype, "promptText", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => Study_1.Study, study => study.blocks, {
-        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+        onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
     }),
     __metadata("design:type", Study_1.Study)
 ], Block.prototype, "study", void 0);

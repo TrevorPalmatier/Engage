@@ -19,7 +19,7 @@ export class BlockController {
 	}
 
 	async one(request: Request, response: Response, next: NextFunction) {
-		return this.blockRepository.findOne(request.params.id, { relations: ["slides", "study"] });
+		return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
