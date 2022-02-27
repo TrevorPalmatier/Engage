@@ -7,6 +7,7 @@ import FakeScreen from './FakeScreen';
 import { useAppDispatch } from '../hooks/store';
 import { addOldBlock } from '../features/blocksSlice';
 import { addOldSlide } from '../features/slideSlice';
+import { addMedia } from '../features/mediaSlideState';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
@@ -37,6 +38,8 @@ const ViewBlock = () => {
       block.slides.map((slide) => {
         dispatch(addOldSlide({blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
         fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${params.id}`)
+          .then(response => response.json())
+          .then (info => dispatch())
       });
       navigate(`/createblock/${block.studyid}/${block.id}`);
     }
