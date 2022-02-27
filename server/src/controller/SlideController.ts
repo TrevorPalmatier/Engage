@@ -9,7 +9,6 @@ export class SlideController {
 		return this.slideRepository.find();
 	}
 
-
 	async media(request: Request, response: Response, next: NextFunction) {
 		if (parseInt(request.params.id, 10) === -1) return [];
 		const result = this.slideRepository
