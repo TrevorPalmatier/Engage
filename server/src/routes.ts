@@ -3,6 +3,7 @@ import { StudyController } from "./controller/StudyController";
 import { SlideController } from "./controller/SlideController";
 import { BlockController } from "./controller/BlockController";
 import { EntryController } from "./controller/EntryController";
+import { SlideMediaController } from "./controller/SlideMedia";
 
 export const Routes = [
 	{
@@ -100,6 +101,11 @@ export const Routes = [
 		route: "/slides/:id",
 		controller: SlideController,
 		action: "remove",
+	},{
+		method: "put",
+		route: "/slides/:id",
+		controller: SlideController,
+		action: "update"
 	},
 	{
 		method: "get",
@@ -130,6 +136,11 @@ export const Routes = [
 		route: "/blocks/:id",
 		controller: BlockController,
 		action: "remove",
+	},{
+		method: "put",
+		route: "/blocks/:id",
+		controller: BlockController,
+		action: "update"
 	},
 	{
 		method: "get",
@@ -154,5 +165,30 @@ export const Routes = [
 		route: "/entries/:id",
 		controller: EntryController,
 		action: "remove",
+	},{
+		method: "get",
+		route: "/slidemedia",
+		controller: SlideMediaController,
+		action: "all"
+	}, {
+		method: "get",
+		route: "/slidemedia/:id",
+		controller: SlideMediaController,
+		action: "one"
+	}, {
+		method: "post",
+		route: "/slidemedia",
+		controller: SlideMediaController,
+		action: "save"
+	}, {
+		method: "delete",
+		route: "/slidemedia/:id",
+		controller: SlideMediaController,
+		action: "remove"
+	},{
+		method: "put",
+		route: "/slidemedia/:id",
+		controller: SlideMediaController,
+		action: "update"
 	},
 ];

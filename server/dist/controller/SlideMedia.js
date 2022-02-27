@@ -9,47 +9,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-const Block_1 = require("../entity/Block");
-class BlockController {
+const SlideMedia_1 = require("../entity/SlideMedia");
+class SlideMediaController {
     constructor() {
-        this.blockRepository = typeorm_1.getRepository(Block_1.Block);
+        this.slideMediaRepository = typeorm_1.getRepository(SlideMedia_1.SlideMedia);
     }
     all(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.find();
-        });
-    }
-    slides(request, response, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const promptAndSlides = this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
-            const result = [
-                ...(yield promptAndSlides).slides,
-                { id: -1, title: (yield promptAndSlides).promptTitle, backgroundText: (yield promptAndSlides).promptText },
-            ];
-            return result;
+            return this.slideMediaRepository.find();
         });
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+            return this.slideMediaRepository.findOne(request.params.id);
         });
     }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.save(request.body);
+            return this.slideMediaRepository.save(request.body);
         });
     }
     remove(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blockToRemove = yield this.blockRepository.findOne(request.params.id);
-            yield this.blockRepository.remove(blockToRemove);
+            const userToRemove = yield this.slideMediaRepository.findOne(request.params.id);
+            yield this.slideMediaRepository.remove(userToRemove);
         });
     }
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.update(request.params.id, request.body);
+            return this.slideMediaRepository.update(request.params.id, request.body);
         });
     }
 }
-exports.BlockController = BlockController;
-//# sourceMappingURL=BlockController.js.map
+exports.SlideMediaController = SlideMediaController;
+//# sourceMappingURL=SlideMedia.js.map

@@ -15,11 +15,13 @@ export class Slide {
     backgroundText: string;
 
     // multiple slides can be in a Block
-    @ManyToOne(type => Block, block => block.slides)
+    @ManyToOne(type => Block, block => block.slides, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     block: number;
 
     // creates a one-to-many relationship with 'SlideMedia'
     // multiple media (images, videos) can be within the prompt
-    @OneToMany(type =>SlideMedia, slidemedia => slidemedia.slide)
+    @OneToMany(type =>SlideMedia, slidemedia => slidemedia.slide, {
+        cascade: true,
+    })
     medias: SlideMedia[];
 }

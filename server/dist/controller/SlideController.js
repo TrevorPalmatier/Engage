@@ -19,11 +19,6 @@ class SlideController {
             return this.slideRepository.find();
         });
     }
-    one(request, response, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.slideRepository.findOne(request.params.id);
-        });
-    }
     media(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             if (parseInt(request.params.id, 10) === -1)
@@ -36,6 +31,11 @@ class SlideController {
             return (yield result).medias;
         });
     }
+    one(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.slideRepository.findOne(request.params.id, { relations: ["medias"] });
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.slideRepository.save(request.body);
@@ -45,6 +45,11 @@ class SlideController {
         return __awaiter(this, void 0, void 0, function* () {
             const slideToRemove = yield this.slideRepository.findOne(request.params.id);
             yield this.slideRepository.remove(slideToRemove);
+        });
+    }
+    update(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.slideRepository.update(request.params.id, request.body);
         });
     }
 }

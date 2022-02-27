@@ -11,7 +11,9 @@ export class SlideMedia {
     mediaUrl: string;
 
     // multiple medias can be used in a slide
-    @ManyToOne(type => Slide, slide => slide.medias)
+    @ManyToOne(type => Slide, slide => slide.medias,  {
+        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+    })
     slide: string;
 
 }

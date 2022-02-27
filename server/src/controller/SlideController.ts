@@ -9,9 +9,6 @@ export class SlideController {
 		return this.slideRepository.find();
 	}
 
-	async one(request: Request, response: Response, next: NextFunction) {
-		return this.slideRepository.findOne(request.params.id);
-	}
 
 	async media(request: Request, response: Response, next: NextFunction) {
 		if (parseInt(request.params.id, 10) === -1) return [];
@@ -22,13 +19,20 @@ export class SlideController {
 			.getOne();
 		return (await result).medias;
 	}
+    async one(request: Request, response: Response, next: NextFunction) {
+        return this.slideRepository.findOne(request.params.id, {relations: ["medias"]});
+    }
 
 	async save(request: Request, response: Response, next: NextFunction) {
 		return this.slideRepository.save(request.body);
 	}
 
-	async remove(request: Request, response: Response, next: NextFunction) {
-		const slideToRemove = await this.slideRepository.findOne(request.params.id);
-		await this.slideRepository.remove(slideToRemove);
-	}
+    async remove(request: Request, response: Response, next: NextFunction) {
+        const slideToRemove = await this.slideRepository.findOne(request.params.id);
+        await this.slideRepository.remove(slideToRemove);
+    }
+
+    async update(request: Request, response: Response, next: NextFunction) {
+        return  this.slideRepository.update(request.params.id, request.body);
+    }
 }

@@ -5,6 +5,7 @@ const StudyController_1 = require("./controller/StudyController");
 const SlideController_1 = require("./controller/SlideController");
 const BlockController_1 = require("./controller/BlockController");
 const EntryController_1 = require("./controller/EntryController");
+const SlideMedia_1 = require("./controller/SlideMedia");
 exports.Routes = [
     {
         method: "get",
@@ -101,6 +102,11 @@ exports.Routes = [
         route: "/slides/:id",
         controller: SlideController_1.SlideController,
         action: "remove",
+    }, {
+        method: "put",
+        route: "/slides/:id",
+        controller: SlideController_1.SlideController,
+        action: "update"
     },
     {
         method: "get",
@@ -131,6 +137,11 @@ exports.Routes = [
         route: "/blocks/:id",
         controller: BlockController_1.BlockController,
         action: "remove",
+    }, {
+        method: "put",
+        route: "/blocks/:id",
+        controller: BlockController_1.BlockController,
+        action: "update"
     },
     {
         method: "get",
@@ -155,6 +166,31 @@ exports.Routes = [
         route: "/entries/:id",
         controller: EntryController_1.EntryController,
         action: "remove",
+    }, {
+        method: "get",
+        route: "/slidemedia",
+        controller: SlideMedia_1.SlideMediaController,
+        action: "all"
+    }, {
+        method: "get",
+        route: "/slidemedia/:id",
+        controller: SlideMedia_1.SlideMediaController,
+        action: "one"
+    }, {
+        method: "post",
+        route: "/slidemedia",
+        controller: SlideMedia_1.SlideMediaController,
+        action: "save"
+    }, {
+        method: "delete",
+        route: "/slidemedia/:id",
+        controller: SlideMedia_1.SlideMediaController,
+        action: "remove"
+    }, {
+        method: "put",
+        route: "/slidemedia/:id",
+        controller: SlideMedia_1.SlideMediaController,
+        action: "update"
     },
 ];
 //# sourceMappingURL=routes.js.map
