@@ -127,7 +127,7 @@ export const Routes = [
 	},
 	{
 		method: "get",
-		route: "blocks/entries/:id",
+		route: "/blocks/entries/:id",
 		controller: BlockController,
 		action: "oneEntries",
 	},

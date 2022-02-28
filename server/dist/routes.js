@@ -128,7 +128,7 @@ exports.Routes = [
     },
     {
         method: "get",
-        route: "blocks/entries/:id",
+        route: "/blocks/entries/:id",
         controller: BlockController_1.BlockController,
         action: "oneEntries",
     },
