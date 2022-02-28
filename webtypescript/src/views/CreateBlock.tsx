@@ -59,7 +59,7 @@ const CreateBlock = () => {
 const postBlocks = (e, studyInfo) => {
         e.preventDefault();
     if(params.blockid != null){
-        const blockDataPut = {id: params.blockid, title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink, study: studyInfo }
+        const blockDataPut = {id: params.blockid, title: block?.title, "promptTitle": block?.promptTitle, "promptText": block?.promptText, "mediaURL": block?.imageLink }
         const requestOptionsBlock = {
             method: "put",
             headers: { "Content-Type": "application/json"},
@@ -68,7 +68,7 @@ const postBlocks = (e, studyInfo) => {
 
         fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${params.blockid}`, requestOptionsBlock)
         .then(response => response.json())
-        .then(info => postSlides(block?.id, info))
+        .then(info => postSlides(block?.id, blockDataPut))
         .then(() => console.log("blockPosted"))
         .catch((err) => console.log(err)); 
     }else{
@@ -115,6 +115,7 @@ const postBlocks = (e, studyInfo) => {
                         .then(() => console.log("posted slides" ))
                         .catch((err) => console.log(err)); 
                 }else{
+                    console.log()
                     const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": blockInfo}  //slide data
                     let requestOptionsSlide = {
                         method: "post",
