@@ -21,7 +21,7 @@ class SlideMediaController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideMediaRepository.findOne(request.params.id, { relations: ["medias"] });
+            return this.slideMediaRepository.findOne(request.params.id);
         });
     }
     save(request, response, next) {
@@ -42,4 +42,4 @@ class SlideMediaController {
     }
 }
 exports.SlideMediaController = SlideMediaController;
-//# sourceMappingURL=SlideMedia.js.map
+//# sourceMappingURL=SlideMediaController.js.map

@@ -7,6 +7,7 @@ import FakeScreen from './FakeScreen';
 import { useAppDispatch } from '../hooks/store';
 import { addOldBlock } from '../features/blocksSlice';
 import { addOldSlide } from '../features/slideSlice';
+import { addMedia } from '../features/mediaSlideState';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
@@ -33,12 +34,16 @@ const ViewBlock = () => {
     const dispatch = useAppDispatch();
 
     const goToEditBlock = () => {
+      console.log("dispatching");
       dispatch(addOldBlock({id: block.id, title: block.title, imagelink: block.mediaURL, promptTitle: block.promptTitle, promptText: block.promptText}));
       block.slides.map((slide) => {
+        console.log("slide dispatch");
         dispatch(addOldSlide({blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
-        fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${params.id}`)
+        // fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${params.id}`)
+        //   .then(response => response.json())
+        //   .then (info => dispatch(addMedia({slideId: info.id, })))
       });
-      navigate(`/createblock/${block.studyid}/${block.id}`);
+      //navigate(`/createblock/${block.studyid}/${block.id}`);
     }
 
     return (
