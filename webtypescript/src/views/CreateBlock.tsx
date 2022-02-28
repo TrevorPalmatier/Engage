@@ -111,7 +111,7 @@ const postBlocks = (e, studyInfo) => {
                     console.log("slideid " + slide_id)
                     fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`, requestOptionsSlide1)
                         .then(response => response.json())
-                        .then(info => postSlideMedia(slide.id, info))
+                        //.then(info => postSlideMedia(slide.id, info))
                         .then(() => console.log("posted slides" ))
                         .catch((err) => console.log(err)); 
                 }else{
