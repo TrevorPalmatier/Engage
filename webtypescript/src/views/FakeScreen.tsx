@@ -18,7 +18,6 @@ const FakeScreen = ({id}) => {
 
     console.log(slideData.medias);
     return (
-        <div>
             <div className='smartphone'>
                 <div className='content'>
                     <h2>{slideData.title}</h2>
@@ -35,7 +34,6 @@ const FakeScreen = ({id}) => {
                     <p>{slideData.backgroundText}.</p>
                 </div>
             </div>
-        </div>
     )
 
 }
