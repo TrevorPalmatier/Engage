@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 export interface MediaState {
     id: number,
@@ -57,3 +58,4 @@ const mediaSlideSlice = createSlice({
 
 export default mediaSlideSlice.reducer;
 export const {addMedia, addOldMedia, deleteOneMedia, cancelMedia, cancelBySlide} = mediaSlideSlice.actions;
+export const selectMedia = (state: RootState) => state.persistedReducer.media;

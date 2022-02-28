@@ -7,7 +7,7 @@ import FakeScreen from './FakeScreen';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { addOldBlock, cancelBlocks } from '../features/blocksSlice';
 import { addOldSlide, cancelSlides } from '../features/slideSlice';
-import { addMedia, addOldMedia, cancelMedia } from '../features/mediaSlideState';
+import { addMedia, addOldMedia, cancelMedia } from '../features/mediaSlideSlice';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
@@ -36,23 +36,33 @@ const ViewBlock = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const slides = useAppSelector(state => state.persistedReducer.slides);
-    const goToEditBlock = () => {
+
+    const goToEditBlock = async (e) => {
+      e.preventDefault();
       dispatch(addOldBlock({id: block.id, title: block.title, imagelink: block.mediaURL, promptTitle: block.promptTitle, promptText: block.promptText}));
       block.slides.map((slide) => {
-        dispatch(addOldSlide({blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
-      });
-      slides.map((slide)=> {
-        fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.slideId}`)
+        dispatch(addOldSlide({id: slide.id, blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
+        fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
           .then(response => response.json())
-          .then (info => dispatchMedia(slide.id, info))
+          .then (info => {console.log("happend");dispatchMedia(slide.id, info)})
       })
-      navigate(`/createblock/${block.study.id}/${block.id}`);
+      console.log(slides);
+      // slides.map((slide)=> {
+      //   console.log("yay");
+      //   fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.slideId}`)
+      //     .then(response => response.json())
+      //     .then (info => {console.log("happend");dispatchMedia(slide.id, info)})
+      // })
+
+       navigate(`/createblock/${block.study.id}/${block.id}`);
     }
 
     const dispatchMedia = (slideId, slideInfo) => {
+      console.log(slideInfo);
         slideInfo.medias.map((media)=>{
-          dispatch(addOldMedia({slideId: slideId, mediaId: media.id, type: media.type, url: media.mediaURL}));
+          dispatch(addOldMedia({slideId: slideInfo.id, mediaId: media.id, type: media.type, url: media.mediaUrl}));
         })
+        
     }
     return (
      
@@ -68,7 +78,7 @@ const ViewBlock = () => {
                 <p>Prompt Text: {block.promptText}</p>
               </div>
               <div>
-              <button onClick={goToEditBlock}> Edit Block </button>
+              <button onClick={e => {goToEditBlock(e)}}> Edit Block </button>
               </div>
               <br/>
               <div className='organizeScreens'>

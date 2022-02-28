@@ -3,7 +3,7 @@ import '../App.scss';
 import '../Styling/CreateSlide.css';
 import { useNavigate } from "react-router-dom";
 import { setText, setTitle, cancel, addSlide } from "../features/slideSlice";
-import { addMedia,deleteOneMedia } from "../features/mediaSlideState";
+import { addMedia,deleteOneMedia } from "../features/mediaSlideSlice";
 import { useAppSelector, useAppDispatch } from "../hooks/store";
 
 /**
@@ -17,7 +17,7 @@ const CreateSlide = ({id}) => {
     const slide = useAppSelector(state => state.persistedReducer.slides).find(slide => slide.id === id);
     const dispatch = useAppDispatch();
     const media = useAppSelector(state => state.persistedReducer.media).filter(media => media.slideId === slide?.id)
-    
+    console.log(media);
     const selectMedia = (event) => {
         const files = event.target.files;
         console.log(files);

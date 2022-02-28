@@ -16,12 +16,22 @@ const FakeScreen = ({id}) => {
         console.log(slideData);
     }, [])
 
+    console.log(slideData.medias);
     return (
         <div>
             <div className='smartphone'>
                 <div className='content'>
                     <h2>{slideData.title}</h2>
-                    <img className='slideImage' src="https://th-thumbnailer.cdn-si-edu.com/4Nq8HbTKgX6djk07DqHqRsRuFq0=/1000x750/filters:no_upscale()/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/d5/24/d5243019-e0fc-4b3c-8cdb-48e22f38bff2/istock-183380744.jpg"/>
+                    {
+                        slideData.medias?.map((media) => {
+                            return (
+                                <div key={media.id}>
+                                    <img className='slideImage' src={media.mediaUrl}/>
+                                </div>
+                            )
+                        } )
+                    }
+                    
                     <p>{slideData.backgroundText}.</p>
                 </div>
             </div>

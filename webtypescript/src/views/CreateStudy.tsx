@@ -124,7 +124,7 @@ const CreateStudy = () => {
 
             fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
                 .then(response => response.json())
-                //.then(info => postSlideMedia(slide.id, info))
+                .then(info => postSlideMedia(slide.id, info))
                 .then(() => console.log("posted slides" ))
                 .catch((err) => console.log(err));      
             }                                                                                                    
@@ -136,7 +136,7 @@ const CreateStudy = () => {
     const postSlideMedia = (slideId, slideInfo) => {
         slideMedia.map((media) => {
             if(media.slideId == slideId){
-                const mediaData = {"mediaUrl": media.url, type: media.type, slide: {slideInfo}};
+                const mediaData = {"mediaUrl": media.url, type: media.type, slide: slideInfo};
                 const requestOptionsMedia = {
                     method: "post",
                     headers: { "Content-Type": "application/json"},
@@ -225,7 +225,9 @@ const CreateStudy = () => {
                                 )
                             })}
                         </div>
-                        <button onClick={goToCreateBlock} className="buttonText"> Add Block </button>
+                        <div>
+                            <button onClick={goToCreateBlock} className="buttonText"> Add Block </button>
+                        </div>
                     </div>  
                     }
                     {params.edit && 
