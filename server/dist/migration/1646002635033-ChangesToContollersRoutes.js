@@ -30,4 +30,4 @@ class ChangesToContollersRoutes1645914925270 {
     }
 }
 exports.ChangesToContollersRoutes1645914925270 = ChangesToContollersRoutes1645914925270;
-//# sourceMappingURL=1645914925270-ChangesToContollersRoutes.js.map
+//# sourceMappingURL=1646002635033-ChangesToContollersRoutes.js.map
