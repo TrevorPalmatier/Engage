@@ -17,9 +17,6 @@ export default function Caption({ route, navigation }) {
 	const imgWidth = Math.min(route.params.photo.width, maxWidth);
 	const imgHeight = Math.min(route.params.photo.height, maxWidth * aspectRatio);
 
-	const [error, setError] = useState("");
-	const [uri, setUri] = useState(null);
-
 	const uploadImage = (photo) => {
 		const data = new FormData();
 		data.append("file", photo);

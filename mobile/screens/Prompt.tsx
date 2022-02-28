@@ -20,6 +20,7 @@ const imgURI = Image.resolveAssetSource(img).uri;
 
 export default function Prompt({ route, navigation }) {
 	const [image, setImage] = useState(null);
+	// Destructuring here
 	const blockId = route.params.blockId;
 	const { data = [], isFetching } = usePromptAndSlidesQuery(blockId);
 
@@ -67,23 +68,6 @@ export default function Prompt({ route, navigation }) {
 							<Slide key={slide.id} slideId={slide.id} title={slide.title} text={slide.backgroundText} />
 						);
 				})}
-				{/* <ImageBackground style={[styles.background]} source={require("../assets/background.jpg")}>
-					<View style={styles.textContainer}>
-						<Text style={styles.text}>
-							This is a Prompt. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi autem sint
-							earum facilis unde aspernatur esse saepe, accusamus quidem iusto veniam neque, ipsa omnis?
-							Dignissimos dolorum aliquid ex ratione consequatur?
-						</Text>
-					</View>
-				</ImageBackground>
-				<View style={[styles.center, styles.container]}>
-					<Text style={styles.text2}>Some Details about the Prompt</Text>
-					<Text style={styles.text2}>
-						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sit maxime cum quibusdam
-						excepturi tenetur! Dolor, autem, ea necessitatibus perspiciatis obcaecati laboriosam, vitae
-						soluta aperiam iusto et iure in illum.
-					</Text>
-				</View> */}
 				<View style={[styles.center, styles.container]}>
 					<Text style={[styles.text3]}>
 						{data[(data as any[]).length - 1]

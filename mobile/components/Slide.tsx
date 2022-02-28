@@ -26,18 +26,14 @@ export default function Slide({ slideId, title, text }) {
 		<View style={[styles.main]}>
 			<ScrollView
 				style={{ flex: 1 }}
-				nestedScrollEnabled={true}
+				nestedScrollEnabled
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={{ alignItems: "center" }}>
 				<View style={[styles.titleContainer]}>
 					<Text style={[styles.titleText]}>{title}</Text>
 				</View>
 				<View style={[{ width: "100%", alignItems: "center" }]}>
-					{uri ? (
-						<Image style={{ height: imgHeight, width: imgWidth, marginTop: 20 }} source={{ uri }} />
-					) : (
-						<></>
-					)}
+					{uri && <Image style={{ height: imgHeight, width: imgWidth, marginTop: 20 }} source={{ uri }} />}
 					<View style={[styles.textContainer]}>
 						<Text style={[styles.text2]}>{text}</Text>
 					</View>

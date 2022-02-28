@@ -5,11 +5,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useLoginMutation } from "../app/services/engage";
 import type { LoginRequest } from "../app/services/engage";
 
-function Login({ navigation }) {
+function Login() {
 	const [error, setError] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const dispatch = useDispatch();
 
 	const [login, { isLoading }] = useLoginMutation();
 
@@ -21,7 +20,6 @@ function Login({ navigation }) {
 		login(payload)
 			.unwrap()
 			.catch((err) => {
-				// console.log(err);
 				setError(err.data.message);
 			});
 	};

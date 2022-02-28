@@ -5,6 +5,7 @@ import { SignupRequest, useSignupMutation } from "../app/services/engage";
 
 function Register({ navigation }) {
 	const [loading, setLoading] = useState(true);
+	// Use object for state. 3 or more is what feels right for that.
 	const [error, setError] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -43,30 +44,26 @@ function Register({ navigation }) {
 					keyboardType='email-address'
 					placeholder='email'
 					placeholderTextColor='#a6a6a6'
-					onChangeText={(email) => setEmail(email)}
+					onChangeText={setEmail}
 				/>
 				<TextInput
 					style={styles.input}
 					placeholder='password'
 					placeholderTextColor='#a6a6a6'
-					secureTextEntry={true}
-					onChangeText={(pw) => setPassword(pw)}
+					secureTextEntry
+					onChangeText={setPassword}
 				/>
 				<TextInput
 					style={styles.input}
 					placeholder='re-enter password'
 					placeholderTextColor='#a6a6a6'
-					secureTextEntry={true}
-					onChangeText={(pw) => setRepassword(pw)}
+					secureTextEntry
+					onChangeText={setRepassword}
 				/>
 				<View style={error ? styles.errorBox : styles.blank}>
 					<Text style={styles.errorText}>{error}</Text>
 				</View>
-				<Pressable
-					style={styles.button}
-					onPress={() => {
-						onSignUp();
-					}}>
+				<Pressable style={styles.button} onPress={onSignUp}>
 					<Text style={{ color: "white" }}>Register</Text>
 				</Pressable>
 			</View>

@@ -37,8 +37,8 @@ export interface ArrayResponse {
 
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
-		// baseUrl: "https://ancient-ridge-25388.herokuapp.com/",
-		baseUrl: "http://192.168.0.241:80/",
+		baseUrl: "https://ancient-ridge-25388.herokuapp.com/",
+		// baseUrl: "http://192.168.0.241:80/",
 		prepareHeaders: (headers, { getState }) => {
 			// By default, if we have a token in the store, let's use that for authenticated requests
 			const token = (getState() as RootState).auth.token;
@@ -75,7 +75,7 @@ export const api = createApi({
 		}),
 		studies: builder.query<ArrayResponse, number>({
 			query(id) {
-				return `users/studies/${id}`;
+				return `studies`;
 			},
 		}),
 		blocks: builder.query<ArrayResponse, number>({

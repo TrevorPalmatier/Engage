@@ -43,19 +43,21 @@ export function CaptureScreen({ navigation }) {
 			// quality: 1,
 			base64: true,
 		});
-		if (!result.cancelled) {
-			setImage((result as ImageInfo).uri);
-			const photo = result as ImageInfo;
-			const base64 = `data:image/jpg;base64,${photo.base64}`;
-			navigation.navigate("Submit", {
-				picker: base64,
-				uri: photo.uri,
-				width: photo.width,
-				height: photo.height,
-				type: photo.type,
-				name: photo.uri.substring(photo.uri.lastIndexOf("/") + 1, photo.uri.length),
-			});
+		if (result.cancelled) {
+			return;
 		}
+
+		setImage((result as ImageInfo).uri);
+		const photo = result as ImageInfo;
+		const base64 = `data:image/jpg;base64,${photo.base64}`;
+		navigation.navigate("Submit", {
+			picker: base64,
+			uri: photo.uri,
+			width: photo.width,
+			height: photo.height,
+			type: photo.type,
+			name: photo.uri.substring(photo.uri.lastIndexOf("/") + 1, photo.uri.length),
+		});
 	};
 	return (
 		<View style={[styles.center, styles.container]}>

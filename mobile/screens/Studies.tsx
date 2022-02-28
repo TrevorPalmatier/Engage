@@ -12,10 +12,6 @@ export default function CharacterSelectScreen({ navigation }) {
 	const user = useAppSelector(selectCurrentUser);
 	const { data = [], isFetching } = useStudiesQuery(user.id);
 
-	useEffect(() => {
-		// console.log(data);
-	}, [data]);
-
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
@@ -35,6 +31,8 @@ export default function CharacterSelectScreen({ navigation }) {
 		// navigation.navigate("CharacterCreation");
 	};
 
+	// You can move these function inside renderItem too remove the need for functions in the StudyCard.
+	// All information exists within this class so there is no need to require the StudyCard to have anything other than the function to call itself.
 	const handleSelectStudy = (id) => {
 		navigation.navigate("Home", { id });
 	};
@@ -56,6 +54,8 @@ export default function CharacterSelectScreen({ navigation }) {
 		);
 	};
 
+	// if(isFetching){ return;} return early instead of ternary opperator
+
 	return (
 		<>
 			{isFetching ? (
@@ -64,21 +64,6 @@ export default function CharacterSelectScreen({ navigation }) {
 				</View>
 			) : (
 				<View style={styles.main}>
-					{/* <ScrollView
-				style={{ width: "100%", backgroundColor: "#404040" }}
-				contentContainerStyle={styles.container}
-				showsVerticalScrollIndicator={false}>
-				{characters.map((character, index) => {
-					return (
-						<CharacterCard
-						key={character.id}
-						index={index}
-						name={character.data().name}
-						select={selectCharacter}
-						/>
-						);
-					})}
-				</ScrollView> */}
 					<FlatList
 						ItemSeparatorComponent={
 							Platform.OS !== "android" && (() => <View style={[styles.separator]} />)
