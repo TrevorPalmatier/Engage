@@ -237,7 +237,7 @@ const CreateStudy = () => {
                     <br/>       
                     <div>
                         <button type="submit" className="buttonText">Create</button>
-                        <button onClick={cancel} className="buttonText">Cancel</button>
+                        <button onClick={cancel} className="buttonText">Delete & Cancel</button>
                     </div>
                    
                 </form>
