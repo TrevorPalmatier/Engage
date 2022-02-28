@@ -29,7 +29,7 @@ export class Block {
     study: Study;
 
     // multiple slides can be within a block
-    @OneToMany(type=>Slide, slide => slide.block)
+    @OneToMany(type=>Slide, slide => slide.block, {cascade: true})
     slides: Slide[];
 
     // creates a one-to-many relationship with "Entry"
