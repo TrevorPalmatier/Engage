@@ -17,6 +17,6 @@ export class SlideMedia {
     @ManyToOne(type => Slide, slide => slide.medias,  {
         onUpdate: 'CASCADE', onDelete: 'CASCADE'
     })
-    slide: string;
+    slide: number;
 
 }
