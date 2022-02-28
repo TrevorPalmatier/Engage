@@ -6,6 +6,7 @@ import { cancelled } from "../features/studySlice";
 import { cancelBlocks } from "../features/blocksSlice";
 import { cancelSlides } from "../features/slideSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
+import { cancelMedia } from "../features/mediaSlideState";
 
 /**
  * First page ** most likely after login
@@ -20,7 +21,8 @@ const Home = () => {
     dispatch(cancelled());
     dispatch(cancelSlides());
     dispatch(cancelBlocks());
-  }, []);
+    dispatch(cancelMedia());
+  }, [])
 
   const navigate = useNavigate(); //sets up navigation
 

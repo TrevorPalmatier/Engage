@@ -4,15 +4,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../App.scss';
 import '../Styling/ViewBlock.css';
 import FakeScreen from './FakeScreen';
-import { useAppDispatch } from '../hooks/store';
-import { addOldBlock } from '../features/blocksSlice';
-import { addOldSlide } from '../features/slideSlice';
-import { addMedia } from '../features/mediaSlideState';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { addOldBlock, cancelBlocks } from '../features/blocksSlice';
+import { addOldSlide, cancelSlides } from '../features/slideSlice';
+import { addMedia, addOldMedia, cancelMedia } from '../features/mediaSlideState';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const params = useParams();
     
     useEffect(() => {
+        dispatch(cancelMedia());
+        dispatch(cancelBlocks());
+        dispatch(cancelSlides());
         const abortController = new AbortController();
     
         try{
@@ -32,20 +35,25 @@ const ViewBlock = () => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-
+    const slides = useAppSelector(state => state.persistedReducer.slides);
     const goToEditBlock = () => {
-      console.log("dispatching");
       dispatch(addOldBlock({id: block.id, title: block.title, imagelink: block.mediaURL, promptTitle: block.promptTitle, promptText: block.promptText}));
       block.slides.map((slide) => {
-        console.log("slide dispatch");
         dispatch(addOldSlide({blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
-        // fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${params.id}`)
-        //   .then(response => response.json())
-        //   .then (info => dispatch(addMedia({slideId: info.id, })))
       });
-      //navigate(`/createblock/${block.studyid}/${block.id}`);
+      slides.map((slide)=> {
+        fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.slideId}`)
+          .then(response => response.json())
+          .then (info => dispatchMedia(slide.id, info))
+      })
+      navigate(`/createblock/${block.study.id}/${block.id}`);
     }
 
+    const dispatchMedia = (slideId, slideInfo) => {
+        slideInfo.medias.map((media)=>{
+          dispatch(addOldMedia({slideId: slideId, mediaId: media.id, type: media.type, url: media.mediaURL}));
+        })
+    }
     return (
      
         <div>
@@ -56,8 +64,13 @@ const ViewBlock = () => {
                 <img className='blockImage' src={block.mediaURL}></img>
               </div>
               <div>
+                <h2>Prompt Title: {block.promptTitle}</h2>
+                <p>Prompt Text: {block.promptText}</p>
+              </div>
+              <div>
               <button onClick={goToEditBlock}> Edit Block </button>
               </div>
+              <br/>
               <div className='organizeScreens'>
                 {block.slides?.map((slide)=> {
                   return (

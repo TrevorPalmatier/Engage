@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface MediaState {
     id: number,
+    mediaId: number,
     slideId: number,
     type: string,
     url: string
@@ -23,11 +24,21 @@ const mediaSlideSlice = createSlice({
         addMedia: (state, {payload}) => {
             state.push({
                 id: nextMediId(state),
+                mediaId: -1,
                 slideId: payload.slideId,
                 type: payload.type,
                 url: payload.url,
             })
             return state;
+        },
+        addOldMedia: (state, {payload}) => {
+            state.push({
+                id: nextMediId(state),
+                mediaId: payload.mediaId,
+                slideId: payload.slideId,
+                type: payload.type,
+                url: payload.url,
+            })
         },
         deleteOneMedia: (state, {payload}) => {
             state = state.filter((media1) => media1.id != payload.id);
@@ -36,9 +47,13 @@ const mediaSlideSlice = createSlice({
         cancelMedia: (state) => {
             state = initialState;
             return state;
-        }
+        },
+        cancelBySlide: (state, {payload}) => {
+            state = state.filter((media) => media.slideId = payload.slideId);
+            return state;
+        } 
     }
 });
 
 export default mediaSlideSlice.reducer;
-export const {addMedia, deleteOneMedia, cancelMedia} = mediaSlideSlice.actions;
+export const {addMedia, addOldMedia, deleteOneMedia, cancelMedia, cancelBySlide} = mediaSlideSlice.actions;

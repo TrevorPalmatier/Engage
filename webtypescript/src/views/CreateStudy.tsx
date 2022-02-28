@@ -4,7 +4,7 @@ import NavbarScroller from "../Components/NavbarScroller";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setTitle, setImage, cancelled, selectStudy} from "../features/studySlice";
-import { addBlock, addOldBlock } from "../features/blocksSlice";
+import { addBlock, addOldBlock, enableDisableBlockEdit } from "../features/blocksSlice";
 import { RootState } from "../store";
 import '../Styling/CreateStudy.scss';
 
@@ -41,6 +41,11 @@ const CreateStudy = () => {
     const goToViewBlocks = () => {
         dispatch(cancelled());
         navigate(`/viewblocks/${params.studyid}`);
+    }
+
+    const editBlock = (id ) => {
+        dispatch(enableDisableBlockEdit({id: id, edit: true}));
+        navigate(`/createblock`);
     }
     //is called when the study want to be create with the "submit" button
 // *** Still have to figure out how to make it synchronous
@@ -119,7 +124,7 @@ const CreateStudy = () => {
 
             fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsSlide)
                 .then(response => response.json())
-                .then(info => postSlideMedia(slide.id, info))
+                //.then(info => postSlideMedia(slide.id, info))
                 .then(() => console.log("posted slides" ))
                 .catch((err) => console.log(err));      
             }                                                                                                    
@@ -131,14 +136,14 @@ const CreateStudy = () => {
     const postSlideMedia = (slideId, slideInfo) => {
         slideMedia.map((media) => {
             if(media.slideId == slideId){
-                const mediaData = {mediaURL: media.url, slide: {slideInfo}};
+                const mediaData = {"mediaUrl": media.url, type: media.type, slide: {slideInfo}};
                 const requestOptionsMedia = {
                     method: "post",
                     headers: { "Content-Type": "application/json"},
                     body: JSON.stringify(mediaData)
                 };
 
-                fetch("https://ancient-ridge-25388.herokuapp.com/slides", requestOptionsMedia)
+                fetch("https://ancient-ridge-25388.herokuapp.com/slidemedia", requestOptionsMedia)
                 .then(response => response.json())
                 .then(() => console.log("posted media" ))
                 .catch((err) => console.log(err));      
@@ -213,8 +218,8 @@ const CreateStudy = () => {
                         <div className="blockGrid">
                             {blocks.map((block) =>{
                                 return (
-                                <div  key={block.id}>
-                                    <img className="gridPhoto" defaultValue={block.imageLink} src={block.imageLink} />
+                                <div  key={block.id} onClick={() => editBlock(block.id)}>
+                                    <img className="gridPhoto"  defaultValue={block.imageLink} src={block.imageLink} />
                                     <p>{block.title}</p>
                                 </div>
                                 )
@@ -231,8 +236,13 @@ const CreateStudy = () => {
                     }
                     <br/>       
                     <div>
+<<<<<<< HEAD
                         <button type="submit" className="buttonText">Create</button>
                         <button onClick={cancel} className="buttonText">Cancel</button>
+=======
+                        <button type="submit">Create</button>
+                        <button onClick={cancel}>Delete & Cancel</button>
+>>>>>>> 6c1d40043... ready for live demo
                     </div>
                    
                 </form>
@@ -244,51 +254,3 @@ const CreateStudy = () => {
 
 export default CreateStudy;
 
-
-  
-    // /**
-    //  * separte post function that goes to our backend/db
-    //  */
-    // const post = async() => {
-    //     console.log('cloud link:' + cloudLink);
-    //         const data = {title: study.title, imageLink: cloudLink};
-    //         const requestOptions = {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify(data)
-    //         };
-
-    //          fetch("/studies", requestOptions)
-    //         .then(response => response.json())
-    //         .then(res => console.log(res));      
-    // };
-    
-    // /**
-    //  * separate function to upload image to the cloudinary filesystem
-    //  */
-    // const uploadImage = async() => {
-	// 	const data = new FormData();
-	// 	data.append("file", study.photo);
-	// 	data.append("upload_preset", "engageapp");
-	// 	data.append("cloud_name", "engageapp");
-
-        
-    //     const response = await fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
-	// 		method: "POST",
-	// 		body: data,
-	// 	})
-	// 	const info = await response.json();
-    //     console.log(info.secure_url);
-    //     setImageForCloud(info.secure_url);
-    //   //  setImageForCloud(info.secure_url);
-
-	// 	//  fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
-	// 	// 	method: "POST",
-	// 	// 	body: data,
-	// 	// })
-	// 	// 	.then((res) => res.json())
-    //     //     .then(img => {setImageForCloud(img.secure_url)})
-	// 	// 	.catch((err) => console.log(err));
-            
-	// };
-    

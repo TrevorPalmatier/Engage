@@ -33,7 +33,7 @@ const slideSlice = createSlice({
             state.push({
                 blockId: payload.blockId,
                 id: nextSlideId(state),
-                slideId: -1,
+                slideId: 0,
                 title: "",
                 backgroundText:"",
                 new: true
@@ -43,12 +43,11 @@ const slideSlice = createSlice({
             state.push({
                 blockId: payload.blockId,
                 id: nextSlideId(state),
-                slideId: payload.id,
+                slideId: payload.slideId,
                 title: payload.title,
                 backgroundText: payload.backgroundText,
                 new: false
             });
-            console.log("slide");
             return state;
         },
 
@@ -75,11 +74,15 @@ const slideSlice = createSlice({
         cancel: (state, {payload}) => {
             state = state.filter((slide) => slide.id != payload.id);
             return state;
+        },
+        cancelByBlock: (state, {payload}) =>{
+            state = state.filter((slide)=> slide.blockId != payload.blockId);
+            return state;
         }
     }
 });
 
 
 export default slideSlice.reducer;
-export const { addSlide, addOldSlide, setText, setTitle, cancel, cancelSlides } = slideSlice.actions;
+export const { addSlide, addOldSlide, setText, setTitle, cancel, cancelSlides, cancelByBlock } = slideSlice.actions;
 //export const selectSlides = (state: RootState) => state.study.block.slides;
