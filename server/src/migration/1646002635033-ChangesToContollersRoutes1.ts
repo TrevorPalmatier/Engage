@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class ChangesToContollersRoutes1645914925270 implements MigrationInterface {
-    name = 'ChangesToContollersRoutes1645914925270'
+export class ChangesToContollersRoutes1646002635033 implements MigrationInterface {
+    name = 'ChangesToContollersRoutes1646002635033'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "slide_media" DROP CONSTRAINT "FK_2cd1db3c1e2d2a1ad0673cfba63"`);

@@ -8,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-class ChangesToContollersRoutes1645914925270 {
+class ChangesToContollersRoutes1646002635033 {
     constructor() {
-        this.name = 'ChangesToContollersRoutes1645914925270';
+        this.name = 'ChangesToContollersRoutes1646002635033';
     }
     up(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -29,5 +29,5 @@ class ChangesToContollersRoutes1645914925270 {
         });
     }
 }
-exports.ChangesToContollersRoutes1645914925270 = ChangesToContollersRoutes1645914925270;
-//# sourceMappingURL=1646002635033-ChangesToContollersRoutes.js.map
+exports.ChangesToContollersRoutes1646002635033 = ChangesToContollersRoutes1646002635033;
+//# sourceMappingURL=1646002635033-ChangesToContollersRoutes1.js.map
