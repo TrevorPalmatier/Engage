@@ -5,8 +5,6 @@
     flex-direction: row;
     position: fixed;
     top: 0;
-    // z-index: 3;
-    // transition: all 1s ease;
     font-family: Verdana, 'Geneva', Tahoma, sans-serif;
     background-color: black;
     color:white;
@@ -21,6 +19,7 @@
     }
     
     .left h2 {
+        font-family: Roboto;
         font-weight: 900;
         font-stretch: .4;
     }
@@ -36,6 +35,8 @@
 
         .nav-link{
             color: white;
+            text-decoration: none;
+            font-family: Roboto;
 
             &:hover{
                 color: grey;
@@ -43,11 +44,3 @@
         }
     }
 }
-
-// .NavbarScroller div li a{
-//     display: block;
-
-//     color: white;
-//     text-align: center;
-//     text-decoration: none;
-// }

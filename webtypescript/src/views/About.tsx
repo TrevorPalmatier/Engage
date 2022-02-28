@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
-import '../App.css';
+import '../App.scss';
 /**
  * This page shares what Engage is all about
  * @returns 

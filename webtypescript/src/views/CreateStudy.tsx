@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import '../App.css';
+import '../App.scss';
 import NavbarScroller from "../Components/NavbarScroller";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { setTitle, setImage, cancelled, selectStudy} from "../features/studySlice";
 import { addBlock, addOldBlock } from "../features/blocksSlice";
 import { RootState } from "../store";
-import '../Styling/CreateStudy.css';
+import '../Styling/CreateStudy.scss';
 
 /** 
  * Notes for things to maybe implement:
@@ -183,10 +183,13 @@ const CreateStudy = () => {
     return (
         <div>
             <NavbarScroller/>   
-            <div className='page'> 
-            <div className = "wrapper">
+            <div className="page"> 
+            <div className="viewHeader">
                 <h1>Create a Study</h1>
-                <form onSubmit={handleSubmit}>
+            </div>
+
+            <div className = "wrapper">
+                <form onSubmit={handleSubmit} className="form">
                     <fieldset>
                         <label>
                             Name of Study: 
@@ -205,7 +208,7 @@ const CreateStudy = () => {
                         <img className="photo"  src={study.imageLink} />
                     }
                     {!params.edit && 
-                    <div>
+                    <div className="container_blocks">
                         <h2>Study's Blocks</h2>
                         <div className="blockGrid">
                             {blocks.map((block) =>{
@@ -217,19 +220,19 @@ const CreateStudy = () => {
                                 )
                             })}
                         </div>
-                        <button onClick={goToCreateBlock}> Add Block </button>
+                        <button onClick={goToCreateBlock} className="buttonText"> Add Block </button>
                     </div>  
                     }
                     {params.edit && 
                         <div>
-                            <button onClick={goToViewBlocks}> Edit Blocks </button>
+                            <button onClick={goToViewBlocks} className="buttonText"> Edit Blocks </button>
                         </div>
 
                     }
                     <br/>       
                     <div>
-                        <button type="submit">Create</button>
-                        <button onClick={cancel}>Cancel</button>
+                        <button type="submit" className="buttonText">Create</button>
+                        <button onClick={cancel} className="buttonText">Cancel</button>
                     </div>
                    
                 </form>

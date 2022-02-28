@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../App.css';
+import '../App.scss';
 import '../Styling/FakeScreen.css';
 /**
  * this is to show a fake screen for each slide of a block

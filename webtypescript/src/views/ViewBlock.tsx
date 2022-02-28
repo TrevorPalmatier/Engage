@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../App.css';
+import '../App.scss';
 import '../Styling/ViewBlock.css';
 import FakeScreen from './FakeScreen';
 import { useAppDispatch } from '../hooks/store';
