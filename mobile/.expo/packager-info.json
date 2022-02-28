@@ -4,7 +4,7 @@
   "packagerPort": 19000,
   "webpackServerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerNgrokUrl": "https://z7-v3d.anonymous.mobile.exp.direct",
+  "packagerNgrokUrl": "https://packager.z7-v3d.anonymous.mobile.exp.direct",
+  "ngrokPid": 64056
 }
