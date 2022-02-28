@@ -127,6 +127,12 @@ exports.Routes = [
         action: "slides",
     },
     {
+        method: "get",
+        route: "blocks/entries/:id",
+        controller: BlockController_1.BlockController,
+        action: "oneEntries",
+    },
+    {
         method: "post",
         route: "/blocks",
         controller: BlockController_1.BlockController,

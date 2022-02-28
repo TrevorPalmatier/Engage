@@ -126,6 +126,12 @@ export const Routes = [
 		action: "slides",
 	},
 	{
+		method: "get",
+		route: "blocks/entries/:id",
+		controller: BlockController,
+		action: "oneEntries",
+	},
+	{
 		method: "post",
 		route: "/blocks",
 		controller: BlockController,
