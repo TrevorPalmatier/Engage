@@ -236,13 +236,8 @@ const CreateStudy = () => {
                     }
                     <br/>       
                     <div>
-<<<<<<< HEAD
                         <button type="submit" className="buttonText">Create</button>
                         <button onClick={cancel} className="buttonText">Cancel</button>
-=======
-                        <button type="submit">Create</button>
-                        <button onClick={cancel}>Delete & Cancel</button>
->>>>>>> 6c1d40043... ready for live demo
                     </div>
                    
                 </form>
