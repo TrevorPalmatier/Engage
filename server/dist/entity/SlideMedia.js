@@ -27,7 +27,7 @@ __decorate([
 ], SlideMedia.prototype, "type", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => Slide_1.Slide, slide => slide.medias, {
-        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+        onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
     }),
     __metadata("design:type", Number)
 ], SlideMedia.prototype, "slide", void 0);

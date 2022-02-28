@@ -15,7 +15,7 @@ export class SlideMedia {
 
     // multiple medias can be used in a slide
     @ManyToOne(type => Slide, slide => slide.medias,  {
-        onUpdate: 'CASCADE', onDelete: 'CASCADE'
+        onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
     })
     slide: number;
 
