@@ -34,6 +34,11 @@ class BlockController {
             return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
         });
     }
+    oneEntries(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.blockRepository.findOne(request.params.id, { relations: ["entries"] });
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.blockRepository.save(request.body);

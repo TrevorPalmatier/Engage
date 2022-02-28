@@ -22,6 +22,10 @@ export class BlockController {
 		return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
 	}
 
+	async oneEntries(request: Request, response: Response, next: NextFunction) {
+		return this.blockRepository.findOne(request.params.id, { relations: ["entries"] });
+	}
+
 	async save(request: Request, response: Response, next: NextFunction) {
 		return this.blockRepository.save(request.body);
 	}
