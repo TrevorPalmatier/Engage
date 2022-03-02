@@ -80,6 +80,10 @@ const ViewBlock = () => {
               <button onClick={e => {goToEditBlock(e)}}> Edit Block </button>
               </div>
               <br/>
+              <div className = 'headersForComponents'>
+                <h2>Slides</h2>
+                <h2>Entries</h2>
+              </div>
               <div className = 'maincomponent'>
                 <div className='organizeScreens'>
                   {block.slides?.map((slide)=> {
@@ -90,17 +94,34 @@ const ViewBlock = () => {
                     )
                   })}
                 </div>
-                {/* <div className ='entriesGrid'>
+                <div className ='entriesGrid'>
                   {entries?.map((entry) => {
-                    return(
-                      <div key = {entry.id}>
-                        <img src={entry.imageLink}/>
-                        <h3 >{entry.description}</h3>
-                      </div>
-                    )
+                      var img1 = new Image();
+                      img1.src = entry.imageLink;
+                      img1.onload = (e) => {
+                        if(img1.height > img1.width){
+                          console.log("here");
+                            return(
+                              <div className= 'wider' key = {entry.id}>
+                                <img src={entry.imageLink}/>
+                                <h3 >{entry.description}</h3>
+                              </div>
+                            )
+                        }else {
+                          return(
+                            <div className = 'taller' key = {entry.id}>
+                              <img src={entry.imageLink}/>
+                              <h3 >{entry.description}</h3>
+                            </div>
+                          )
+                        }
+                       
+                      };
+
+                    
                   })
                   }
-                </div> */}
+                </div>
               </div>
             </div>
         </div>

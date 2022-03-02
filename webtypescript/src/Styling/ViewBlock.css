@@ -5,10 +5,19 @@
     
 } 
 
+.headersForComponents {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5%;
+    width: 100%;
+    margin-left: 10px;
+}
 .maincomponent {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    justify-items: flex-start;
+    width: 100%;
 }
 .entriesGrid {
     display: grid;
@@ -36,13 +45,19 @@
       grid-area: 1/ 1 / 2 / 2;
 }
 
-.entriesGrid div img {
+.entriesGrid .wider div img {
     border: 1px solid white;
     border-radius: 50%;
     max-width: 100%;
-    object-fit: fill;
     grid-area: 1 / 1 / 2 / 2;
     
+}
+
+.entriesGrid .taller div img {
+    border: 1px solid white;
+    border-radius: 50%;
+    max-width: 50%;
+    grid-area: 1 / 1 / 2 / 2;
 }
 
 .entriesGrid div h3 {
@@ -57,5 +72,11 @@
 .organizeScreens {
     display: flex;
     flex-direction: row;
+    width: 50%;
+    border: 5px solid black;
+    overflow-x: scroll;
+    margin: 5px;
+    padding: 5px;
     gap: 20px;
+    text-align: left;
 }
