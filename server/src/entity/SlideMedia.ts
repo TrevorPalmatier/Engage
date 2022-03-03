@@ -13,6 +13,12 @@ export class SlideMedia {
     @Column()
     type: string;
 
+    @Column({default: "landscape"} )
+    orientation: string;
+
+    @Column({nullable: true})
+    position: number;
+
     // multiple medias can be used in a slide
     @ManyToOne(type => Slide, slide => slide.medias,  {
         onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
