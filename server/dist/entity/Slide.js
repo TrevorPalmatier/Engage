@@ -27,6 +27,10 @@ __decorate([
     __metadata("design:type", String)
 ], Slide.prototype, "backgroundText", void 0);
 __decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Number)
+], Slide.prototype, "option", void 0);
+__decorate([
     typeorm_1.ManyToOne(type => Block_1.Block, block => block.slides, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
     __metadata("design:type", Number)
 ], Slide.prototype, "block", void 0);

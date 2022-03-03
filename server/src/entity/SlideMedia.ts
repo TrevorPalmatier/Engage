@@ -16,7 +16,7 @@ export class SlideMedia {
     @Column({default: "landscape"} )
     orientation: string;
 
-    @Column({nullable: true})
+    @Column({nullable: false})
     position: number;
 
     // multiple medias can be used in a slide

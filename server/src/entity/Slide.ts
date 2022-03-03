@@ -14,6 +14,10 @@ export class Slide {
     @Column()
     backgroundText: string;
 
+    // the slide options to choose out of
+    @Column({nullable: true})
+    option: number;
+
     // multiple slides can be in a Block
     @ManyToOne(type => Block, block => block.slides, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     block: number;

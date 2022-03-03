@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], SlideMedia.prototype, "orientation", void 0);
 __decorate([
-    typeorm_1.Column({ nullable: true }),
+    typeorm_1.Column({ nullable: false }),
     __metadata("design:type", Number)
 ], SlideMedia.prototype, "position", void 0);
 __decorate([
