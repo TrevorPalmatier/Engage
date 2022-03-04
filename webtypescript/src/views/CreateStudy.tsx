@@ -7,6 +7,7 @@ import { setTitle, setImage, cancelled, selectStudy} from "../features/studySlic
 import { addBlock, addOldBlock, enableDisableBlockEdit } from "../features/blocksSlice";
 import { RootState } from "../store";
 import '../Styling/CreateStudy.scss';
+import { setSlideOption } from "../features/slideSlice";
 
 /** 
  * Notes for things to maybe implement:
@@ -115,7 +116,7 @@ const CreateStudy = () => {
         console.log("id of block: " + blockInfo.Id)
         slides.map((slide) => {
             if(slide.blockId == blockId){
-                const slideData = {title: slide.title, "backgroundText": slide.backgroundText, "block": blockInfo}  //slide data
+                const slideData = {title: slide.title, "backgroundText": slide.backgroundText, option: slide.option, "block": blockInfo}  //slide data
                 const requestOptionsSlide = {
                     method: "post",
                     headers: { "Content-Type": "application/json"},
@@ -136,7 +137,7 @@ const CreateStudy = () => {
     const postSlideMedia = (slideId, slideInfo) => {
         slideMedia.map((media) => {
             if(media.slideId == slideId){
-                const mediaData = {"mediaUrl": media.url, type: media.type, slide: slideInfo};
+                const mediaData = {"mediaUrl": media.url, type: media.type, orientation: media.orientation, position: media.position, slide: slideInfo};
                 const requestOptionsMedia = {
                     method: "post",
                     headers: { "Content-Type": "application/json"},
@@ -193,7 +194,7 @@ const CreateStudy = () => {
                 <h1>Create a Study</h1>
             </div>
 
-            <div className = "wrapper">
+            <div className = "form">
                 <form onSubmit={handleSubmit} className="form">
                     <fieldset>
                         <label>
@@ -208,7 +209,6 @@ const CreateStudy = () => {
                             <input  type="file" name="image" onChange={selectImage} />
                         </label>
                     </fieldset>
-                    <br/>
                     {study.selectedImage && 
                         <img className="photo"  src={study.imageLink} />
                     }
@@ -235,9 +235,8 @@ const CreateStudy = () => {
                             <button onClick={goToViewBlocks} className="buttonText"> Edit Blocks </button>
                         </div>
 
-                    }
-                    <br/>       
-                    <div>
+                    }      
+                    <div className="submitButtons">
                         <button type="submit" className="buttonText">Create</button>
                         <button onClick={cancel} className="buttonText">Delete & Cancel</button>
                     </div>

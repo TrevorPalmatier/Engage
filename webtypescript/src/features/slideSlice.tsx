@@ -10,6 +10,7 @@ export interface SlideState {
     slideId: number,
     title: string,
     backgroundText: string,
+    option: number,
     new: boolean
 
 }
@@ -36,6 +37,7 @@ const slideSlice = createSlice({
                 slideId: 0,
                 title: "",
                 backgroundText:"",
+                option: 1,
                 new: true
             });
             return state;
@@ -46,6 +48,7 @@ const slideSlice = createSlice({
                 slideId: payload.slideId,
                 title: payload.title,
                 backgroundText: payload.backgroundText,
+                option: payload.option,
                 new: false
             });
             return state;
@@ -67,6 +70,13 @@ const slideSlice = createSlice({
             })
             return state;
         },
+        setSlideOption: (state, {payload}) =>{
+            state.map((slide) => {
+                if(slide.id == payload.id){
+                    slide.option = payload.option;
+                }
+            })
+        },
         cancelSlides: (state) => {
             state = initialState;
             return state;
@@ -84,5 +94,5 @@ const slideSlice = createSlice({
 
 
 export default slideSlice.reducer;
-export const { addSlide, addOldSlide, setText, setTitle, cancel, cancelSlides, cancelByBlock } = slideSlice.actions;
+export const { addSlide, addOldSlide, setText, setTitle, setSlideOption, cancel, cancelSlides, cancelByBlock } = slideSlice.actions;
 //export const selectSlides = (state: RootState) => state.study.block.slides;

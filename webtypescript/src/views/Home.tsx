@@ -47,7 +47,6 @@ const Home = () => {
           <button className="buttonText" onClick={goToCreateStudy}>
             Create Study
           </button>
-          <div className="divider" />
           <button onClick={goToViewStudy} className="buttonText">
             View Studies
           </button>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import '../App.scss';
-import '../Styling/CreateBlock.css';
+import '../Styling/CreateBlock.scss';
 import NavbarScroller from "../Components/NavbarScroller";
 import CreateSlide from "./CreateSlide";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,6 +24,7 @@ const CreateBlock = () => {
     const block  = useAppSelector(selectBlock);     //selects data to be persisted from a block
     const slides = useAppSelector(state => state.persistedReducer.slides.filter(slide => slide.blockId == block?.id));      //selects slides for a specific block
     const slideMedia = [...useAppSelector(selectMedia)];
+
     //allows navigation
     const navigate = useNavigate();
     const params = useParams();
@@ -201,7 +202,6 @@ const postBlocks = (e, studyInfo) => {
     //creates new slide element and adds it through the reducer
     const handleNewSlide = () => {
         dispatch(addSlide({blockId: block?.id}));
-        //dispatch(addSlide({slide: slides}))
     };
 
     //handles discarding the block and slides when cancelled
@@ -234,63 +234,50 @@ const postBlocks = (e, studyInfo) => {
         <div>
             <NavbarScroller/>
             <div className="page">
-            <div className = "viewHeader">
-                <h1>Create a Block</h1>
-            </div>
-            <div className = "wrapper">
-               <form onSubmit={handleSubmit}>
-                <fieldset>
-                    <label>
-                        Name of Block:  
-                        <input type="text" defaultValue={block?.title} name="name_of_block"
+                <div className = "viewHeader">
+                    <h1>Create a Block</h1>
+                </div>
+                <div className = "form">
+                    <form onSubmit={handleSubmit}>
+                        <fieldset>
+                            <label>Name of Block:</label>
+                            <input type="text" defaultValue={block?.title} name="name_of_block"
                             onChange={e=>{dispatch(setBlockTitle({id: block?.id, title: e.target.value}))}} />
-                    </label>
-                </fieldset>
-                <fieldset>
-                    <label>
-                        Upload Front Cover for Block: 
-                        <input type="file" name="image" onChange={selectImage} />
-                    </label>
-                </fieldset>
-                    {block?.selectedImage && 
-                        <img className="photo"  src={block?.imageLink} />
-                    }
-                <br/>
-                <div className="createRect">
-                    <h2>Create Prompt</h2>
-                    <fieldset>
-                        <label>Title of Prompt:</label>
-                            <input type="text" defaultValue={block?.promptTitle} name="title_of_prompt" 
-                                onChange={e=>{dispatch(setBlockPromptTitle({id: block?.id, promptTitle: e.target.value}))}}/>
-                        
-                    </fieldset>
-                    <fieldset>
-                        <label>
-                            Prompt: 
-                            <br/>
-                        </label>
-                            <textarea className="textArea" defaultValue={block?.promptText} name="prompt" 
-                                onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
-                    </fieldset>
-                </div>
-                <br/>
-                    {
-                    slides.map((slide) => {
-                        return (
-                        <div key={slide.id} className="createRect">
-                            <CreateSlide key={slide.id} id={slide.id}/>
+                         </fieldset>
+                        <fieldset>
+                            <label> Upload Front Cover for Block:</label>
+                            <input type="file" name="image" onChange={selectImage} />
+                        </fieldset>
+                        {block?.selectedImage && 
+                            <img className="photo"  src={block?.imageLink} />
+                        }
+                        <div className="createRect">
+                            <h2>Create Prompt</h2>
+                                <fieldset>
+                                    <label>Title of Prompt:</label>
+                                    <input type="text" defaultValue={block?.promptTitle} name="title_of_prompt" 
+                                    onChange={e=>{dispatch(setBlockPromptTitle({id: block?.id, promptTitle: e.target.value}))}}/>
+                                </fieldset>
+                                <fieldset>
+                                    <label> Prompt: <br/></label>
+                                    <textarea className="textArea" defaultValue={block?.promptText} name="prompt" 
+                                    onChange={e=>{dispatch(setBlockPromptText({id: block?.id, promptText: e.target.value}))}}/>
+                                </fieldset>
                         </div>
-                        )
-                    })
-                    }
-                <div>
-                    <button type="button" onClick={handleNewSlide}>+ Create New Slide</button>
-                </div>
-                <br/>
-                <div>
-                    <button type="submit">Save</button>
-                    <button className ="center"onClick={handleCancel}>Delete & Cancel</button>
-                </div>
+                        {
+                            slides.map((slide) => {
+                                return (
+                                <div key={slide.id} className="createRect">
+                                    <CreateSlide key={slide.id} id={slide.id}/>
+                                </div>
+                                )
+                             })
+                        }
+                        <button type="button" className="fullWidthButton" onClick={handleNewSlide}>+ Create New Slide</button>
+                        <div className="submitButtons">
+                            <button className="buttonText" type="submit">Save</button>
+                            <button className ="buttonText" onClick={handleCancel}>Delete & Cancel</button>
+                        </div>
                </form>
             </div>
             </div>

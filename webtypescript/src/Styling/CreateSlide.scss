@@ -1,0 +1,43 @@
+.slideMedia {
+    display: flex;
+    flex-direction: row;
+    place-items: top;
+    gap: 10px;
+    font-family: Verdana, 'Geneva', Tahoma, sans-serif;
+    padding-left: 15px;
+
+    div {
+        display:block;
+        place-items: center;
+        text-align: center;
+
+        .mediahover {
+            max-width:200px;
+            max-height:200px;
+            width: auto;
+            height: auto;
+            border: 2px black solid;
+        }
+
+        .texthover {
+            max-width:200px;
+            max-height:200px;
+            width: auto;
+            height: auto;
+            visibility: hidden;
+        }
+    }
+
+    div:hover{
+        .mediahover{
+            opacity: .5;
+        }
+
+        .texthover {
+            visibility: visible;
+        }
+    }
+}
+
+
+

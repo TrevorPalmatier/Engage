@@ -1,8 +1,8 @@
 import React from "react";
 import '../App.scss';
-import '../Styling/CreateSlide.css';
+import '../Styling/CreateSlide.scss';
 import { useNavigate } from "react-router-dom";
-import { setText, setTitle, cancel, addSlide } from "../features/slideSlice";
+import { setText, setTitle, cancel, addSlide, setSlideOption } from "../features/slideSlice";
 import { addMedia,deleteOneMedia } from "../features/mediaSlideSlice";
 import { useAppSelector, useAppDispatch } from "../hooks/store";
 
@@ -20,23 +20,26 @@ const CreateSlide = ({id}) => {
     console.log(media);
     const selectMedia = (event) => {
         const files = event.target.files;
-        console.log(files);
 
-        [...files].forEach((file) => {
-            let img = file;
+        [...files].forEach((file, index) => {
+            if(index > 1){
+                alert("You can only upload a maximum of 2 files");
+            }else{
+                let img = file;
 
-            const data = new FormData();
+                const data = new FormData();
 
-            data.append("file", img);
-            data.append("upload_preset", "engageapp");
-            data.append("cloud_name", "engageapp");
+                data.append("file", img);
+                data.append("upload_preset", "engageapp");
+                data.append("cloud_name", "engageapp");
 
-            const uploadImage = fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
-                method: "POST",
-                body: data,
-            })
-                .then(response => response.json())
-                .then(info => dispatch(addMedia({slideId: slide?.id, type: file.type, url: info.secure_url})))
+                const uploadImage = fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
+                    method: "POST",
+                    body: data,
+                })
+                    .then(response => response.json())
+                    .then(info => dispatch(addMedia({slideId: slide?.id, type: file.type, orientation: findDimensions(info.height, info.width), position: index, url: info.secure_url})))
+            }
         })
     }
     
@@ -44,41 +47,51 @@ const CreateSlide = ({id}) => {
         dispatch(deleteOneMedia({id: mediaid}));
     }
 
+    const findDimensions = (height, width) =>{
+        if(height > width){
+            return "vertical"
+        }else{
+            return "landscape"
+        }
+    }
+
     //renders the create study element
     //still needs to handle multiple image upload
     return (
-        <div className="wrapper">
+        <div className="form">
             <fieldset>
                 <label> Title of Slide:</label> 
-                    <input type="text" defaultValue={slide?.title} name="slide_title" 
-                        onChange={e=>{ dispatch(setTitle({id: slide?.id, title: e.target.value}))}} />
-                
+                <input type="text" defaultValue={slide?.title} name="slide_title" 
+                onChange={e=>{ dispatch(setTitle({id: slide?.id, title: e.target.value}))}} />     
             </fieldset>
             <fieldset>
                 <label>Background Text:  </label>
                 <textarea className='textArea' defaultValue={slide?.backgroundText} name="prompt" 
-                        onChange={e=>{dispatch(setText({id: slide?.id, text: e.target.value}))}}/>
-               
+                onChange={e=>{dispatch(setText({id: slide?.id, text: e.target.value}))}}/>
             </fieldset>
             <fieldset>
-                <label>Upload images to display on the slide: </label>
-                <input type="file"onChange={event => selectMedia(event)} multiple />     
+                <label>Upload 1-2 images to display on the slide: </label>
+                <input type="file" onChange={event => selectMedia(event)}  multiple />     
             </fieldset>
             <div className="slideMedia">
-                
-            {media?.map((media1)=> {
+                {media?.map((media1)=> {
                 return (
                     <div key= {media1.id}>
                         { media1.type.split('/')[0] == 'video' && 
                                 <video className="mediahover"  onClick={() => deleteMedia(media1.id)} src={media1.url}/>
                         }
                         {media1.type.split('/')[0] == 'image' && 
-                                <img className="mediahover" onClick={() => deleteMedia(media1.id)}src={media1.url}/>
+                                <img className="mediahover"  onClick={() => deleteMedia(media1.id)}src={media1.url}/>
                         }
                     <p className="texthover">Click to Delete</p>
                     </div>
                 )
                 })}
+            </div>
+            <div className="submitButtons">
+                <button className="buttonText" onClick={() => dispatch(setSlideOption({id: slide?.id, option: 1 }))}>Select Option 1</button>
+                <button className="buttonText" onClick={() => dispatch(setSlideOption({id: slide?.id, option: 2 }))}>Select Option 2</button>
+                <button className="buttonText" onClick={() => dispatch(setSlideOption({id: slide?.id, option: 3 }))}>Select Option 3</button>
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../App.scss';
-import '../Styling/ViewBlock.css';
+import '../Styling/ViewBlock.scss';
 import FakeScreen from './FakeScreen';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { addOldBlock, cancelBlocks } from '../features/blocksSlice';
@@ -39,7 +39,7 @@ const ViewBlock = () => {
           abortController.abort(); // cancel pending fetch request on component unmount
         }
     
-      }, []);
+      }, [entries]);
 
   
     const goToEditBlock = async (e) => {
@@ -47,7 +47,8 @@ const ViewBlock = () => {
 
       dispatch(addOldBlock({id: block.id, title: block.title, imagelink: block.mediaURL, promptTitle: block.promptTitle, promptText: block.promptText}));
       block.slides.map((slide) => {
-        dispatch(addOldSlide({id: slide.id, blockId: block.id, slideId: slide.id, title: slide.title, backgroundText: slide.backgroundText }));
+        //create old slide in persist store
+        dispatch(addOldSlide({id: slide.id, blockId: block.id, slideId: slide.id, option: slide.option, title: slide.title, backgroundText: slide.backgroundText }));
         fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
           .then(response => response.json())
           .then (info => {dispatchMedia(slide.id, info)})
@@ -59,25 +60,24 @@ const ViewBlock = () => {
     const dispatchMedia = (slideId, slideInfo) => {
       console.log(slideInfo);
         slideInfo.medias.map((media)=>{
-          dispatch(addOldMedia({slideId: slideInfo.id, mediaId: media.id, type: media.type, url: media.mediaUrl}));
+          dispatch(addOldMedia({slideId: slideInfo.id, mediaId: media.id, type: media.type, orientation: media.orientation, position: media.positioni, url: media.mediaUrl}));
         })
-        
     }
+
     return (
-     
         <div>
             <NavbarScroller/>
             <div className='page'>       
-              <div className='pageHeader'>
-                <p>Block: {block.title}</p>   
+              <div className='viewHeader'>
+                <h1>Block: {block.title}</h1>   
                 <img className='blockImage' src={block.mediaURL}></img>
               </div>
-              <div>
+              <div className="promptInfo">
                 <h2>Prompt Title: {block.promptTitle}</h2>
-                <p>Prompt Text: {block.promptText}</p>
+                <h3>Prompt Text: {block.promptText}</h3>
               </div>
-              <div>
-              <button onClick={e => {goToEditBlock(e)}}> Edit Block </button>
+              <div className='submitButtons'>
+                <button className='buttonText' onClick={e => {goToEditBlock(e)}}> Edit Block </button>
               </div>
               <br/>
               <div className = 'headersForComponents'>
@@ -89,36 +89,32 @@ const ViewBlock = () => {
                   {block.slides?.map((slide)=> {
                     return (
                       <div>
-                      <FakeScreen key={slide.id} id = {slide.id}/>
+                        <FakeScreen key={slide.id} id = {slide.id}/>
                       </div>
                     )
                   })}
                 </div>
                 <div className ='entriesGrid'>
                   {entries?.map((entry) => {
-                      var img1 = new Image();
-                      img1.src = entry.imageLink;
-                      img1.onload = (e) => {
-                        if(img1.height > img1.width){
-                          console.log("here");
-                            return(
-                              <div className= 'wider' key = {entry.id}>
-                                <img src={entry.imageLink}/>
-                                <h3 >{entry.description}</h3>
-                              </div>
-                            )
-                        }else {
-                          return(
-                            <div className = 'taller' key = {entry.id}>
-                              <img src={entry.imageLink}/>
-                              <h3 >{entry.description}</h3>
-                            </div>
+                      var img = new Image();
+                      img.src = entry.imageLink;
+                      const height = img.height;
+                      const width = img.width;
+                      if(height > width){
+                        return(
+                          <div className="taller" key = {entry.id}>
+                            <img src={entry.imageLink}/>
+                            <h3 >{entry.description}</h3>
+                          </div>
                           )
-                        }
-                       
-                      };
-
-                    
+                      }else{
+                        return(
+                          <div className="wider" key = {entry.id}>
+                            <img src={entry.imageLink}/>
+                            <h3 >{entry.description}</h3>
+                          </div>
+                          )
+                      }
                   })
                   }
                 </div>

@@ -1,26 +1,15 @@
-.gridPhoto {
-    max-width:100%;
-    width: auto;
-    height:auto;
-    border: 5px;
-    border-color: black;
-  }
-
-.gridPhoto:hover {
-    opacity: .5;
-}
-
 .studiesGrid {
   display: grid;
   width: 100%;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  /* gap: 2rem; */
+  gap: 1rem;
+  margin-top: 15px;
 }
 
 .studiesGrid div {
   background: black;
   border: 1px solid white;
-  /* border-radius: 5px; */
+  border-radius: 5px; 
   display: grid;
   place-items: center;
   text-align: center;
@@ -37,11 +26,19 @@
     grid-area: 1/ 1 / 2 / 2;
 }
 
-.studiesGrid  div  img {
+.studiesGrid .wider img {
   border: 1px solid white;
   border-radius: 50%;
   max-width: 100%;
+  grid-area: 1 / 1 / 2 / 2;
+  
+}
+
+.studiesGrid .taller img {
+  border: 2px solid white;
+  border-radius: 50%;
   object-fit: fill;
+  max-width: 50%;
   grid-area: 1 / 1 / 2 / 2;
 }
 

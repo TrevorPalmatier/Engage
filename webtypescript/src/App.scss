@@ -1,7 +1,7 @@
 .App {
   text-align: center;
   justify-content: space-around;
-  // justify-content: center;
+  justify-content: center;
   display:flex;
   flex-direction: column;
   line-height: 3.0;
@@ -15,148 +15,131 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-family: Verdana, 'Geneva', Tahoma, sans-serif;
-  margin-top: 50px;
+  align-content: center;
+  font-family: Tahoma,'Geneva',  Verdana, sans-serif;
   padding-left: 50px;
   padding-right: 50px;
   padding-bottom: 50px;
-  align-items: flex-start;
-
-.viewHeader{
-  display: flex;
-  justify-content: center;
-  margin-top: 50px;
-
-  h1{
-    font-family: Roboto; 
-    text-transform: uppercase;
-    font-weight: 300;
-    font-size: 50px;
-  }
-}
-
-.container{
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  width: 35%;
-  // can't seem to center so I am hardcoding this value for now
-  margin-left: 32%;
 
-  h2{
-    font-family: Roboto;
-    text-transform: uppercase;
-    font-size: 20px;
-  }
-
-  .buttonText{
-    font-family: Roboto;
-    height: 75%;
-    background-color: #ffffff;
+  .viewHeader{
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-decoration: none;
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    color: black;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  
-    &:hover{
-      opacity: .7;
-      background-color: grey;
-      color: white;
-      border: 2px solid white;
-      transition: all 0.2s ease-in-out;
-      cursor: pointer;
+    margin-top: 75px;
+    width: 100%;
+    gap: 25px;
+
+    h1{
+      font-family: Roboto; 
+      text-transform: uppercase;
+      font-weight: 300;
+      font-size: 50px;
     }
   }
-  
-}
 
-.photo {
-  max-width:200px;
-  max-height:200px;
-  width: auto;
-  height: auto;
-}
+  .container{
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+    align-items:center;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    justify-items: center;
 
-.createRect {
-  height: auto;
-  width: 100%;
-  justify-content: center;
-  border: 2px;
-  border-style: solid;
-  border-color: rgb(187, 187, 187);
-  padding: 5px 20px;
-}
+    h2{
+      font-family: Roboto;
+      text-transform: uppercase;
+      font-size: 20px;
+    }
+  }
 
-.textBox {
-  height: 40px;
-  width: 100%;
-  font-size: 14px;
-}
+  .photo {
+    max-width:200px;
+    max-height:200px;
+    width: auto;
+    height: auto;
+  }
 
-.fullWidthButton {
-  width: 100%;
-  height:auto;
-}
-  
-.pageHeader {
-  padding: 40px 40px 0px 40px ;
-  text-align: center;
-  font-weight: 600;
-  font-size: 60px;
-  display: flex;
-  place-items: center;
-  width: 100%;
-  justify-content: center;
-  gap: 25px;
-}
-
-.addPadding {
-  padding-bottom: 20px;
-  padding-top: 20px;
-}
+  .pageHeader {
+    padding: 40px 40px 0px 40px ;
+    text-align: center;
+    font-weight: 600;
+    font-size: 60px;
+    display: flex;
+    place-items: center;
+    width: 100%;
+    justify-content: center;
+    gap: 25px;
+  }
 }
 
 .buttonText{
   font-family: Roboto;
   background-color: #ffffff;
-  // display: flex;
-  // flex-direction: column;
+  min-height: 40px;
+  max-height: auto;
   text-decoration: none;
   border: 2px solid black;
   border-radius: 10px;
-  padding: 10px;
   color: black;
   text-transform: uppercase;
   letter-spacing: 2px;
 
   &:hover{
-    opacity: .7;
-    background-color: grey;
+    background-color: black;
     color: white;
-    border: 2px solid white;
+    border: 5px double white;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
   }
 }  
 
-.divider{
-  width:10px;
+.form{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 5px;
+  align-content: flex-start;
+  width: 100%;
+
+
+  fieldset{
+    border: 0px hidden white;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+
+  .createRect {
+    height: auto;
+    max-width: 100%;
+    justify-content: center;
+    border: 2px;
+    border-style: solid;
+    border-color: rgb(187, 187, 187);
+    padding: 10px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+
+    h2{
+      padding-left: 10px;
+    }
+  }
+}
+
+.submitButtons {
+  padding: 10px;
+  display: inline-flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+
+.gridPhoto {
+  max-width:100%;
+  width: auto;
   height:auto;
-  display:inline-block;
+  border: 5px;
+  border-color: black;
 }
 
-.wrapper {
-  padding: 5px 20px;
-}
-
-.wrapper fieldset {
-  margin: 20px;
-}

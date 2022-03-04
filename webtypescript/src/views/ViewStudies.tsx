@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import NavbarScroller from "../Components/NavbarScroller";
 import "../App.scss";
 import "../Styling/ViewStudies.scss";
-import CreateStudy from "./CreateStudy";
 import { useNavigate } from "react-router-dom";
 
 const ViewStudies = () => {
   const [data, setData] = useState<any>([]);
-  const [photo, setPhoto] = useState("");
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -28,7 +26,7 @@ const ViewStudies = () => {
     return () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
-  }, []);
+  }, [data]);
 
   const navigate = useNavigate(); //sets up navigation
 
@@ -37,9 +35,9 @@ const ViewStudies = () => {
   };
 
   const gotToBlocks = (id) => {
-    console.log(id);
     navigate(`/viewblocks/${id}`);
   };
+
   return (
     <div>
       <NavbarScroller />
@@ -47,19 +45,30 @@ const ViewStudies = () => {
         <div className="viewHeader">
           <h1>Studies</h1>
         </div>
-        <div className="button_container">
+        <div className="submitButtons">
           <button className="buttonText" onClick={goToCreateStudy}>
             Create Study
           </button>
         </div>
         <div className="studiesGrid">
           {data.map((study) => {
-            return (
-              <div key={study.id} onClick={() => gotToBlocks(study.id)}>
-                <img className="gridPhoto" src={study.imageLink}></img>
-                <h3>{study.title}</h3>
-              </div>
-            );
+            var img = new Image();
+            img.src = study.imageLink;
+            if(img.height > img.width){
+              return (
+                <div className="taller" key={study.id} onClick={() => gotToBlocks(study.id)}>
+                  <img key={study.id} src={study.imageLink}></img>
+                  <h3>{study.title}</h3>
+                </div>
+              );
+            }else{
+              return (
+                <div className="wider" key={study.id} onClick={() => gotToBlocks(study.id)}>
+                  <img key={study.id} src={study.imageLink}></img>
+                  <h3>{study.title}</h3>
+                </div>
+              )
+            } 
           })}
         </div>
       </div>

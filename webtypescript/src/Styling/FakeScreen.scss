@@ -1,0 +1,154 @@
+/* The device with borders */
+.smartphone {
+    position: relative;
+    width: 250px;
+    height: 444px;
+    margin: auto;
+    background-color: black;
+    border: 15px black solid;
+    border-top-width: 50px;
+    border-bottom-width:50px;
+    border-radius: 36px;
+  }
+  
+  
+  /* The horizontal line on the top of the device */
+  .smartphone::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 5px;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #333;
+    border-radius: 10px;
+  }
+  
+  /* The circle on the bottom of the device */
+  .smartphone::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 50%;
+    bottom: -45px;
+    transform: translate(-50%, -50%);
+    background: #333;
+    border-radius: 50%;
+  }
+
+/* The screen (or content) of the device */
+.smartphone .content1 {
+  width: 95%;
+  height: 95%;
+  background: white;
+  overflow-y: scroll;
+  border: 2.5% solid black;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas: 
+     "one one" 
+     "two two"
+     "three three";
+  gap: none;
+}
+
+.smartphone .content1::-webkit-scrollbar-track {
+  border: 2px solid black;
+  padding: 2px 0;
+  background-color: rgb(255, 255, 255);
+}
+
+.smartphone .content1::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.smartphone .content1::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: black;
+    border: 1px solid rgb(155, 155, 155);
+    margin: 1px;
+}
+
+.smartphone .content1 .header{
+  grid-area: one;
+  width: 100%;
+  text-align: center;
+  background-color: black;
+  color: white;
+}
+
+.smartphone .content1 .option1 {
+  grid-area: three;
+  display: flex;
+  flex-flow: column;
+}
+
+.smartphone .content1 img:nth-child(2) {
+  grid-area: two;
+  width: 100%;
+}
+
+.smartphone .content1 .option1 img:nth-child(2) {
+  width: 100%;
+}
+
+.smartphone .content1 .option1 .text {
+  font-size: small;
+  text-align: left;
+  word-break: keep-all;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+.smartphone .content1 .option2 {
+  grid-area: three;
+  display: flex;
+  flex-flow: column;
+}
+
+.smartphone .content1 .option2 .img:nth-child(2) {
+  width: 100%;
+}
+
+.smartphone .content1 .option2 .text1, .smartphone .content1 .option2 .text2 {
+  font-size: small;
+  text-align: left;
+  word-break: keep-all;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+
+.smartphone .content1 .option3 {
+  grid-area: three;
+  display: 'flexbox';
+  position: relative;
+}
+
+
+.smartphone .content1 .option3 img:nth-child(2) {
+  width: 50%;
+  float: right;
+}
+
+
+.smartphone .content1 .option3 .text1, .smartphone .content1 .option3 .text2{
+  /* position: relative; */
+  font-size: small;
+  text-align: left;
+  word-break: keep-all;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+.smartphone .content1 .option3 .text2 {
+  margin-top: -1.0em;
+}

@@ -1,40 +1,74 @@
+
+
 .container_blocks{
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
-    width: 25%;
+    width: 100%;
+    padding: 10px;
   
     h2{
       font-family: Roboto;
       text-transform: uppercase;
       font-size: 20px;
     }
+}
 
-    .buttonText{
-        font-family: Roboto;
-        height: 75%;
-        background-color: #ffffff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        text-decoration: none;
-        border: 2px solid black;
-        border-radius: 10px;
-        padding: 10px;
-        color: black;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        // margin-bottom: 25px;
-      
-        &:hover{
-          opacity: .7;
-          background-color: grey;
-          color: white;
-          border: 2px solid white;
-          transition: all 0.2s ease-in-out;
-          cursor: pointer;
-        }
-      }
+.blockGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  div{
+    background: black;
+    border: 1px solid white;
+    /* border-radius: 5px; */
+    display: grid;
+    place-items: center;
+    text-align: center;
+    filter: drop-shadow(0px 0px 10px black);
+
+    &hover{
+      opacity: .6;
+    }
+
+    &before{
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+      grid-area: 1/ 1 / 2 / 2;
+    }
+
+    img {
+      border: 1px solid white;
+      border-radius: 50%;
+      max-width: 100%;
+      object-fit: fill;
+      grid-area: 1 / 1 / 2 / 2;
+    }
+
+    h3{
+      width: 100%;
+      color:white;
+      place-self: end;
+      grid-area: 1 / 1 / 2 / 2;
+      background-color: black;
+      opacity: .7;
+    }
+  }
+}
+
+
+
+.gridPhoto {
+  max-width:100%;
+  width: auto;
+  height:auto;
+  border: 5px;
+  border-color: black;
+
+  &hover{
+    opacity: .5;
+  }
 }

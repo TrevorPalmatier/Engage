@@ -14,7 +14,7 @@
     display: grid;
     width: 60%;
     grid-template-columns: 1fr 1fr 1fr;
-    /* gap: 2rem; */
+    gap: 10px;
   }
 
 .blocksGrid div {
@@ -36,13 +36,19 @@
       grid-area: 1/ 1 / 2 / 2;
 }
 
-.blocksGrid  div  img {
+.blocksGrid .wider img {
     border: 1px solid white;
     border-radius: 50%;
     max-width: 100%;
-    object-fit: fill;
     grid-area: 1 / 1 / 2 / 2;
     
+}
+
+.blocksGrid .taller img {
+    border: 1px solid white;
+    border-radius: 50%;
+    max-width: 50%;
+    grid-area: 1 / 1 / 2 / 2;
 }
 
 .blocksGrid div h3 {

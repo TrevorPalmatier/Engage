@@ -1,0 +1,36 @@
+.textArea {
+    width: 100%;
+    min-height: 100px;
+    height: auto;
+}
+
+.fullWidthButton {
+    font-family: Roboto;
+    background-color: #ffffff;
+    min-height: 40px;
+    max-height: auto;
+    text-decoration: none;
+    border: 2px solid black;
+    border-radius: 10px;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    width: 100%;
+    margin: 5px;
+
+    &:hover{
+        background-color: black;
+        color: white;
+        border: 5px double white;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+      }
+}
+
+.submitButtons {
+    padding: 10px;
+    display: inline-flex;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+  }

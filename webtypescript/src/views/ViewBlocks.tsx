@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../App.scss';
-import '../Styling/ViewBlocks.css';
+import '../Styling/ViewBlocks.scss';
 import { useAppDispatch } from '../hooks/store';
 import { addBlock } from '../features/blocksSlice';
 import { setTitle } from '../features/studySlice';
@@ -50,26 +50,38 @@ const ViewBlocks = () => {
     <div>
        <NavbarScroller/>
        <div className='page'>    
-        <div className='pageHeader'>
-          <p>Study: {study.title}</p>
+        <div className='viewHeader'>
+          <h1>Study: {study.title}</h1>
           <img className='studyImage' src={study.imageLink}/>
         </div>
-        <div>
-          <button  className="buttonCreateBlock" onClick={editStudy}>Edit Study</button>
+        <div className='submitButtons'>
+          <button  className="buttonText" onClick={editStudy}>Edit Study</button>
+          <button  className="buttonText" onClick={createBlock}>Add Block</button>
         </div>
         <div className='aboveGrid'>
-          <button  className="buttonCreateBlock" onClick={createBlock}>Add Block</button>
           <h2 className="part">Participants</h2>
         </div>
         <div className='blockparticipantGrid'>
           <div className='blocksGrid'>
             {blockData?.map(block => {
-                  return (
-                    <div key= {block.id} onClick={() => goToBlock(block.id)}>
-                            <img src={block.mediaURL}></img>
-                            <h3 >{block.title}</h3>
-                      </div>
-                  )})}
+              var img = new Image();
+              img.src = block.mediaURL;
+              if(img.height > img.width){
+                return (
+                  <div className="taller" key= {block.id} onClick={() => goToBlock(block.id)}>
+                      <img src={block.mediaURL}></img>
+                      <h3 >{block.title}</h3>
+                  </div>
+                )
+              }else{
+                 return (
+                  <div className="wider" key= {block.id} onClick={() => goToBlock(block.id)}>
+                    <img src={block.mediaURL}></img>
+                    <h3 >{block.title}</h3>
+                  </div>
+                )
+              }
+            })}
           </div>
           <div className='participantList'>
             <p>person.one@hope.edu</p>
