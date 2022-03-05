@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavbarScroller from "../Components/NavbarScroller";
-import { useNavigate, useParams } from "react-router-dom";
 import "../App.scss";
 import "../Styling/FakeScreen.scss";
 /**
@@ -19,10 +17,10 @@ const FakeScreen = ({ id }) => {
         setData(data);
         setSlideOption(data);
       });
-  }, []);
+  }, [id]);
 
   const setSlideOption = (slide) => {
-    if (slide.option == 1) {
+    if (slide.option === 1) {
       setFirstStr(slide.backgroundText);
     } else {
       setFirstStr(
@@ -44,32 +42,36 @@ const FakeScreen = ({ id }) => {
           <h2>{slideData.title}</h2>
         </div>
         {slideData.medias?.map((media, index) => {
-          if (media.position == 0 && slideData.option == 1) {
-            return (
-              <div className="option1">
-                <img key={media.id} src={media.mediaUrl} />
-                <p className="text">{str1}</p>
-              </div>
-            );
-          } else if (media.position == 0 && slideData.option == 2) {
-            return (
-              <div className="option2">
-                <p className="text1">{str1}</p>
-                <img key={media.id} src={media.mediaUrl} />
-                <p className="text2">{str2}</p>
-              </div>
-            );
-          } else if (media.position == 0 && slideData.option == 3) {
-            return <img key={media.id} src={media.mediaUrl} />;
-          } else if (media.position == 1 && slideData.option == 3) {
+          if (media.position === 0) {
+            if(slideData.option === 1){
+              return (
+                <div className="option1">
+                  <img key={media.id} src={media.mediaUrl} alt="option1" />
+                  <p className="text">{str1}</p>
+                </div>
+              );
+            }
+            else if(slideData.option === 2){
+              return (
+                <div className="option2">
+                  <p className="text1">{str1}</p>
+                  <img key={media.id} src={media.mediaUrl} alt="option2" />
+                  <p className="text2">{str2}</p>
+                </div>
+              );
+            }
+          } else if (media.position === 0 && slideData.option === 3) {
+            return <img key={media.id} src={media.mediaUrl} alt="position0 option 3" />;
+          } else if (media.position === 1 && slideData.option === 3) {
             return (
               <div className="option3">
                 <p className="text1">{str1}</p>
-                <img key={media.id} src={media.mediaUrl} />
+                <img key={media.id} src={media.mediaUrl} alt="position1 option 3" />
                 <p className="text2">{str2}</p>
               </div>
             );
           }
+          return(<div></div>);
         })}
       </div>
     </div>

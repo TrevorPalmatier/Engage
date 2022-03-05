@@ -1,7 +1,6 @@
-import { useState } from "react";
+import React from 'react';
 import "./App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Home from "./views/Home";
 import CreateStudy from "./views/CreateStudy";
 import CreateBlock from "./views/CreateBlock";
@@ -9,9 +8,6 @@ import About from "./views/About";
 import ViewStudies from "./views/ViewStudies";
 import ViewBlocks from "./views/ViewBlocks";
 import ViewBlock from "./views/ViewBlock";
-import CreateSlide from "./views/CreateSlide";
-import NavbarScroller from "./Components/NavbarScroller";
-import FakeScreen from "./views/FakeScreen";
 
 function App() {
   return (

@@ -1,12 +1,9 @@
 import React from "react";
 import "../App.scss";
 import "../Styling/CreateSlide.scss";
-import { useNavigate } from "react-router-dom";
 import {
   setText,
   setTitle,
-  cancel,
-  addSlide,
   setSlideOption,
 } from "../features/slideSlice";
 import { addMedia, deleteOneMedia } from "../features/mediaSlideSlice";
@@ -42,13 +39,13 @@ const CreateSlide = ({ id }) => {
         data.append("upload_preset", "engageapp");
         data.append("cloud_name", "engageapp");
 
-        const uploadImage = fetch(
+        fetch(
           "https://api.cloudinary.com/v1_1/engageapp/upload",
           {
             method: "POST",
             body: data,
           }
-        )
+          )
           .then((response) => response.json())
           .then((info) =>
             dispatch(
@@ -60,7 +57,8 @@ const CreateSlide = ({ id }) => {
                 url: info.secure_url,
               })
             )
-          );
+          )
+          .catch((error) => console.log(error));
       }
     });
   };
@@ -111,18 +109,19 @@ const CreateSlide = ({ id }) => {
         {media?.map((media1) => {
           return (
             <div key={media1.id}>
-              {media1.type.split("/")[0] == "video" && (
+              {media1.type.split("/")[0] === "video" && (
                 <video
                   className="mediahover"
                   onClick={() => deleteMedia(media1.id)}
                   src={media1.url}
                 />
               )}
-              {media1.type.split("/")[0] == "image" && (
+              {media1.type.split("/")[0] === "image" && (
                 <img
                   className="mediahover"
                   onClick={() => deleteMedia(media1.id)}
                   src={media1.url}
+                  alt="slidemedia"
                 />
               )}
               <p className="texthover">Click to Delete</p>

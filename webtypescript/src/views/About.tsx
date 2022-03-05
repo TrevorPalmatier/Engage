@@ -1,5 +1,4 @@
 import React from "react";
-import NavbarScroller from "../Components/NavbarScroller";
 import "../App.scss";
 import { Layout } from "../Components/Layout";
 /**

@@ -1,8 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import internal from "stream";
-import { isConstructorDeclaration } from "typescript";
-import { RootState } from "../store";
-import blocksSlice from "./blocksSlice";
 
 export interface SlideState {
   blockId: number;
@@ -53,24 +49,24 @@ const slideSlice = createSlice({
     },
 
     setTitle: (state, { payload }) => {
-      state.map((slide) => {
-        if (slide.id == payload.id) {
+      state.forEach((slide) => {
+        if (slide.id === payload.id) {
           slide.title = payload.title;
         }
       });
       return state;
     },
     setText: (state, { payload }) => {
-      state.map((slide) => {
-        if (slide.id == payload.id) {
+      state.forEach((slide) => {
+        if (slide.id === payload.id) {
           slide.backgroundText = payload.text;
         }
       });
       return state;
     },
     setSlideOption: (state, { payload }) => {
-      state.map((slide) => {
-        if (slide.id == payload.id) {
+      state.forEach((slide) => {
+        if (slide.id === payload.id) {
           slide.option = payload.option;
         }
       });
@@ -80,11 +76,11 @@ const slideSlice = createSlice({
       return state;
     },
     cancel: (state, { payload }) => {
-      state = state.filter((slide) => slide.id != payload.id);
+      state = state.filter((slide) => slide.id !== payload.id);
       return state;
     },
     cancelByBlock: (state, { payload }) => {
-      state = state.filter((slide) => slide.blockId != payload.blockId);
+      state = state.filter((slide) => slide.blockId !== payload.blockId);
       return state;
     },
   },

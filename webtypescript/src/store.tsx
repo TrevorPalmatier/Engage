@@ -5,7 +5,6 @@ import { combineReducers } from "redux";
 import SlidesReducer from "./features/slideSlice";
 import MediaSlideReducer from "./features/mediaSlideSlice";
 import {
-  persistStore,
   persistReducer,
   FLUSH,
   REHYDRATE,

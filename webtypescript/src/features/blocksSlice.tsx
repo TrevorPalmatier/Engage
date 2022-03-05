@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import internal from "stream";
 import { RootState } from "../store";
-import { useAppDispatch, useAppSelector } from "../hooks/store";
-import { setImage } from "./studySlice";
 
 interface BlockState {
   id: number;
@@ -61,16 +58,16 @@ const blocksSlice = createSlice({
       return state;
     },
     setBlockTitle: (state, { payload }) => {
-      state.map((block) => {
-        if (block.id == payload.id) {
+      state.forEach((block) => {
+        if (block.id === payload.id) {
           block.title = payload.title;
         }
       });
       return state;
     },
     setBlockImageLink: (state, { payload }) => {
-      state.map((block) => {
-        if (block.id == payload.id) {
+      state.forEach((block) => {
+        if (block.id === payload.id) {
           block.imageLink = payload.imageLink;
           block.selectedImage = true;
         }
@@ -78,23 +75,23 @@ const blocksSlice = createSlice({
       return state;
     },
     setBlockPromptTitle: (state, { payload }) => {
-      state.map((block) => {
-        if (block.id == payload.id) {
+      state.forEach((block) => {
+        if (block.id === payload.id) {
           block.promptTitle = payload.promptTitle;
         }
       });
       return state;
     },
     setBlockPromptText: (state, { payload }) => {
-      state.map((block) => {
-        if (block.id == payload.id) {
+      state.forEach((block) => {
+        if (block.id === payload.id) {
           block.promptText = payload.promptText;
         }
       });
       return state;
     },
     cancelled: (state, { payload }) => {
-      state = state.filter((block) => block.id != payload.id);
+      state = state.filter((block) => block.id !== payload.id);
       return state;
     },
     cancelBlocks: (state) => {
@@ -102,8 +99,8 @@ const blocksSlice = createSlice({
       return state;
     },
     enableDisableBlockEdit: (state, { payload }) => {
-      state.map((block) => {
-        if (block.id == payload.id) {
+      state.forEach((block) => {
+        if (block.id === payload.id) {
           block.edit = payload.edit;
         }
       });

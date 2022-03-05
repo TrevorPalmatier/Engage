@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../App.scss";
-import NavbarScroller from "../Components/NavbarScroller";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import {
@@ -11,12 +10,10 @@ import {
 } from "../features/studySlice";
 import {
   addBlock,
-  addOldBlock,
   enableDisableBlockEdit,
 } from "../features/blocksSlice";
 import { RootState } from "../store";
 import "../Styling/CreateStudy.scss";
-import { setSlideOption } from "../features/slideSlice";
 import { Layout } from "../Components/Layout";
 
 /**
@@ -29,12 +26,9 @@ import { Layout } from "../Components/Layout";
  * @returns form to Create a Study
  */
 const CreateStudy = () => {
-  const [blockData, setData] = useState<any>([]);
-
   //sets up reducers and redux
   const dispatch = useAppDispatch();
   const study = useAppSelector(selectStudy);
-  const imageLink = study.imageLink;
   const blocks = useAppSelector(
     (state: RootState) => state.persistedReducer.study.blocks
   ); //get blocks for the study
@@ -99,7 +93,7 @@ const CreateStudy = () => {
   };
 
   const postBlocks = (studyInfo) => {
-    blocks.map((block) => {
+    blocks.forEach((block) => {
       //block data to be posted
       const blockData = {
         title: block?.title,
@@ -123,7 +117,6 @@ const CreateStudy = () => {
       )
         .then((response) => response.json())
         .then((info) => postSlides(block?.id, info))
-        .then(() => console.log("blockPosted"))
         .catch((err) => console.log(err));
     });
 
@@ -135,15 +128,15 @@ const CreateStudy = () => {
    */
   const postSlides = (blockId, blockInfo) => {
     //loops through all the slides and does a post request for each one
-    console.log("id of block: " + blockInfo.Id);
-    slides.map((slide) => {
-      if (slide.blockId == blockId) {
+    slides.forEach((slide) => {
+      if (slide.blockId === blockId) {
         const slideData = {
           title: slide.title,
           backgroundText: slide.backgroundText,
           option: slide.option,
           block: blockInfo,
         }; //slide data
+
         const requestOptionsSlide = {
           method: "post",
           headers: { "Content-Type": "application/json" },
@@ -156,16 +149,14 @@ const CreateStudy = () => {
         )
           .then((response) => response.json())
           .then((info) => postSlideMedia(slide.id, info))
-          .then(() => console.log("posted slides"))
           .catch((err) => console.log(err));
       }
     });
-    // navigate("../createslide");
   };
 
   const postSlideMedia = (slideId, slideInfo) => {
-    slideMedia.map((media) => {
-      if (media.slideId == slideId) {
+    slideMedia.forEach((media) => {
+      if (media.slideId === slideId) {
         const mediaData = {
           mediaUrl: media.url,
           type: media.type,
@@ -188,21 +179,22 @@ const CreateStudy = () => {
           .catch((err) => console.log(err));
       }
     });
-  };
+  }
 
   /**
    * Selects image to be uploaded to cloudinary
    */
   const selectImage = async (event: any) => {
-    if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
-
+    let img = event.target.files?.[0];
+    if (!img) {
+      return;
+    }
       const data = new FormData();
       data.append("file", img);
       data.append("upload_preset", "engageapp");
       data.append("cloud_name", "engageapp");
 
-      const uploadImage = await fetch(
+      fetch(
         "https://api.cloudinary.com/v1_1/engageapp/upload",
         {
           method: "POST",
@@ -211,7 +203,6 @@ const CreateStudy = () => {
       )
         .then((response) => response.json())
         .then((info) => dispatch(setImage({ imageLink: info.secure_url })));
-    }
   };
 
   //called if the user wants to cancel the form
@@ -251,7 +242,7 @@ const CreateStudy = () => {
             </label>
           </fieldset>
           {study.selectedImage && (
-            <img className="photo" src={study.imageLink} />
+            <img className="photo" src={study.imageLink} alt="cover for study" />
           )}
           {!params.edit && (
             <div className="container_blocks">
@@ -264,6 +255,7 @@ const CreateStudy = () => {
                         className="gridPhoto"
                         defaultValue={block.imageLink}
                         src={block.imageLink}
+                        alt="grid"
                       />
                       <p>{block.title}</p>
                     </div>

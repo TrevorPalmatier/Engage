@@ -18,7 +18,7 @@ const ViewBlocks = () => {
 
   useEffect(() => {
     const abortController = new AbortController();
-    try {
+
       fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${params.id}`, {
         signal: abortController.signal,
       })
@@ -26,14 +26,13 @@ const ViewBlocks = () => {
         .then((data) => {
           setStudy(data);
           setBlockData(data.blocks);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+        })
+        .catch((error) => console.log(error));
+
     return () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
-  }, []);
+  }, [params.id]);
 
   const createBlock = () => {
     dispatch(addBlock());
@@ -55,7 +54,7 @@ const ViewBlocks = () => {
     <Layout>
       <div className="viewHeader">
         <h1>Study: {study.title}</h1>
-        <img className="studyImage" src={study.imageLink} />
+        <img className="studyImage" src={study.imageLink} alt="cover for study" />
       </div>
       <div className="submitButtons">
         <button className="buttonText" onClick={editStudy}>
@@ -80,7 +79,7 @@ const ViewBlocks = () => {
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
-                  <img src={block.mediaURL}></img>
+                  <img src={block.mediaURL} alt ="tall block cover"></img>
                   <h3>{block.title}</h3>
                 </div>
               );
@@ -91,7 +90,7 @@ const ViewBlocks = () => {
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
-                  <img src={block.mediaURL}></img>
+                  <img src={block.mediaURL} alt = "wide block cover"></img>
                   <h3>{block.title}</h3>
                 </div>
               );

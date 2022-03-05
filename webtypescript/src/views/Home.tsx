@@ -22,7 +22,7 @@ const Home = () => {
     dispatch(cancelSlides());
     dispatch(cancelBlocks());
     dispatch(cancelMedia());
-  }, []);
+  }, [dispatch]);
 
   const navigate = useNavigate(); //sets up navigation
 

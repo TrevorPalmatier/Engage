@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavbarScroller from "../Components/NavbarScroller";
 import "../App.scss";
 import "../Styling/ViewStudies.scss";
 import { useNavigate } from "react-router-dom";
@@ -60,7 +59,7 @@ const ViewStudies = () => {
                 key={study.id}
                 onClick={() => gotToBlocks(study.id)}
               >
-                <img key={study.id} src={study.imageLink}></img>
+                <img key={study.id} src={study.imageLink} alt="tall"></img>
                 <h3>{study.title}</h3>
               </div>
             );
@@ -71,7 +70,7 @@ const ViewStudies = () => {
                 key={study.id}
                 onClick={() => gotToBlocks(study.id)}
               >
-                <img key={study.id} src={study.imageLink}></img>
+                <img key={study.id} src={study.imageLink} alt="wide"></img>
                 <h3>{study.title}</h3>
               </div>
             );

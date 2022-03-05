@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
 import "../App.scss";
 import "../Styling/CreateBlock.scss";
-import NavbarScroller from "../Components/NavbarScroller";
 import CreateSlide from "./CreateSlide";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
@@ -17,7 +15,6 @@ import {
 } from "../features/blocksSlice";
 import {
   addSlide,
-  cancel,
   cancelByBlock,
   cancelSlides,
 } from "../features/slideSlice";
@@ -40,7 +37,7 @@ const CreateBlock = () => {
   const dispatch = useAppDispatch(); //calls on reducers actions
   const block = useAppSelector(selectBlock); //selects data to be persisted from a block
   const slides = useAppSelector((state) =>
-    state.persistedReducer.slides.filter((slide) => slide.blockId == block?.id)
+    state.persistedReducer.slides.filter((slide) => slide.blockId === block?.id)
   ); //selects slides for a specific block
   const slideMedia = [...useAppSelector(selectMedia)];
 
@@ -51,14 +48,13 @@ const CreateBlock = () => {
   /**
    * Method is called when the user pushes the "Create" button
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (params.studyid == null) {
+    if (params.studyid === null) {
       navigate("../createstudy");
       dispatch(enableDisableBlockEdit({ id: block?.id, edit: false }));
     } else {
-      const id = params.studyid;
       fetch(
         `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`
       )
@@ -141,7 +137,7 @@ const CreateBlock = () => {
   const postSlides = (blockId, blockInfo) => {
     //loops through all the slides and does a post request for each one
     slides.forEach((slide) => {
-      if (slide.blockId == blockId) {
+      if (slide.blockId === blockId) {
         if (!slide.new) {
           const slideDataPut = {
             id: slide.slideId,
@@ -198,10 +194,8 @@ const CreateBlock = () => {
 
   const postSlideMedia = (slideId, slideInfo) => {
     slideMedia?.forEach((media) => {
-      console.log(media);
-      if (slideId == media.slideId) {
-        if (media.mediaId != -1) {
-          console.log("media put");
+      if (slideId === media.slideId) {
+        if (media.mediaId !== -1) {
           const mediaDataPut = {
             id: media.mediaId,
             mediaUrl: media.url,
@@ -218,7 +212,6 @@ const CreateBlock = () => {
             requestOptionsMedia1
           )
             .then((response) => response.json())
-            .then(() => console.log("posted media"))
             .catch((err) => console.log(err));
         } else {
           console.log("media post");
@@ -291,13 +284,13 @@ const CreateBlock = () => {
   //handles discarding the block and slides when cancelled
   const handleCancel = () => {
     dispatch(cancelled({ id: block?.id }));
-    slides.map((slide) => {
+    slides.forEach((slide) => {
       dispatch(cancelBySlide({ slideId: slide.id }));
     });
     dispatch(cancelByBlock({ blockId: block?.id }));
 
     //cancel the block and any slide
-    if (params.studyid == null) {
+    if (params.studyid === null) {
       navigate("../createstudy"); //redirects to "Create Study" page
     } else {
       if (params.blockid != null) {
@@ -320,7 +313,7 @@ const CreateBlock = () => {
         <h1>Create a Block</h1>
       </div>
       <div className="form">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <fieldset>
             <label>Name of Block:</label>
             <input
@@ -339,7 +332,7 @@ const CreateBlock = () => {
             <input type="file" name="image" onChange={selectImage} />
           </fieldset>
           {block?.selectedImage && (
-            <img className="photo" src={block?.imageLink} />
+            <img className="photo" src={block?.imageLink} alt="cover of block"/>
           )}
           <div className="createRect">
             <h2>Create Prompt</h2>
@@ -361,7 +354,6 @@ const CreateBlock = () => {
             </fieldset>
             <fieldset>
               <label>
-                {" "}
                 Prompt: <br />
               </label>
               <textarea

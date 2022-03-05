@@ -1,6 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { stat } from "fs/promises";
-import internal from "stream";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 interface StudyState {

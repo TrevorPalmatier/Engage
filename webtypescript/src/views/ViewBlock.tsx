@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import NavbarScroller from "../Components/NavbarScroller";
 import { useNavigate, useParams } from "react-router-dom";
 import "../App.scss";
 import "../Styling/ViewBlock.scss";
 import FakeScreen from "./FakeScreen";
-import { useAppDispatch, useAppSelector } from "../hooks/store";
+import { useAppDispatch } from "../hooks/store";
 import { addOldBlock, cancelBlocks } from "../features/blocksSlice";
 import { addOldSlide, cancelSlides } from "../features/slideSlice";
 import {
-  addMedia,
   addOldMedia,
   cancelMedia,
 } from "../features/mediaSlideSlice";
@@ -27,7 +25,6 @@ const ViewBlock = () => {
     dispatch(cancelSlides());
     const abortController = new AbortController();
 
-    try {
       fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${params.id}`, {
         signal: abortController.signal,
       })
@@ -36,7 +33,8 @@ const ViewBlock = () => {
         })
         .then((data) => {
           setData(data);
-        });
+        })
+        .catch((error) => console.log(error));
 
       fetch(
         `https://ancient-ridge-25388.herokuapp.com/blocks/entries/${params.id}`,
@@ -46,15 +44,14 @@ const ViewBlock = () => {
         .then((data) => {
           console.log(data);
           setEntries(data.entries);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+        })
+        .catch((error) => console.log(error));
 
     return () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
-  }, [entries]);
+
+  }, [dispatch, params.id, entries]);
 
   const goToEditBlock = async (e) => {
     e.preventDefault();
@@ -68,7 +65,7 @@ const ViewBlock = () => {
         promptText: block.promptText,
       })
     );
-    block.slides.map((slide) => {
+    block.slides.forEach((slide) => {
       //create old slide in persist store
       dispatch(
         addOldSlide({
@@ -83,16 +80,15 @@ const ViewBlock = () => {
       fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
         .then((response) => response.json())
         .then((info) => {
-          dispatchMedia(slide.id, info);
+          dispatchMedia(info);
         });
     });
 
     navigate(`/createblock/${block.study.id}/${block.id}`);
   };
 
-  const dispatchMedia = (slideId, slideInfo) => {
-    console.log(slideInfo);
-    slideInfo.medias.map((media) => {
+  const dispatchMedia = (slideInfo) => {
+    slideInfo.medias.forEach((media) => {
       dispatch(
         addOldMedia({
           slideId: slideInfo.id,
@@ -110,7 +106,7 @@ const ViewBlock = () => {
     <Layout>
       <div className="viewHeader">
         <h1>Block: {block.title}</h1>
-        <img className="blockImage" src={block.mediaURL}></img>
+        <img className="blockImage" src={block.mediaURL} alt="cover for block"></img>
       </div>
       <div className="promptInfo">
         <h2>Prompt Title: {block.promptTitle}</h2>
@@ -151,14 +147,14 @@ const ViewBlock = () => {
             if (height > width) {
               return (
                 <div className="taller" key={entry.id}>
-                  <img src={entry.imageLink} />
+                  <img src={entry.imageLink} alt="tall" />
                   <h3>{entry.description}</h3>
                 </div>
               );
             } else {
               return (
                 <div className="wider" key={entry.id}>
-                  <img src={entry.imageLink} />
+                  <img src={entry.imageLink} alt="wide" />
                   <h3>{entry.description}</h3>
                 </div>
               );
