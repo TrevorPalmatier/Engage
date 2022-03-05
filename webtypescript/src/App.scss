@@ -2,9 +2,9 @@
   text-align: center;
   justify-content: space-around;
   justify-content: center;
-  display:flex;
+  display: flex;
   flex-direction: column;
-  line-height: 3.0;
+  line-height: 3;
   height: 150px;
   width: 100%;
   margin-top: 10px;
@@ -16,38 +16,38 @@
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  font-family: Tahoma,'Geneva',  Verdana, sans-serif;
+  font-family: Tahoma, "Geneva", Verdana, sans-serif;
   padding-left: 50px;
   padding-right: 50px;
   padding-bottom: 50px;
   align-items: center;
 
-  .viewHeader{
+  .viewHeader {
     display: flex;
     justify-content: center;
     margin-top: 75px;
     width: 100%;
     gap: 25px;
 
-    h1{
-      font-family: Roboto; 
+    h1 {
+      font-family: Roboto;
       text-transform: uppercase;
       font-weight: 300;
       font-size: 50px;
     }
   }
 
-  .container{
+  .container {
     display: flex;
     flex-direction: row;
     align-content: flex-start;
-    align-items:center;
+    align-items: center;
     gap: 10px;
     width: 100%;
     justify-content: center;
     justify-items: center;
 
-    h2{
+    h2 {
       font-family: Roboto;
       text-transform: uppercase;
       font-size: 20px;
@@ -55,14 +55,14 @@
   }
 
   .photo {
-    max-width:200px;
-    max-height:200px;
+    max-width: 200px;
+    max-height: 200px;
     width: auto;
     height: auto;
   }
 
   .pageHeader {
-    padding: 40px 40px 0px 40px ;
+    padding: 40px 40px 0px 40px;
     text-align: center;
     font-weight: 600;
     font-size: 60px;
@@ -74,7 +74,7 @@
   }
 }
 
-.buttonText{
+.buttonText {
   font-family: Roboto;
   background-color: #ffffff;
   min-height: 40px;
@@ -86,16 +86,16 @@
   text-transform: uppercase;
   letter-spacing: 2px;
 
-  &:hover{
+  &:hover {
     background-color: black;
     color: white;
     border: 5px double white;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
   }
-}  
+}
 
-.form{
+.form {
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -103,8 +103,7 @@
   align-content: flex-start;
   width: 100%;
 
-
-  fieldset{
+  fieldset {
     border: 0px hidden white;
     padding-bottom: 10px;
     padding-top: 10px;
@@ -121,7 +120,7 @@
     margin-top: 7px;
     margin-bottom: 7px;
 
-    h2{
+    h2 {
       padding-left: 10px;
     }
   }
@@ -134,12 +133,10 @@
   gap: 5px;
 }
 
-
 .gridPhoto {
-  max-width:100%;
+  max-width: 100%;
   width: auto;
-  height:auto;
+  height: auto;
   border: 5px;
   border-color: black;
 }
-

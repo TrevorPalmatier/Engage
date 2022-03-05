@@ -41,35 +41,43 @@ const ViewStudies = () => {
 
   return (
     <Layout>
-        <div className="viewHeader">
-          <h1>Studies</h1>
-        </div>
-        <div className="submitButtons">
-          <button className="buttonText" onClick={goToCreateStudy}>
-            Create Study
-          </button>
-        </div>
-        <div className="studiesGrid">
-          {data.map((study) => {
-            var img = new Image();
-            img.src = study.imageLink;
-            if(img.height > img.width){
-              return (
-                <div className="taller" key={study.id} onClick={() => gotToBlocks(study.id)}>
-                  <img key={study.id} src={study.imageLink}></img>
-                  <h3>{study.title}</h3>
-                </div>
-              );
-            }else{
-              return (
-                <div className="wider" key={study.id} onClick={() => gotToBlocks(study.id)}>
-                  <img key={study.id} src={study.imageLink}></img>
-                  <h3>{study.title}</h3>
-                </div>
-              )
-            } 
-          })}
-        </div>
+      <div className="viewHeader">
+        <h1>Studies</h1>
+      </div>
+      <div className="submitButtons">
+        <button className="buttonText" onClick={goToCreateStudy}>
+          Create Study
+        </button>
+      </div>
+      <div className="studiesGrid">
+        {data.map((study) => {
+          var img = new Image();
+          img.src = study.imageLink;
+          if (img.height > img.width) {
+            return (
+              <div
+                className="taller"
+                key={study.id}
+                onClick={() => gotToBlocks(study.id)}
+              >
+                <img key={study.id} src={study.imageLink}></img>
+                <h3>{study.title}</h3>
+              </div>
+            );
+          } else {
+            return (
+              <div
+                className="wider"
+                key={study.id}
+                onClick={() => gotToBlocks(study.id)}
+              >
+                <img key={study.id} src={study.imageLink}></img>
+                <h3>{study.title}</h3>
+              </div>
+            );
+          }
+        })}
+      </div>
     </Layout>
   );
 };
