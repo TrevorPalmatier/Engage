@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { addOldBlock, cancelBlocks } from '../features/blocksSlice';
 import { addOldSlide, cancelSlides } from '../features/slideSlice';
 import { addMedia, addOldMedia, cancelMedia } from '../features/mediaSlideSlice';
+import { Layout } from '../Components/Layout';
 const ViewBlock = () => {
     const [block, setData] = useState<any>({});
     const [entries, setEntries] = useState<any>([]);
@@ -65,9 +66,7 @@ const ViewBlock = () => {
     }
 
     return (
-        <div>
-            <NavbarScroller/>
-            <div className='page'>       
+        <Layout>     
               <div className='viewHeader'>
                 <h1>Block: {block.title}</h1>   
                 <img className='blockImage' src={block.mediaURL}></img>
@@ -119,8 +118,7 @@ const ViewBlock = () => {
                   }
                 </div>
               </div>
-            </div>
-        </div>
+        </Layout> 
         
     );
 }

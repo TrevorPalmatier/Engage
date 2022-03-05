@@ -7,6 +7,7 @@ import { cancelBlocks } from "../features/blocksSlice";
 import { cancelSlides } from "../features/slideSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { cancelMedia } from "../features/mediaSlideSlice";
+import { Layout } from "../Components/Layout";
 
 /**
  * First page ** most likely after login
@@ -36,9 +37,7 @@ const Home = () => {
 
   //renders home screen
   return (
-    <div>
-      <NavbarScroller />
-      <div className="page">
+    <Layout>
         <div className="viewHeader">
           <h1>Engage</h1>
         </div>
@@ -51,8 +50,7 @@ const Home = () => {
             View Studies
           </button>
         </div>
-      </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -8,6 +8,7 @@ import { addBlock, addOldBlock, enableDisableBlockEdit } from "../features/block
 import { RootState } from "../store";
 import '../Styling/CreateStudy.scss';
 import { setSlideOption } from "../features/slideSlice";
+import { Layout } from "../Components/Layout";
 
 /** 
  * Notes for things to maybe implement:
@@ -184,12 +185,9 @@ const CreateStudy = () => {
         }
     }
 
-    //console.log(study.title);
     //renders the form to create a study
     return (
-        <div>
-            <NavbarScroller/>   
-            <div className="page"> 
+        <Layout>
             <div className="viewHeader">
                 <h1>Create a Study</h1>
             </div>
@@ -243,8 +241,7 @@ const CreateStudy = () => {
                    
                 </form>
             </div>  
-            </div> 
-        </div>
+        </Layout>
     )
 }
 

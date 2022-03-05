@@ -7,6 +7,7 @@ import { useAppDispatch } from '../hooks/store';
 import { addBlock } from '../features/blocksSlice';
 import { setTitle } from '../features/studySlice';
 import { setImage } from '../features/studySlice';
+import { Layout } from '../Components/Layout';
 
 const ViewBlocks = () => {
   const params = useParams();
@@ -47,9 +48,7 @@ const ViewBlocks = () => {
   }
 
   return (
-    <div>
-       <NavbarScroller/>
-       <div className='page'>    
+    <Layout>  
         <div className='viewHeader'>
           <h1>Study: {study.title}</h1>
           <img className='studyImage' src={study.imageLink}/>
@@ -88,8 +87,7 @@ const ViewBlocks = () => {
             <p>person.two@hope.edu</p>
           </div>
         </div>
-       </div>
-    </div>
+    </Layout> 
   );
 }
  

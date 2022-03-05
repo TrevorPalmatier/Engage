@@ -1,20 +1,18 @@
 import React from 'react';
 import NavbarScroller from '../Components/NavbarScroller';
 import '../App.scss';
+import { Layout } from '../Components/Layout';
 /**
  * This page shares what Engage is all about
  * @returns 
  */
 const About = () => {
-
-
   return (
-  <div>
-    <NavbarScroller/>
-    <div className='page'>
+  <Layout>
+    <div className="viewHeader">
       <h1>This is the about page</h1>
     </div>
-  </div>
+  </Layout>
   );
 }
 

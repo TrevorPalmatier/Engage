@@ -9,6 +9,7 @@ import { setBlockTitle, setBlockImageLink, setBlockPromptText, setBlockPromptTit
     cancelled, enableDisableBlockEdit, selectBlock, cancelBlocks } from "../features/blocksSlice";
 import { addSlide, cancel, cancelByBlock, cancelSlides} from "../features/slideSlice";
 import  { cancelBySlide, cancelMedia, selectMedia } from "../features/mediaSlideSlice";
+import { Layout } from "../Components/Layout";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -231,9 +232,7 @@ const postBlocks = (e, studyInfo) => {
     //renders the element
     //inserted defaultVlaue to use persist data even if page is refreshed 
     return (
-        <div>
-            <NavbarScroller/>
-            <div className="page">
+        <Layout>
                 <div className = "viewHeader">
                     <h1>Create a Block</h1>
                 </div>
@@ -280,8 +279,7 @@ const postBlocks = (e, studyInfo) => {
                         </div>
                </form>
             </div>
-            </div>
-        </div>
+        </Layout>
     )
 }
 

@@ -3,6 +3,7 @@ import NavbarScroller from "../Components/NavbarScroller";
 import "../App.scss";
 import "../Styling/ViewStudies.scss";
 import { useNavigate } from "react-router-dom";
+import { Layout } from "../Components/Layout";
 
 const ViewStudies = () => {
   const [data, setData] = useState<any>([]);
@@ -39,9 +40,7 @@ const ViewStudies = () => {
   };
 
   return (
-    <div>
-      <NavbarScroller />
-      <div className="page">
+    <Layout>
         <div className="viewHeader">
           <h1>Studies</h1>
         </div>
@@ -71,8 +70,7 @@ const ViewStudies = () => {
             } 
           })}
         </div>
-      </div>
-    </div>
+    </Layout>
   );
 };
 export default ViewStudies;
