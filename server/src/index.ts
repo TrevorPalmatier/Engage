@@ -21,8 +21,9 @@ createConnection()
 				origin: "*",
 			})
 		);
-		app.use(bodyParser.json());
+		app.use(bodyParser.json({limit: '50mb'}));
 		app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
+
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {

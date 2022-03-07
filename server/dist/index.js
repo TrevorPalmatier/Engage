@@ -29,7 +29,7 @@ typeorm_1.createConnection()
     app.use(cors_1.default({
         origin: "*",
     }));
-    app.use(body_parser_1.default.json());
+    app.use(body_parser_1.default.json({ limit: '50mb' }));
     app.use(body_parser_1.default.urlencoded({ limit: '100mb', extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
