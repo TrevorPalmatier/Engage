@@ -30,7 +30,7 @@ typeorm_1.createConnection()
         origin: "*",
     }));
     app.use(body_parser_1.default.json());
-    app.use(body_parser_1.default.urlencoded({ extended: true }));
+    app.use(body_parser_1.default.urlencoded({ limit: '50mb', extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
