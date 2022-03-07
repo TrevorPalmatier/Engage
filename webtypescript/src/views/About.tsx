@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../App.scss";
 import { Layout } from "../Components/Layout";
 /**
@@ -16,10 +17,12 @@ const About = () => {
         <h3>Basic Workflow</h3>
         <p>Each study has a set of blocks. Each block has a set of slides. Each slide contains background text and images for the user to reference.</p>
 
+        {/* ("../createstudy") */}
         <br/>
         <h3>Page Breakdowns</h3>
         <h4>Home Page</h4>
-        <p>This is where you will find quick links to the Create Study page and the View Studies Page</p>
+        <p>This is where you will find quick links to the <Link to='../createstudy'>Create Study</Link> page 
+        and the <Link to='../viewstudies'>View Studies</Link> Page</p>
 
         <h4>Create Study</h4>
         <p>This is where you can create a study. Name the study, upload a cover, and add blocks to the study here. </p>
