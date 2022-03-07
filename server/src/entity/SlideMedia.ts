@@ -8,7 +8,7 @@ export class SlideMedia {
     id: number;
 
     @Column()
-    mediaUrl: string;
+    imageID: string;
 
     @Column()
     type: string;

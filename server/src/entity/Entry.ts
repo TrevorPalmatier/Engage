@@ -17,7 +17,7 @@ export class Entry {
     user: number;
 
     @Column()
-    imageLink: string;
+    imageID: string;
 
     @Column({nullable: true})
     text: string;

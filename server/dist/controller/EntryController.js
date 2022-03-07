@@ -32,7 +32,7 @@ class EntryController {
             const body = request.body;
             entry.user = body.userId;
             entry.block = body.blockId;
-            entry.imageLink = body.imageLink;
+            entry.imageID = body.imageLink;
             entry.text = body.text;
             return this.entryRepository.save(entry);
         });

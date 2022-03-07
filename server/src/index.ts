@@ -49,16 +49,13 @@ createConnection()
 		app.post("/uploadimage", async (req, res, next) => {
 			console.log(req.body);
 			try{
-				console.log(req.body);
 				const fileStr = req.body.file;
 				const uploadedResponse = await cloudinary2.uploader.
 				upload(fileStr, {
 					upload_preset: "engageapp",
 				});
-				console.log(uploadedResponse);
 				res.json({publicId: uploadedResponse.public_id});
 			}catch(error){
-				console.error(error);
 				res.status(500).json({err: "Could not upload" + req.body.file.toString()})
 			}
 		})
@@ -68,36 +65,18 @@ createConnection()
 				const public_id = req.body.public_id;
 				const deleteResponse = await cloudinary2.uploader.
 				destroy(public_id);
-				console.log(deleteResponse);
 				res.json({msg: "deleted the image"});
 			}catch(error){
-				console.error(error);
 				res.status(500).json({err: "Could not delete"})
 			}
 		})
 
 		// start express server
 		app.listen(process.env.PORT || 80, async () => {
-			// insert new users for test
-			// await connection.manager.save(
-			// 	connection.manager.create(User, {
-			// 		firstName: "Timber",
-			// 		lastName: "Saw",
-			// 		emailAddress: "timber.saw@gmail.com",
-			// 		password: "orange",
-			// 	})
-			// );
-			// await connection.manager.save(
-			// 	connection.manager.create(User, {
-			// 		firstName: "Phantom",
-			// 		lastName: "Assassin",
-			// 		emailAddress: "phantom.Assassin@gmail.com",
-			// 		password: "cheese",
-			// 	})
-			// );
+
 			// tslint:disable-next-line:no-console
 			console.log("Express server on https://ancient-ridge-25388.herokuapp.com/");
 		});
-		// tslint:disable-next-line:no-console
+
 	})
 	.catch();

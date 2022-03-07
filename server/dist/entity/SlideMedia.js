@@ -20,7 +20,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], SlideMedia.prototype, "mediaUrl", void 0);
+], SlideMedia.prototype, "imageID", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

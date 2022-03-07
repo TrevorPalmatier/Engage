@@ -21,7 +21,7 @@ __decorate([
 __decorate([
     typeorm_1.Column({ nullable: true }),
     __metadata("design:type", String)
-], Study.prototype, "imageLink", void 0);
+], Study.prototype, "imageID", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

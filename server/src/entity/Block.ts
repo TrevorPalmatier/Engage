@@ -14,7 +14,7 @@ export class Block {
     title: string;
 
     @Column()
-    mediaURL: string;
+    imageID: string;
 
     @Column()
     promptTitle: string;

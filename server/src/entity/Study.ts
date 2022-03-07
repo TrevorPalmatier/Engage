@@ -9,7 +9,7 @@ export class Study {
     id: number;
 
     @Column({nullable: true})
-    imageLink: string;
+    imageID: string;
 
     @Column()
     title: string;
