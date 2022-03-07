@@ -65,22 +65,23 @@ const ViewBlocks = () => {
           Add Block
         </button>
       </div>
+      <div>
+        <h3>Access Code: {study.code}</h3>
+      </div>
       <div className="aboveGrid">
         <h2 className="part">Participants</h2>
       </div>
       <div className="blockparticipantGrid">
         <div className="blocksGrid">
           {blockData?.map((block) => {
-            var img = new Image();
-            img.src = block.imageID;
-            if (img.height > img.width) {
+            if (block.imgOrienation === "veritcal") {
               return (
                 <div
                   className="taller"
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
-                  <img src={img.src} alt ="tall block cover"/>
+                  <Image cloudName='engageapp' publicId={block.imageID}/>
                   <h3>{block.title}</h3>
                 </div>
               );
@@ -91,7 +92,7 @@ const ViewBlocks = () => {
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
-                  <img src={img.src} alt = "wide block cover"/>
+                  <Image cloudName='engageapp' publicId={block.imageID}/>
                   <h3>{block.title}</h3>
                 </div>
               );

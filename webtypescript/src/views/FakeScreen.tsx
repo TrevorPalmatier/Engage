@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../App.scss";
 import "../Styling/FakeScreen.scss";
+import {Image} from "cloudinary-react";
 /**
  * this is to show a fake screen for each slide of a block
  */
@@ -44,28 +45,28 @@ const FakeScreen = ({ id }) => {
           if (media.position === 0) {
             if(slideData.option === 1){
               return (
-                <div className="option1">
-                  <img key={media.id} src={media.imageID} alt="option1" />
+                <div key = {media.id} className="option1">
+                  <Image cloudName='engageapp' publicId={media.imageID}/>
                   <p className="text">{str1}</p>
                 </div>
               );
             }
             else if(slideData.option === 2){
               return (
-                <div className="option2">
+                <div  key = {media.id} className="option2">
                   <p className="text1">{str1}</p>
-                  <img key={media.id} src={media.imageID} alt="option2" />
+                  <Image cloudName='engageapp' publicId={media.imageID}/>
                   <p className="text2">{str2}</p>
                 </div>
               );
             }
           } else if (media.position === 0 && slideData.option === 3) {
-            return <img key={media.id} src={media.mediaUrl} alt="position0 option 3" />;
+            <Image  key = {media.id} cloudName='engageapp' publicId={media.imageID}/>
           } else if (media.position === 1 && slideData.option === 3) {
             return (
-              <div className="option3">
+              <div  key = {media.id} className="option3">
                 <p className="text1">{str1}</p>
-                <img key={media.id} src={media.mediaUrl} alt="position1 option 3" />
+                <Image cloudName='engageapp' publicId={media.imageID}/>
                 <p className="text2">{str2}</p>
               </div>
             );

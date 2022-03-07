@@ -1,6 +1,7 @@
 import React from "react";
 import "../App.scss";
 import "../Styling/CreateSlide.scss";
+import { Image } from "cloudinary-react";
 import {
   setText,
   setTitle,
@@ -33,33 +34,29 @@ const CreateSlide = ({ id }) => {
       } else {
         let img = file;
 
-        const data = new FormData();
-
-        data.append("file", img);
-        data.append("upload_preset", "engageapp");
-        data.append("cloud_name", "engageapp");
-
-        fetch(
-          "https://api.cloudinary.com/v1_1/engageapp/upload",
-          {
-            method: "POST",
-            body: data,
-          }
+        const reader = new FileReader();
+        reader.readAsDataURL(img);
+        reader.onloadend = async() => {
+        try{
+          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({file: reader.result}),
+          });
+          const info = await response.json();
+          await dispatch(
+            addMedia({
+              slideId: slide?.id,
+              type: file.type,
+              orientation: findDimensions(info.height, info.width),
+              position: index,
+              url: info.publicId,
+            })
           )
-          .then((response) => response.json())
-          .then((info) =>
-            dispatch(
-              addMedia({
-                slideId: slide?.id,
-                type: file.type,
-                orientation: findDimensions(info.height, info.width),
-                position: index,
-                url: info.secure_url,
-              })
-            )
-          )
-          .catch((error) => console.log(error));
-      }
+        }catch(error){
+          console.error(error)
+        }
+    }}
     });
   };
 
@@ -117,12 +114,7 @@ const CreateSlide = ({ id }) => {
                 />
               )}
               {media1.type.split("/")[0] === "image" && (
-                <img
-                  className="mediahover"
-                  onClick={() => deleteMedia(media1.id)}
-                  src={media1.url}
-                  alt="slidemedia"
-                />
+                <Image className="mediahover" onClick={() => deleteMedia(media1.id)} cloudName='engageapp' publicId={media1.url}/>
               )}
               <p className="texthover">Click to Delete</p>
             </div>

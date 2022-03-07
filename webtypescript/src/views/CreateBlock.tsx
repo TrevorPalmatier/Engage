@@ -1,6 +1,7 @@
 import "../App.scss";
 import "../Styling/CreateBlock.scss";
 import CreateSlide from "./CreateSlide";
+import { Image } from "cloudinary-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import {
@@ -199,8 +200,10 @@ const CreateBlock = () => {
         if (media.mediaId !== -1) {
           const mediaDataPut = {
             id: media.mediaId,
-            mediaUrl: media.url,
+            imgID: media.url,
             type: media.type,
+            orientation: media.orientation,
+            position: media.position
           };
           const requestOptionsMedia1 = {
             method: "put",
@@ -215,20 +218,12 @@ const CreateBlock = () => {
             .then((response) => response.json())
             .catch((err) => console.log(err));
         } else {
-          console.log("media post");
-          console.log(
-            media.url +
-              ", " +
-              media.type +
-              ", " +
-              slideInfo.id +
-              ", " +
-              slideInfo.title
-          );
           const mediaData = {
-            mediaUrl: media.url,
+            imageID: media.url,
             type: media.type,
             slide: slideInfo,
+            orientation: media.orientation,
+            position: media.position,
           };
           const requestOptionsMedia = {
             method: "post",
@@ -241,7 +236,6 @@ const CreateBlock = () => {
             requestOptionsMedia
           )
             .then((response) => response.json())
-            .then(() => console.log("posted media"))
             .catch((err) => console.log(err));
         }
       }
@@ -254,29 +248,39 @@ const CreateBlock = () => {
    * For now once the image is choose it will upload to the file system: cloudinary
    */
   const selectImage = (event: any) => {
-    if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
+    event.preventDefault();
+    let img = event.target.files?.[0];
+    if (!img) {
+      return;
+    }
 
-      //creates the data for the post to cloudinary
-      const data = new FormData();
-      data.append("file", img);
-      data.append("upload_preset", "engageapp");
-      data.append("cloud_name", "engageapp");
-
-      //posts to cloudinary here
-      fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
-        method: "POST",
-        body: data,
-      })
-        .then((response) => response.json())
-        .then((info) =>
-          dispatch(
-            setBlockImageLink({ id: block?.id, imageLink: info.secure_url })
+    const reader = new FileReader();
+    reader.readAsDataURL(img);
+    reader.onloadend = async() => {
+        try{
+          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({file: reader.result}),
+          });
+          
+          const info = await response.json();
+          await  dispatch(
+            setBlockImageLink({ id: block?.id, imageLink: info.publicId, imgOrientation: findDimensions(info.height, info.width)})
           )
-        );
+        }catch(error){
+          console.error(error)
+        }
     }
   };
 
+  const findDimensions = (height, width) => {
+    if (height > width) {
+      return "vertical";
+    } else {
+      return "landscape";
+    }
+  };
   //creates new slide element and adds it through the reducer
   const handleNewSlide = () => {
     dispatch(addSlide({ blockId: block?.id }));
@@ -334,7 +338,7 @@ const CreateBlock = () => {
             <input type="file" name="image" onChange={selectImage} />
           </fieldset>
           {block?.selectedImage && (
-            <img className="photo" src={block?.imageLink} alt="cover of block"/>
+            <Image className="photo" cloudName='engageapp' publicId={block?.imageLink}/>
           )}
           <div className="createRect">
             <h2>Create Prompt</h2>

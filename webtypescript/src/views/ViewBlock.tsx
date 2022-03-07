@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {Image} from "cloudinary-react";
 import "../App.scss";
 import "../Styling/ViewBlock.scss";
 import FakeScreen from "./FakeScreen";
@@ -106,7 +107,7 @@ const ViewBlock = () => {
     <Layout>
       <div className="viewHeader">
         <h1>Block: {block.title}</h1>
-        <img className="blockImage" src={block.imageID} alt="cover for block"></img>
+        <Image className="blockImage" cloudName='engageapp' publicId={block.imageID}/>
       </div>
       <div className="promptInfo">
         <h2>Prompt Title: {block.promptTitle}</h2>

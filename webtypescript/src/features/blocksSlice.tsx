@@ -5,6 +5,7 @@ interface BlockState {
   id: number;
   title: string;
   imageLink: string;
+  imgOrienation: string;
   selectedImage: boolean;
   promptTitle: string;
   promptText: string;
@@ -32,6 +33,7 @@ const blocksSlice = createSlice({
           id: nextId(state),
           title: "",
           imageLink: "",
+          imgOrienation: "",
           selectedImage: false,
           promptTitle: "",
           promptText: "",
@@ -48,6 +50,7 @@ const blocksSlice = createSlice({
           id: payload.id,
           title: payload.title,
           imageLink: payload.imageLink,
+          imgOrienation: payload.imgOrientation,
           selectedImage: true,
           promptTitle: payload.promptTitle,
           promptText: payload.promptText,
@@ -70,6 +73,7 @@ const blocksSlice = createSlice({
         if (block.id === payload.id) {
           block.imageLink = payload.imageLink;
           block.selectedImage = true;
+          block.imgOrienation = payload.imgOrientation;
         }
       });
       return state;

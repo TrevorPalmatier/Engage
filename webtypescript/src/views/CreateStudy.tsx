@@ -16,6 +16,7 @@ import { RootState } from "../store";
 import "../Styling/CreateStudy.scss";
 import { Layout } from "../Components/Layout";
 import {Image} from 'cloudinary-react';
+import  GenerateRandomCode  from 'react-random-code-generator';
 
 /**
  * Notes for things to maybe implement:
@@ -82,8 +83,10 @@ const CreateStudy = () => {
   };
 
   const postStudy = async () => {
+    //generate an access code
+    const accessCode = GenerateRandomCode.TextNumCode(3,3);
     //post the STUDY data
-    const postData = { title: study.title, "imageID": study.imageLink };
+    const postData = { title: study.title, "imageID": study.imageLink, imgOrientation: study.imgOrientation, code: accessCode };
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -107,6 +110,7 @@ const CreateStudy = () => {
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
         imageID: block?.imageLink,
+        imgOrientation: block?.imgOrienation,
         study: studyInfo,
       };
 
@@ -213,10 +217,18 @@ const CreateStudy = () => {
           });
           
           const info = await response.json();
-          await dispatch(setImage({imageLink: info.publicId}));
+          await dispatch(setImage({imageLink: info.publicId, imgOrientation: findDimensions(info.height, info.width)}));
         }catch(error){
           console.error(error)
         }
+    }
+  };
+
+  const findDimensions = (height, width) => {
+    if (height > width) {
+      return "vertical";
+    } else {
+      return "landscape";
     }
   };
 
@@ -280,12 +292,7 @@ const CreateStudy = () => {
                 {blocks.map((block) => {
                   return (
                     <div key={block.id} onClick={() => editBlock(block.id)}>
-                      <img
-                        className="gridPhoto"
-                        defaultValue={block.imageLink}
-                        src={block.imageLink}
-                        alt="grid"
-                      />
+                      <Image className="gridPhoto" cloudName='engageapp' publicId={block.imageLink}/>
                       <h3>{block.title}</h3>
                     </div>
                   );
