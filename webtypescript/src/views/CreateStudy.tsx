@@ -15,6 +15,8 @@ import {
 import { RootState } from "../store";
 import "../Styling/CreateStudy.scss";
 import { Layout } from "../Components/Layout";
+import {Image} from 'cloudinary-react';
+import { json } from "stream/consumers";
 
 /**
  * Notes for things to maybe implement:
@@ -189,29 +191,49 @@ const CreateStudy = () => {
     if (!img) {
       return;
     }
-      const data = new FormData();
-      data.append("file", img);
-      data.append("upload_preset", "engageapp");
-      data.append("cloud_name", "engageapp");
+    console.log(img);
+      const data = {file: img};
+
+      const requestOptions = {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      };
+
+      console.log(requestOptions.body);
 
       fetch(
-        "https://api.cloudinary.com/v1_1/engageapp/upload",
-        {
-          method: "POST",
-          body: data,
-        }
+        "https://ancient-ridge-25388.herokuapp.com/uploadimage",
+        requestOptions
       )
         .then((response) => response.json())
-        .then((info) => dispatch(setImage({ imageLink: info.secure_url })));
+        .then((info) => {console.log(info);dispatch(setImage({ imageLink: info.public_id }))});
   };
 
   //called if the user wants to cancel the form
-  const cancel = () => {
+  const cancel = async (e) => {
+    e.preventDefault();
     dispatch(cancelled());
+
+    const data = {"public_id": study.imageLink};
+
+    console.log(data);
+    fetch(
+      "https://ancient-ridge-25388.herokuapp.com/deleteimage",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }
+    )
+      .then(async (response) => await response.json())
+      .then((info) => {console.log(info)});
+
     if (!params.edit) {
-      navigate("/");
+      console.log("here");
+      await navigate("/");
     } else {
-      navigate(`../viewblocks/${params.studyid}`);
+      await navigate(`../viewblocks/${params.studyid}`);
     }
   };
 
@@ -242,7 +264,7 @@ const CreateStudy = () => {
             </label>
           </fieldset>
           {study.selectedImage && (
-            <img className="photo" src={study.imageLink} alt="cover for study" />
+            <Image className="photo" cloudName='engageapp' publicId={study.imageLink}/>
           )}
           {!params.edit && (
             <div className="container_blocks">
@@ -282,7 +304,7 @@ const CreateStudy = () => {
             <button type="submit" className="buttonText">
               Create
             </button>
-            <button onClick={cancel} className="buttonText">
+            <button onClick={(e) => cancel(e)} className="buttonText">
               Delete & Cancel
             </button>
           </div>

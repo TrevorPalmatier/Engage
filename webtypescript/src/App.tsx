@@ -19,7 +19,7 @@ function App() {
           <Route path="/createstudy/:edit" element={<CreateStudy />} />
           <Route path="/createstudy/:edit/:studyid" element={<CreateStudy />} />
           <Route path="/createblock" element={<CreateBlock />} />
-          <Route path="/createblock/:studyid" element={<CreateBlock />} />
+          <Route path="/createblock/:studyid" element={<CreateBlock/>} />
           <Route
             path="/createblock/:studyid/:blockid"
             element={<CreateBlock />}
