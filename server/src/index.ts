@@ -22,7 +22,6 @@ createConnection()
 			})
 		);
 		app.use(bodyParser.json());
-		app.use(express.urlencoded({limit: '50mb', extended: true}));
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
@@ -59,7 +58,7 @@ createConnection()
 				res.json({publicId: uploadedResponse.public_id});
 			}catch(error){
 				console.error(error);
-				res.status(500).json({err: "Could not upload" + req.body})
+				res.status(500).json({err: "Could not upload" + req.body.file})
 			}
 		})
 
