@@ -47,6 +47,7 @@ createConnection()
 
 
 		app.post("/uploadimage", async (req, res, next) => {
+			console.log(req.body);
 			try{
 				console.log(req.body);
 				const fileStr = req.body.file;
