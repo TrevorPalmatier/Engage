@@ -22,7 +22,7 @@ createConnection()
 			})
 		);
 		app.use(bodyParser.json());
-
+		app.use(bodyParser.urlencoded({extended: true}));
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
 			(app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
@@ -53,8 +53,8 @@ createConnection()
 				const fileStr = req.body.file;
 				const uploadedResponse = await cloudinary2.uploader.
 				upload(fileStr, {
-					upload_preset: "engageapp"
-				})
+					upload_preset: "engageapp",
+				});
 				console.log(uploadedResponse);
 				res.json({publicId: uploadedResponse.public_id});
 			}catch(error){

@@ -30,6 +30,7 @@ typeorm_1.createConnection()
         origin: "*",
     }));
     app.use(body_parser_1.default.json());
+    app.use(body_parser_1.default.urlencoded({ extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
@@ -49,12 +50,13 @@ typeorm_1.createConnection()
     app.post("/signup", auth_1.signup);
     app.post("/private", auth_1.isAuth);
     app.post("/uploadimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        console.log(req.body);
         try {
             console.log(req.body);
             const fileStr = req.body.file;
             const uploadedResponse = yield cloudinary_1.cloudinary2.uploader.
                 upload(fileStr, {
-                upload_preset: "engageapp"
+                upload_preset: "engageapp",
             });
             console.log(uploadedResponse);
             res.json({ publicId: uploadedResponse.public_id });
