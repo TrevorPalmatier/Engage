@@ -62,7 +62,7 @@ typeorm_1.createConnection()
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ err: "Could not upload" });
+            res.status(500).json({ err: "Could not upload" + req.body });
         }
     }));
     app.post("/deleteimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {

@@ -59,7 +59,7 @@ createConnection()
 				res.json({publicId: uploadedResponse.public_id});
 			}catch(error){
 				console.error(error);
-				res.status(500).json({err: "Could not upload"})
+				res.status(500).json({err: "Could not upload" + req.body})
 			}
 		})
 
