@@ -51,6 +51,7 @@ typeorm_1.createConnection()
     app.post("/private", auth_1.isAuth);
     app.post("/uploadimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log(req.body);
             const fileStr = req.body.file;
             const uploadedResponse = yield cloudinary_1.cloudinary2.uploader.
                 upload(fileStr, {

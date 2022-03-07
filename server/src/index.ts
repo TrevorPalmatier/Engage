@@ -49,6 +49,7 @@ createConnection()
 
 		app.post("/uploadimage", async (req, res, next) => {
 			try{
+				console.log(req.body);
 				const fileStr = req.body.file;
 				const uploadedResponse = await cloudinary2.uploader.
 				upload(fileStr, {
