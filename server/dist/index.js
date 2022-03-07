@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = require("./auth/auth");
+const cloudinary_1 = require("./utils/cloudinary");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
@@ -29,6 +30,7 @@ typeorm_1.createConnection()
         origin: "*",
     }));
     app.use(body_parser_1.default.json());
+    app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
@@ -47,6 +49,34 @@ typeorm_1.createConnection()
     app.post("/login", auth_1.login);
     app.post("/signup", auth_1.signup);
     app.post("/private", auth_1.isAuth);
+    app.post("/uploadimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            const fileStr = req.body.file;
+            const uploadedResponse = yield cloudinary_1.cloudinary2.uploader.
+                upload(fileStr, {
+                upload_preset: "engageapp"
+            });
+            console.log(uploadedResponse);
+            res.json({ publicId: uploadedResponse.public_id });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Could not upload" });
+        }
+    }));
+    app.post("/deleteimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            const public_id = req.body.public_id;
+            const deleteResponse = yield cloudinary_1.cloudinary2.uploader.
+                destroy(public_id);
+            console.log(deleteResponse);
+            res.json({ msg: "deleted the image" });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Could not delete" });
+        }
+    }));
     // start express server
     app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
         // insert new users for test

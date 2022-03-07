@@ -1,13 +1,14 @@
 import "reflect-metadata";
 import bodyParser from "body-parser";
 import { login, signup, isAuth } from "./auth/auth";
-import { User } from "./entity/User";
+import {cloudinary2} from './utils/cloudinary';
 import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
-import { getConnectionOptions, ConnectionOptions, createConnection } from "typeorm";
+import {  createConnection } from "typeorm";
 import dotenv from "dotenv";
+import { UploadStream } from "cloudinary";
 dotenv.config();
 
 createConnection()
@@ -21,6 +22,7 @@ createConnection()
 			})
 		);
 		app.use(bodyParser.json());
+		app.use(express.urlencoded({limit: '50mb', extended: true}));
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
@@ -43,6 +45,35 @@ createConnection()
 		app.post("/signup", signup);
 
 		app.post("/private", isAuth);
+
+
+		app.post("/uploadimage", async (req, res, next) => {
+			try{
+				const fileStr = req.body.file;
+				const uploadedResponse = await cloudinary2.uploader.
+				upload(fileStr, {
+					upload_preset: "engageapp"
+				})
+				console.log(uploadedResponse);
+				res.json({publicId: uploadedResponse.public_id});
+			}catch(error){
+				console.error(error);
+				res.status(500).json({err: "Could not upload"})
+			}
+		})
+
+		app.post("/deleteimage", async (req, res, next) => {
+			try{
+				const public_id = req.body.public_id;
+				const deleteResponse = await cloudinary2.uploader.
+				destroy(public_id);
+				console.log(deleteResponse);
+				res.json({msg: "deleted the image"});
+			}catch(error){
+				console.error(error);
+				res.status(500).json({err: "Could not delete"})
+			}
+		})
 
 		// start express server
 		app.listen(process.env.PORT || 80, async () => {
