@@ -16,7 +16,6 @@ import { RootState } from "../store";
 import "../Styling/CreateStudy.scss";
 import { Layout } from "../Components/Layout";
 import {Image} from 'cloudinary-react';
-import { json } from "stream/consumers";
 
 /**
  * Notes for things to maybe implement:
@@ -40,7 +39,7 @@ const CreateStudy = () => {
   const params = useParams();
   const navigate = useNavigate(); //allows navigation within app
   //goes to create a block
-  //maybe change this to not a route?
+
   const goToCreateBlock = () => {
     dispatch(addBlock());
     navigate("/createblock");
@@ -57,51 +56,57 @@ const CreateStudy = () => {
   };
   //is called when the study want to be create with the "submit" button
   // *** Still have to figure out how to make it synchronous
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (params.edit) {
-      const postData = { title: study.title, imageLink: study.imageLink };
-      const requestOptions = {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(postData),
-      };
+    if (!params.edit){
+      postStudy();
+      navigate("../");
+      return;
+    }
+    
+    const postData = { title: study.title, imageLink: study.imageLink };
+    const requestOptions = {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(postData),
+    };
 
-      fetch(
-        `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`,
-        requestOptions
-      ).then((response) => response.json());
+    fetch(
+      `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`,
+      requestOptions
+    ).then((response) => response.json());
 
       navigate(`../viewblocks/${params.studyid}`);
-    } else {
-      postStudy();
-    }
+    
   };
 
-  const postStudy = () => {
+  const postStudy = async () => {
     //post the STUDY data
-    const postData = { title: study.title, imageLink: study.imageLink };
+    const postData = { title: study.title, "imageID": study.imageLink };
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(postData),
     };
-
-    fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions)
-      .then((response) => response.json())
-      .then((info) => postBlocks(info))
-      .then(() => console.log("Posted to Backend"));
+    
+    try{
+      const response = await fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions);
+      const info = await response.json();
+      postBlocks(info);
+    }catch(error) {
+      console.log(error)
+    }
   };
 
-  const postBlocks = (studyInfo) => {
-    blocks.forEach((block) => {
+  const postBlocks = async(studyInfo) => {
+    blocks.forEach( async (block) => {
       //block data to be posted
       const blockData = {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
-        mediaURL: block?.imageLink,
+        imageID: block?.imageLink,
         study: studyInfo,
       };
 
@@ -111,26 +116,28 @@ const CreateStudy = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(blockData),
       };
+      try{
+        // ***  need to save the block id before calling the "postSlides()" function
+        const response = await fetch(
+          "https://ancient-ridge-25388.herokuapp.com/blocks",
+          requestOptionsBlock
+        );
 
-      // ***  need to save the block id before calling the "postSlides()" function
-      fetch(
-        "https://ancient-ridge-25388.herokuapp.com/blocks",
-        requestOptionsBlock
-      )
-        .then((response) => response.json())
-        .then((info) => postSlides(block?.id, info))
-        .catch((err) => console.log(err));
+        const info = await response.json();
+        console.log(info);
+        await postSlides(block?.id, info)
+        }catch(error){
+          console.log(error);
+        }
     });
-
-    navigate("../"); //go back to home when finished
   };
 
   /**
    * This method is able post the slides for the block to the api
    */
-  const postSlides = (blockId, blockInfo) => {
+  const postSlides = async (blockId, blockInfo) => {
     //loops through all the slides and does a post request for each one
-    slides.forEach((slide) => {
+    slides.forEach( async (slide) => {
       if (slide.blockId === blockId) {
         const slideData = {
           title: slide.title,
@@ -144,23 +151,25 @@ const CreateStudy = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(slideData),
         };
-
-        fetch(
-          "https://ancient-ridge-25388.herokuapp.com/slides",
-          requestOptionsSlide
-        )
-          .then((response) => response.json())
-          .then((info) => postSlideMedia(slide.id, info))
-          .catch((err) => console.log(err));
+        try{
+          const response = await fetch(
+            "https://ancient-ridge-25388.herokuapp.com/slides",
+            requestOptionsSlide
+          )
+          const info = await response.json();
+          await postSlideMedia(slide.id, info);
+        }catch(error){
+          console.log(error);
+        }     
       }
     });
   };
 
-  const postSlideMedia = (slideId, slideInfo) => {
-    slideMedia.forEach((media) => {
+  const postSlideMedia = async (slideId, slideInfo) => {
+    slideMedia.forEach(async (media) => {
       if (media.slideId === slideId) {
         const mediaData = {
-          mediaUrl: media.url,
+          imageID: media.url,
           type: media.type,
           orientation: media.orientation,
           position: media.position,
@@ -171,14 +180,14 @@ const CreateStudy = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(mediaData),
         };
-
-        fetch(
-          "https://ancient-ridge-25388.herokuapp.com/slidemedia",
-          requestOptionsMedia
+        try{
+          const response = await fetch(
+            "https://ancient-ridge-25388.herokuapp.com/slidemedia",
+            requestOptionsMedia
         )
-          .then((response) => response.json())
-          .then(() => console.log("posted media"))
-          .catch((err) => console.log(err));
+        }catch(error){
+          console.log(error);
+        }
       }
     });
   }
@@ -187,27 +196,28 @@ const CreateStudy = () => {
    * Selects image to be uploaded to cloudinary
    */
   const selectImage = async (event: any) => {
+    event.preventDefault();
     let img = event.target.files?.[0];
     if (!img) {
       return;
     }
-    console.log(img);
-      const data = {file: img};
 
-      const requestOptions = {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      };
-
-      console.log(requestOptions.body);
-
-      fetch(
-        "https://ancient-ridge-25388.herokuapp.com/uploadimage",
-        requestOptions
-      )
-        .then((response) => response.json())
-        .then((info) => {console.log(info);dispatch(setImage({ imageLink: info.public_id }))});
+    const reader = new FileReader();
+    reader.readAsDataURL(img);
+    reader.onloadend = async() => {
+        try{
+          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({file: reader.result}),
+          });
+          
+          const info = await response.json();
+          await dispatch(setImage({imageLink: info.publicId}));
+        }catch(error){
+          console.error(error)
+        }
+    }
   };
 
   //called if the user wants to cancel the form
@@ -217,7 +227,6 @@ const CreateStudy = () => {
 
     const data = {"public_id": study.imageLink};
 
-    console.log(data);
     fetch(
       "https://ancient-ridge-25388.herokuapp.com/deleteimage",
       {
@@ -227,10 +236,8 @@ const CreateStudy = () => {
       }
     )
       .then(async (response) => await response.json())
-      .then((info) => {console.log(info)});
 
     if (!params.edit) {
-      console.log("here");
       await navigate("/");
     } else {
       await navigate(`../viewblocks/${params.studyid}`);
@@ -255,7 +262,7 @@ const CreateStudy = () => {
                 defaultValue={study.title}
                 onChange={(e) => dispatch(setTitle({ title: e.target.value }))}
               />
-            </label>
+            </label> 
           </fieldset>
           <fieldset>
             <label>
@@ -279,7 +286,7 @@ const CreateStudy = () => {
                         src={block.imageLink}
                         alt="grid"
                       />
-                      <p>{block.title}</p>
+                      <h3>{block.title}</h3>
                     </div>
                   );
                 })}

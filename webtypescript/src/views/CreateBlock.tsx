@@ -51,9 +51,10 @@ const CreateBlock = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (params.studyid === null) {
+    if (!params.studyid) {
       navigate("../createstudy");
       dispatch(enableDisableBlockEdit({ id: block?.id, edit: false }));
+      return;
     } else {
       fetch(
         `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`
@@ -290,8 +291,9 @@ const CreateBlock = () => {
     dispatch(cancelByBlock({ blockId: block?.id }));
 
     //cancel the block and any slide
-    if (params.studyid === null) {
+    if (!params.studyid) {
       navigate("../createstudy"); //redirects to "Create Study" page
+      return;
     } else {
       if (params.blockid != null) {
         dispatch(cancelSlides());

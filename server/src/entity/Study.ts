@@ -8,8 +8,14 @@ export class Study {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({unique: true})
+    code: string;
+
     @Column({nullable: true})
     imageID: string;
+
+    @Column()
+    imgOrientation: string;
 
     @Column()
     title: string;

@@ -7,6 +7,7 @@ import { addBlock } from "../features/blocksSlice";
 import { setTitle } from "../features/studySlice";
 import { setImage } from "../features/studySlice";
 import { Layout } from "../Components/Layout";
+import { Image } from "cloudinary-react";
 
 const ViewBlocks = () => {
   const params = useParams();
@@ -54,7 +55,7 @@ const ViewBlocks = () => {
     <Layout>
       <div className="viewHeader">
         <h1>Study: {study.title}</h1>
-        <img className="studyImage" src={study.imageLink} alt="cover for study" />
+        <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
       </div>
       <div className="submitButtons">
         <button className="buttonText" onClick={editStudy}>
@@ -71,7 +72,7 @@ const ViewBlocks = () => {
         <div className="blocksGrid">
           {blockData?.map((block) => {
             var img = new Image();
-            img.src = block.mediaURL;
+            img.src = block.imageID;
             if (img.height > img.width) {
               return (
                 <div
@@ -79,7 +80,7 @@ const ViewBlocks = () => {
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
-                  <img src={block.mediaURL} alt ="tall block cover"></img>
+                  <img src={img.src} alt ="tall block cover"/>
                   <h3>{block.title}</h3>
                 </div>
               );
@@ -90,7 +91,7 @@ const ViewBlocks = () => {
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
-                  <img src={block.mediaURL} alt = "wide block cover"></img>
+                  <img src={img.src} alt = "wide block cover"/>
                   <h3>{block.title}</h3>
                 </div>
               );

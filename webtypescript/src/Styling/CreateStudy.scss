@@ -21,7 +21,7 @@
   div {
     background: black;
     border: 1px solid white;
-    /* border-radius: 5px; */
+    border-radius: 5px;
     display: grid;
     place-items: center;
     text-align: center;
@@ -42,7 +42,7 @@
       border: 1px solid white;
       border-radius: 50%;
       max-width: 100%;
-      object-fit: fill;
+      // object-fit: fill;
       grid-area: 1 / 1 / 2 / 2;
     }
 

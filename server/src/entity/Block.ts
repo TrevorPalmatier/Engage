@@ -17,6 +17,9 @@ export class Block {
     imageID: string;
 
     @Column()
+    imgOrientation: string;
+
+    @Column()
     promptTitle: string;
 
     @Column()

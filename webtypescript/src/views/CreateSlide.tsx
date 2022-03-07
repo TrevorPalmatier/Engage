@@ -23,7 +23,7 @@ const CreateSlide = ({ id }) => {
   const media = useAppSelector((state) => state.persistedReducer.media).filter(
     (media) => media.slideId === slide?.id
   );
-  console.log(media);
+
   const selectMedia = (event) => {
     const files = event.target.files;
 

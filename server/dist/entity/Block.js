@@ -30,6 +30,10 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
+], Block.prototype, "imgOrientation", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
 ], Block.prototype, "promptTitle", void 0);
 __decorate([
     typeorm_1.Column(),

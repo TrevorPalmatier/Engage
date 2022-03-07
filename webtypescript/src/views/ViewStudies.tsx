@@ -3,11 +3,12 @@ import "../App.scss";
 import "../Styling/ViewStudies.scss";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../Components/Layout";
+import { Image } from "cloudinary-react";
 
 const ViewStudies = () => {
   const [data, setData] = useState<any>([]);
 
-  useEffect(() => {
+  useEffect( () => {
     const abortController = new AbortController();
 
     fetch("https://ancient-ridge-25388.herokuapp.com/studies", {
@@ -26,7 +27,7 @@ const ViewStudies = () => {
     return () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
-  }, [data]);
+  }, []);
 
   const navigate = useNavigate(); //sets up navigation
 
@@ -59,7 +60,7 @@ const ViewStudies = () => {
                 key={study.id}
                 onClick={() => gotToBlocks(study.id)}
               >
-                <img key={study.id} src={study.imageLink} alt="tall"></img>
+                <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
                 <h3>{study.title}</h3>
               </div>
             );
@@ -70,7 +71,7 @@ const ViewStudies = () => {
                 key={study.id}
                 onClick={() => gotToBlocks(study.id)}
               >
-                <img key={study.id} src={study.imageLink} alt="wide"></img>
+                <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
                 <h3>{study.title}</h3>
               </div>
             );

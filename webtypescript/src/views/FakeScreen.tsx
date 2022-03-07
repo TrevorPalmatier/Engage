@@ -13,7 +13,6 @@ const FakeScreen = ({ id }) => {
     fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setData(data);
         setSlideOption(data);
       });
@@ -46,7 +45,7 @@ const FakeScreen = ({ id }) => {
             if(slideData.option === 1){
               return (
                 <div className="option1">
-                  <img key={media.id} src={media.mediaUrl} alt="option1" />
+                  <img key={media.id} src={media.imageID} alt="option1" />
                   <p className="text">{str1}</p>
                 </div>
               );
@@ -55,7 +54,7 @@ const FakeScreen = ({ id }) => {
               return (
                 <div className="option2">
                   <p className="text1">{str1}</p>
-                  <img key={media.id} src={media.mediaUrl} alt="option2" />
+                  <img key={media.id} src={media.imageID} alt="option2" />
                   <p className="text2">{str2}</p>
                 </div>
               );

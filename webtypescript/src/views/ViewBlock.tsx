@@ -51,7 +51,7 @@ const ViewBlock = () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
 
-  }, [dispatch, params.id, entries]);
+  }, []);
 
   const goToEditBlock = async (e) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ const ViewBlock = () => {
       addOldBlock({
         id: block.id,
         title: block.title,
-        imagelink: block.mediaURL,
+        imagelink: block.imageID,
         promptTitle: block.promptTitle,
         promptText: block.promptText,
       })
@@ -96,7 +96,7 @@ const ViewBlock = () => {
           type: media.type,
           orientation: media.orientation,
           position: media.positioni,
-          url: media.mediaUrl,
+          url: media.imageID,
         })
       );
     });
@@ -106,7 +106,7 @@ const ViewBlock = () => {
     <Layout>
       <div className="viewHeader">
         <h1>Block: {block.title}</h1>
-        <img className="blockImage" src={block.mediaURL} alt="cover for block"></img>
+        <img className="blockImage" src={block.imageID} alt="cover for block"></img>
       </div>
       <div className="promptInfo">
         <h2>Prompt Title: {block.promptTitle}</h2>
@@ -141,20 +141,20 @@ const ViewBlock = () => {
         <div className="entriesGrid">
           {entries?.map((entry) => {
             var img = new Image();
-            img.src = entry.imageLink;
+            img.src = entry.imageID;
             const height = img.height;
             const width = img.width;
             if (height > width) {
               return (
                 <div className="taller" key={entry.id}>
-                  <img src={entry.imageLink} alt="tall" />
+                  <img src={img.src} alt="tall" />
                   <h3>{entry.description}</h3>
                 </div>
               );
             } else {
               return (
                 <div className="wider" key={entry.id}>
-                  <img src={entry.imageLink} alt="wide" />
+                  <img src={img.src} alt="wide" />
                   <h3>{entry.description}</h3>
                 </div>
               );
