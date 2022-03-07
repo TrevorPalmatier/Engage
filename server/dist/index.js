@@ -30,7 +30,6 @@ typeorm_1.createConnection()
         origin: "*",
     }));
     app.use(body_parser_1.default.json());
-    app.use(express_1.default.urlencoded({ limit: '50mb', extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
@@ -62,7 +61,7 @@ typeorm_1.createConnection()
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ err: "Could not upload" + req.body });
+            res.status(500).json({ err: "Could not upload" + req.body.file.toString() });
         }
     }));
     app.post("/deleteimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
