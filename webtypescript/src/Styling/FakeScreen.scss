@@ -90,12 +90,12 @@
   flex-flow: column;
 }
 
-.smartphone .content1 img:nth-child(2) {
+.smartphone .content1 img:nth-of-type(1) {
   grid-area: two;
   width: 100%;
 }
 
-.smartphone .content1 .option1 img:nth-child(2) {
+.smartphone .content1 .option1 img:nth-of-type(1) {
   width: 100%;
 }
 
@@ -113,7 +113,7 @@
   flex-flow: column;
 }
 
-.smartphone .content1 .option2 .img:nth-child(2) {
+.smartphone .content1 .option2 .img:nth-of-type(1) {
   width: 100%;
 }
 
@@ -132,7 +132,7 @@
   position: relative;
 }
 
-.smartphone .content1 .option3 img:nth-child(2) {
+.smartphone .content1 .option3 img:nth-of-type(1) {
   width: 50%;
   float: right;
 }

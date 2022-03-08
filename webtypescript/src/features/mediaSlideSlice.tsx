@@ -56,7 +56,7 @@ const mediaSlideSlice = createSlice({
       return state;
     },
     cancelBySlide: (state, { payload }) => {
-      state = state.filter((media) => (media.slideId === payload.slideId));
+      state = state.filter((media) => (media.slideId !== payload.slideId));
       return state;
     },
   },

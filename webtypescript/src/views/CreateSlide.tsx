@@ -6,8 +6,9 @@ import {
   setText,
   setTitle,
   setSlideOption,
+  cancel,
 } from "../features/slideSlice";
-import { addMedia, deleteOneMedia } from "../features/mediaSlideSlice";
+import { addMedia, cancelBySlide, deleteOneMedia } from "../features/mediaSlideSlice";
 import { useAppSelector, useAppDispatch } from "../hooks/store";
 
 /**
@@ -33,7 +34,6 @@ const CreateSlide = ({ id }) => {
         alert("You can only upload a maximum of 2 files");
       } else {
         let img = file;
-
         const reader = new FileReader();
         reader.readAsDataURL(img);
         reader.onloadend = async() => {
@@ -49,7 +49,7 @@ const CreateSlide = ({ id }) => {
               slideId: slide?.id,
               type: file.type,
               orientation: findDimensions(info.height, info.width),
-              position: index,
+              position: media.length,
               url: info.publicId,
             })
           )
@@ -60,8 +60,18 @@ const CreateSlide = ({ id }) => {
     });
   };
 
-  const deleteMedia = (mediaid) => {
+  const deleteMedia = (mediaid, idOfMedia) => {
     dispatch(deleteOneMedia({ id: mediaid }));
+
+    if(idOfMedia !== -1){
+      fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${idOfMedia}`,{
+            method: "delete",
+            headers: { 'Content-Type': 'application/json' },
+          })
+          .then(response => response.json())
+          .catch(error => console.log(error));
+    }
+    
   };
 
   const findDimensions = (height, width) => {
@@ -109,12 +119,12 @@ const CreateSlide = ({ id }) => {
               {media1.type.split("/")[0] === "video" && (
                 <video
                   className="mediahover"
-                  onClick={() => deleteMedia(media1.id)}
+                  onClick={() => deleteMedia(media1.id, media1.mediaId)}
                   src={media1.url}
                 />
               )}
               {media1.type.split("/")[0] === "image" && (
-                <Image className="mediahover" onClick={() => deleteMedia(media1.id)} cloudName='engageapp' publicId={media1.url}/>
+                <Image className="mediahover" onClick={() => deleteMedia(media1.id, media1.mediaId)} cloudName='engageapp' publicId={media1.url}/>
               )}
               <p className="texthover">Click to Delete</p>
             </div>
@@ -123,23 +133,29 @@ const CreateSlide = ({ id }) => {
       </div>
       <div className="submitButtons">
         <button
+          type="button"
           className="buttonText"
           onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 1 }))}
         >
           Select Option 1
         </button>
         <button
+        type="button"
           className="buttonText"
           onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 2 }))}
         >
           Select Option 2
         </button>
         <button
+          type="button"
           className="buttonText"
           onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 3 }))}
         >
           Select Option 3
         </button>
+      </div>
+      <div>
+        <button type="button" className="buttonText" onClick={() => {dispatch(cancel({id:slide?.id})); dispatch(cancelBySlide({slideId:slide?.id}))}}>Delete Slide</button>
       </div>
     </div>
   );

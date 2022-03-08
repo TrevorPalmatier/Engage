@@ -17,6 +17,7 @@ import "../Styling/CreateStudy.scss";
 import { Layout } from "../Components/Layout";
 import {Image} from 'cloudinary-react';
 import  GenerateRandomCode  from 'react-random-code-generator';
+import { Interface } from "readline";
 
 /**
  * Notes for things to maybe implement:
@@ -62,7 +63,7 @@ const CreateStudy = () => {
 
     if (!params.edit){
       postStudy();
-      navigate("../");
+      navigate("../viewstudies");
       return;
     }
     
@@ -208,6 +209,7 @@ const CreateStudy = () => {
 
     const reader = new FileReader();
     reader.readAsDataURL(img);
+    
     reader.onloadend = async() => {
         try{
           const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
@@ -250,7 +252,7 @@ const CreateStudy = () => {
       .then(async (response) => await response.json())
 
     if (!params.edit) {
-      await navigate("/");
+      await navigate("/viewstudies");
     } else {
       await navigate(`../viewblocks/${params.studyid}`);
     }

@@ -8,6 +8,7 @@ import About from "./views/About";
 import ViewStudies from "./views/ViewStudies";
 import ViewBlocks from "./views/ViewBlocks";
 import ViewBlock from "./views/ViewBlock";
+import EditBlock from "./views/EditBlock";
 
 function App() {
   return (
@@ -20,10 +21,7 @@ function App() {
           <Route path="/createstudy/:edit/:studyid" element={<CreateStudy />} />
           <Route path="/createblock" element={<CreateBlock />} />
           <Route path="/createblock/:studyid" element={<CreateBlock/>} />
-          <Route
-            path="/createblock/:studyid/:blockid"
-            element={<CreateBlock />}
-          />
+          <Route path="/editblock/:studyid/:blockid" element={<EditBlock />}/>
           <Route path="/viewstudies" element={<ViewStudies />} />
           <Route path="/viewblocks/:id" element={<ViewBlocks />} />
           <Route path="/viewblock/:id" element={<ViewBlock />} />

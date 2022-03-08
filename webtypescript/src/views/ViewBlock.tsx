@@ -56,37 +56,49 @@ const ViewBlock = () => {
 
   const goToEditBlock = async (e) => {
     e.preventDefault();
-
-    dispatch(
-      addOldBlock({
-        id: block.id,
-        title: block.title,
-        imagelink: block.imageID,
-        promptTitle: block.promptTitle,
-        promptText: block.promptText,
-      })
-    );
-    block.slides.forEach((slide) => {
-      //create old slide in persist store
-      dispatch(
-        addOldSlide({
-          id: slide.id,
-          blockId: block.id,
-          slideId: slide.id,
-          option: slide.option,
-          title: slide.title,
-          backgroundText: slide.backgroundText,
-        })
-      );
-      fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
-        .then((response) => response.json())
-        .then((info) => {
-          dispatchMedia(info);
-        });
-    });
-
-    navigate(`/createblock/${block.study.id}/${block.id}`);
+    
+    dispatchData();
+    navigate(`/editblock/${block.study.id}/${block.id}`);
   };
+
+  const dispatchData = async () => {
+
+    //dispatch the block data
+    dispatch(
+        addOldBlock({
+          id: block.id,
+          title: block.title,
+          imageLink: block.imageID,
+          imgOriengation: block.imgOrientation,
+          promptTitle: block.promptTitle,
+          promptText: block.promptText,
+        })
+    );
+
+    //dispatch slides
+    block.slides.forEach((slide) => {
+        //create old slide in persist store
+        dispatch(
+          addOldSlide({
+            id: slide.id,
+            blockId: block.id,
+            slideId: slide.id,
+            option: slide.option,
+            title: slide.title,
+            backgroundText: slide.backgroundText,
+          })
+        );
+        
+        try{
+            //fetch media for slides and dispatch
+            fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
+            .then((response) => response.json())
+            .then((info) => {dispatchMedia(info)});
+        }catch(error) {
+            console.error(error);
+        }
+    });
+    };
 
   const dispatchMedia = (slideInfo) => {
     slideInfo.medias.forEach((media) => {
@@ -102,6 +114,7 @@ const ViewBlock = () => {
       );
     });
   };
+
 
   return (
     <Layout>
