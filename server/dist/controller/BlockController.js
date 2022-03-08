@@ -52,7 +52,8 @@ class BlockController {
     }
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.update(request.params.id, request.body);
+            yield this.blockRepository.update(request.params.id, request.body);
+            return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
         });
     }
 }

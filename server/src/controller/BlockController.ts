@@ -35,6 +35,7 @@ export class BlockController {
 		await this.blockRepository.remove(blockToRemove);
 	}
 	async update(request: Request, response: Response, next: NextFunction) {
-        return  this.blockRepository.update(request.params.id, request.body);
+    	await  this.blockRepository.update(request.params.id, request.body);
+		return this.blockRepository.findOne(request.params.id, {relations: ["slides"]});
     }
 }
