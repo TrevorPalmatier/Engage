@@ -19,6 +19,7 @@ export class Entry {
     @Column()
     imageID: string;
 
+
     @Column({nullable: true})
     text: string;
 
