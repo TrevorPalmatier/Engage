@@ -20,6 +20,9 @@ export class Block {
     imgOrientation: string;
 
     @Column()
+    version: string;
+
+    @Column()
     promptTitle: string;
 
     @Column()

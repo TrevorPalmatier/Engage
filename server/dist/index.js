@@ -57,8 +57,8 @@ typeorm_1.createConnection()
                 upload(fileStr, {
                 upload_preset: "engageapp",
             });
-            console.log(uploadedResponse.version);
-            res.json({ publicId: uploadedResponse.public_id, height: uploadedResponse.height, width: uploadedResponse.width });
+            console.log(uploadedResponse.type);
+            res.json({ publicId: uploadedResponse.public_id, type: uploadedResponse.type, version: uploadedResponse.version, height: uploadedResponse.height, width: uploadedResponse.width });
         }
         catch (error) {
             res.status(500).json({ err: "Could not upload" + req.body.file.toString() });

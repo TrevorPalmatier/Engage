@@ -19,6 +19,9 @@ export class SlideMedia {
     @Column({nullable: false})
     position: number;
 
+    @Column()
+    version: string;
+
     // multiple medias can be used in a slide
     @ManyToOne(type => Slide, slide => slide.medias,  {
         onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
