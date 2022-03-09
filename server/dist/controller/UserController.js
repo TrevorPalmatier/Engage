@@ -21,7 +21,7 @@ class UserController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.userRepository.findOne(request.params.id);
+            return this.userRepository.findOne(request.params.id, { relations: ["entries"] });
         });
     }
     studies(request, response, next) {

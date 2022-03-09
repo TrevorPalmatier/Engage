@@ -10,7 +10,7 @@ export class UserController {
 	}
 
 	async one(request: Request, response: Response, next: NextFunction) {
-		return this.userRepository.findOne(request.params.id);
+		return this.userRepository.findOne(request.params.id, {relations: ["entries"]});
 	}
 
 	async studies(request: Request, response: Response, next: NextFunction) {
