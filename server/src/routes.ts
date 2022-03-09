@@ -73,6 +73,12 @@ export const Routes = [
 		action: "update",
 	},
 	{
+		method: "put",
+		route: "/studies/:code",
+		controller: StudyController,
+		action: "addUser"
+	},
+	{
 		method: "get",
 		route: "/slides",
 		controller: SlideController,

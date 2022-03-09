@@ -74,6 +74,12 @@ exports.Routes = [
         action: "update",
     },
     {
+        method: "put",
+        route: "/studies/:code",
+        controller: StudyController_1.StudyController,
+        action: "addUser"
+    },
+    {
         method: "get",
         route: "/slides",
         controller: SlideController_1.SlideController,

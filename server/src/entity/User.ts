@@ -18,6 +18,6 @@ export class User {
 	entries: Entry[];
 
 	// multiple users can be part of multiple Studies
-	@ManyToMany((type) => Study, study => study.users)
+	@ManyToMany((type) => Study, study => study.users, {cascade:true})
 	studies: Study[];
 }

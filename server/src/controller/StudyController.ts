@@ -15,7 +15,7 @@ export class StudyController {
 	}
 
 	async one(request: Request, response: Response, next: NextFunction) {
-		return this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
+		return this.studyRepository.findOne(request.params.id, { relations: ["blocks", "users"] });
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
@@ -30,4 +30,16 @@ export class StudyController {
 	async update(request: Request, response: Response, next: NextFunction) {
 		return this.studyRepository.update(request.params.id, request.body);
 	}
+
+	async addUser(request: Request, response: Response, next: NextFunction) {
+		const accessCode = request.params.code;
+
+		const result = this.studyRepository
+			.createQueryBuilder("study")
+			.where("study.code = :id" , { id: accessCode })
+			.getOne();
+
+		return this.studyRepository.update((await result).id, {users: request.body})
+	}
+
 }

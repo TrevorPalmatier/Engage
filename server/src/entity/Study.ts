@@ -27,7 +27,7 @@ export class Study {
     blocks: Block[];
 
     // multiple users can be assigned to multiple studies
-    @ManyToMany(type => User, user => user.studies)
+    @ManyToMany(type => User, user => user.studies, {onUpdate: "CASCADE", onDelete: "CASCADE"})
     @JoinTable()
     users: User[];
 }

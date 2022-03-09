@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "entries", void 0);
 __decorate([
-    typeorm_1.ManyToMany((type) => Study_1.Study, study => study.users),
+    typeorm_1.ManyToMany((type) => Study_1.Study, study => study.users, { cascade: true }),
     __metadata("design:type", Array)
 ], User.prototype, "studies", void 0);
 User = __decorate([

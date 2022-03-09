@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Study.prototype, "blocks", void 0);
 __decorate([
-    typeorm_1.ManyToMany(type => User_1.User, user => user.studies),
+    typeorm_1.ManyToMany(type => User_1.User, user => user.studies, { onUpdate: "CASCADE", onDelete: "CASCADE" }),
     typeorm_1.JoinTable(),
     __metadata("design:type", Array)
 ], Study.prototype, "users", void 0);

@@ -27,7 +27,7 @@ class StudyController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.studyRepository.findOne(request.params.id, { relations: ["blocks"] });
+            return this.studyRepository.findOne(request.params.id, { relations: ["blocks", "users"] });
         });
     }
     save(request, response, next) {
@@ -44,6 +44,16 @@ class StudyController {
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.studyRepository.update(request.params.id, request.body);
+        });
+    }
+    addUser(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const accessCode = request.params.code;
+            const result = this.studyRepository
+                .createQueryBuilder("study")
+                .where("study.code = :id", { id: accessCode })
+                .getOne();
+            return this.studyRepository.update((yield result).id, { users: request.body });
         });
     }
 }
