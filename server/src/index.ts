@@ -57,7 +57,7 @@ createConnection()
 					upload_preset: "engageapp",
 				});
 				console.log(uploadedResponse.type);
-				res.json({publicId: uploadedResponse.public_id, type: uploadedResponse.type, version: uploadedResponse.version, height: uploadedResponse.height, width: uploadedResponse.width});
+				res.json({publicId: uploadedResponse.public_id, imageURL: uploadedResponse.secure_url, type: uploadedResponse.type, version: uploadedResponse.version, height: uploadedResponse.height, width: uploadedResponse.width});
 			}catch(error){
 				res.status(500).json({err: "Could not upload" + req.body.file.toString()})
 			}
