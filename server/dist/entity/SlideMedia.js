@@ -36,7 +36,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], SlideMedia.prototype, "version", void 0);
+], SlideMedia.prototype, "imageURL", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => Slide_1.Slide, slide => slide.medias, {
         onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true

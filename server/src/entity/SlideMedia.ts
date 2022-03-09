@@ -20,7 +20,7 @@ export class SlideMedia {
     position: number;
 
     @Column()
-    version: string;
+    imageURL: string;
 
     // multiple medias can be used in a slide
     @ManyToOne(type => Slide, slide => slide.medias,  {

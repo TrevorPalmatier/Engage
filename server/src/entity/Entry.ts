@@ -20,7 +20,7 @@ export class Entry {
     imageID: string;
 
     @Column()
-    version: string;
+    imageURL: string;
 
     @Column()
     type: string;

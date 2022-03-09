@@ -33,7 +33,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], Entry.prototype, "version", void 0);
+], Entry.prototype, "imageURL", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

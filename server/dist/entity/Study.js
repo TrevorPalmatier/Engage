@@ -29,7 +29,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], Study.prototype, "version", void 0);
+], Study.prototype, "imageURL", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
