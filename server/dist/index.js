@@ -75,6 +75,18 @@ typeorm_1.createConnection()
             res.status(500).json({ err: "Could not delete" });
         }
     }));
+    app.get("/getimageurl/:publicid", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            console.log(req.params.publicid);
+            const publicId = req.params.publicid;
+            const getResponse = yield cloudinary_1.cloudinary2.api.resource(publicId);
+            console.log(getResponse);
+            res.json(yield getResponse);
+        }
+        catch (error) {
+            res.status(500).json({ error: "could not get the photo" });
+        }
+    }));
     // start express server
     app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
         // tslint:disable-next-line:no-console

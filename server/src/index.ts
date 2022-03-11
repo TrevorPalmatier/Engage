@@ -76,9 +76,11 @@ createConnection()
 
 		app.get("/getimageurl/:publicid", async (req, res, next) => {
 			try{
-				const public_id = req.body.publicid;
-				const getResponse = await cloudinary2.api.resource(public_id);
-				return await getResponse;
+				console.log(req.params.publicid);
+				const publicId = req.params.publicid;
+				const getResponse = await cloudinary2.api.resource(publicId);
+				console.log(getResponse);
+				res.json(await getResponse);
 			}catch(error) {
 				res.status(500).json({error: "could not get the photo"})
 			}
