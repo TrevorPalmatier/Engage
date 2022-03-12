@@ -49,7 +49,8 @@ class SlideController {
     }
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideRepository.update(request.params.id, request.body);
+            yield this.slideRepository.update(request.params.id, request.body);
+            return yield this.slideRepository.findOne(request.params.id, { relations: ["medias"] });
         });
     }
 }

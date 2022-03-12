@@ -32,6 +32,7 @@ export class SlideController {
     }
 
     async update(request: Request, response: Response, next: NextFunction) {
-        return  this.slideRepository.update(request.params.id, request.body);
+        await this.slideRepository.update(request.params.id, request.body);
+		return await this.slideRepository.findOne(request.params.id, {relations: ["medias"]});
     }
 }
