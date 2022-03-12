@@ -14,8 +14,6 @@ export class Study {
     @Column({nullable: true})
     imageID: string;
 
-    @Column()
-    imageURL: string;
 
     @Column()
     imgOrientation: string;

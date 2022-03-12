@@ -19,12 +19,6 @@ export class Entry {
     @Column()
     imageID: string;
 
-    @Column()
-    imageURL: string;
-
-    @Column()
-    type: string;
-
     @Column({nullable: true})
     text: string;
 

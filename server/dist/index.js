@@ -77,10 +77,8 @@ typeorm_1.createConnection()
     }));
     app.get("/getimageurl/:publicid", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(req.params.publicid);
             const publicId = req.params.publicid;
             const getResponse = yield cloudinary_1.cloudinary2.api.resource(publicId);
-            console.log(getResponse);
             res.json(yield getResponse);
         }
         catch (error) {

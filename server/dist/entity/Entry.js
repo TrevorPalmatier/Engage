@@ -31,14 +31,6 @@ __decorate([
     __metadata("design:type", String)
 ], Entry.prototype, "imageID", void 0);
 __decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], Entry.prototype, "imageURL", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], Entry.prototype, "type", void 0);
-__decorate([
     typeorm_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Entry.prototype, "text", void 0);
