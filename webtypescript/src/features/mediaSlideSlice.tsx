@@ -31,7 +31,7 @@ const mediaSlideSlice = createSlice({
         slideId: payload.slideId,
         type: payload.type,
         orientation: payload.orientation,
-        position: payload.position,
+        position: 0,
         imageID: payload.imageID,
       });
       return state;
@@ -46,6 +46,15 @@ const mediaSlideSlice = createSlice({
         position: payload.position,
         imageID: payload.imageID,
       });
+    },
+    setMediaPosition: (state, { payload }) => {
+      state.map((media1) => {
+        if(media1.id === payload.id){
+          media1.position = payload.position;
+        }
+      })
+
+      return state;
     },
     deleteOneMedia: (state, { payload }) => {
       state = state.filter((media1) => media1.id !== payload.id);
@@ -66,6 +75,7 @@ export default mediaSlideSlice.reducer;
 export const {
   addMedia,
   addOldMedia,
+  setMediaPosition,
   deleteOneMedia,
   cancelMedia,
   cancelBySlide,

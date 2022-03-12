@@ -51,6 +51,7 @@ const CreateBlock = () => {
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(e.target);
 
     if (!params.studyid) {
       navigate("../createstudy");
@@ -127,9 +128,6 @@ const CreateBlock = () => {
         .then((info) => postSlides(block?.id, info))
         .catch((err) => console.log(err));
     }
-
-    dispatch(cancelSlides());
-    dispatch(cancelBlocks());
   };
 
   /**
@@ -144,6 +142,7 @@ const CreateBlock = () => {
             id: slide.slideId,
             title: slide.title,
             backgroundText: slide.backgroundText,
+            option: slide.option
           }; //slide data
           const requestOptionsSlide1 = {
             method: "put",
@@ -152,18 +151,13 @@ const CreateBlock = () => {
           };
 
           const slide_id = slide.slideId;
-          console.log("slideid " + slide_id);
           fetch(
             `https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`,
             requestOptionsSlide1
           )
             .then((response) => response.json())
             .then((info) => {
-              postSlideMedia(slide.id, {
-                id: slide.slideId,
-                title: slide.title,
-                backgroundText: slide.backgroundText,
-              });
+              postSlideMedia(slide.id, slideDataPut);
             })
             .catch((err) => console.log(err));
         } else {
@@ -171,6 +165,7 @@ const CreateBlock = () => {
             title: slide.title,
             backgroundText: slide.backgroundText,
             block: blockInfo,
+            option: slide.option,
           }; //slide data
           let requestOptionsSlide = {
             method: "post",
@@ -291,20 +286,12 @@ const CreateBlock = () => {
     dispatch(cancelByBlock({ blockId: block?.id }));
 
     //cancel the block and any slide
-    if (!params.studyid) {
-      navigate("../createstudy"); //redirects to "Create Study" page
+    if (params.studyid) {
+      navigate(`../viewblocks/${params.studyid}`);
       return;
-    } else {
-      if (params.blockid != null) {
-        dispatch(cancelSlides());
-        dispatch(cancelMedia());
-        navigate(`../viewblock/${params.blockid}`);
-      } else {
-        dispatch(cancelSlides());
-        dispatch(cancelMedia());
-        navigate(`../viewblocks/${params.studyid}`);
-      }
     }
+
+    navigate("../createstudy"); //redirects to "Create Study" page
   };
 
   //renders the element

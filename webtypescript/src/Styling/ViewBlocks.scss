@@ -12,7 +12,7 @@
 
 .blocksGrid {
   display: grid;
-  width: 60%;
+  width: 55%;  
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
 }
@@ -73,27 +73,38 @@
 
 .participantList {
   width: 40%;
-  display: inline;
+  display: inline-flex;
   border: 1px solid rgb(0, 0, 0);
-  padding: 5px;
+  overflow: visible;
+  position: relative;
   align-self: flex-start;
+  padding: 10px;
 }
 
 .blockparticipantGrid {
   display: flex;
-  gap: 5%;
+  flex-direction: row;
+  width: 100%;
+  gap: 5%
 }
 
 .aboveGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+  "one one one two two";
   width: 100%;
-  display: flex;
+  gap: 10px;
   padding: 5px;
   align-items: flex-start;
 }
 
-.aboveGrid div {
-  width: 50%;
-  display: inline-block;
+.aboveGrid div:nth-of-type(1) {
+  grid-area: one;
+}
+
+.aboveGrid div:nth-of-type(2) {
+  grid-area: two;
 }
 
 .part {

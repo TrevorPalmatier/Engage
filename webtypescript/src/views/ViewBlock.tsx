@@ -43,7 +43,6 @@ const ViewBlock = () => {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setEntries(data.entries);
         })
         .catch((error) => console.log(error));
@@ -115,7 +114,19 @@ const ViewBlock = () => {
     });
   };
 
-
+  const deleteBlock = async () => {
+    
+    try{
+      await fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${block.id}`, {
+        method: 'delete',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+    }catch(error){
+      console.error(error);
+    }
+    navigate(`/viewblocks/${block.study.id}`);
+  }
   return (
     <Layout>
       <div className="viewHeader">
@@ -136,9 +147,15 @@ const ViewBlock = () => {
           {" "}
           Edit Block{" "}
         </button>
+        <button className="buttonText" onClick={() => {
+          const confirmBox = window.confirm("Any participants entries will be deleted.\nAre you sure you want to delete this Block?")
+          if(confirmBox === true){
+            deleteBlock();
+          }
+        }}>
+          Delete Block
+        </button>
       </div>
-      <br />
-
       <div className="maincomponent">
       <div >
         <h2>Slides</h2>
@@ -146,7 +163,7 @@ const ViewBlock = () => {
         <div className="organizeScreens">
           {block.slides?.map((slide) => {
             return (
-              <div>
+              <div key={slide.id}>
                 <FakeScreen key={slide.id} id={slide.id} />
               </div>
             );

@@ -123,6 +123,7 @@ const EditBlock = () => {
     })
   }
 
+
   /**
    * deletes individual media by id
    * @param id 
@@ -140,7 +141,8 @@ const EditBlock = () => {
     .then((response) => response.json())
     .catch((err) => console.log(err));
 
-  }
+  } 
+  
   /**
    * This method is able post the slides for the block to the api
    */
@@ -168,11 +170,9 @@ const EditBlock = () => {
           )
             .then((response) => response.json())
             .then((info) => {
-              postSlideMedia(slide.id, {
-                id: slide.slideId,
-                title: slide.title,
-                backgroundText: slide.backgroundText,
-              });
+              deleteMediaForSlide(info.medias);
+              postSlideMedia(slide.id, slideDataPut);
+
             })
             .catch((err) => console.log(err));
         return;
@@ -199,6 +199,24 @@ const EditBlock = () => {
       }
     );
   };
+
+  const deleteMediaForSlide = (oldSlideMedia) => {
+    let toDelete = oldSlideMedia;
+
+    slideMedia?.forEach((media) => {
+      toDelete = toDelete.filter((media1) => media.mediaId !== media1.id);
+    });
+
+    toDelete.forEach((media) => {
+        fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.id}`,{
+              method: "delete",
+              headers: { 'Content-Type': 'application/json' },
+            })
+            .then(response => response.json())
+            .catch(error => console.log(error));
+    })
+
+  }
 
   const postSlideMedia = (slideId, slideInfo) => {
     slideMedia?.forEach((media) => {
@@ -301,21 +319,8 @@ const EditBlock = () => {
     });
     dispatch(cancelByBlock({ blockId: block?.id }));
 
-    //cancel the block and any slide
-    if (!params.studyid) {
-      navigate("../createstudy"); //redirects to "Create Study" page
-      return;
-    } else {
-      if (params.blockid != null) {
-        dispatch(cancelSlides());
-        dispatch(cancelMedia());
-        navigate(`../viewblock/${params.blockid}`);
-      } else {
-        dispatch(cancelSlides());
-        dispatch(cancelMedia());
-        navigate(`../viewblocks/${params.studyid}`);
-      }
-    }
+    navigate(`../viewblock/${params.blockid}`);
+     
   };
 
   //renders the element

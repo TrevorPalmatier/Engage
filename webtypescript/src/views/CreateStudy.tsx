@@ -10,6 +10,7 @@ import {
 } from "../features/studySlice";
 import {
   addBlock,
+  cancelBlocks,
   enableDisableBlockEdit,
 } from "../features/blocksSlice";
 import { RootState } from "../store";
@@ -17,6 +18,8 @@ import "../Styling/CreateStudy.scss";
 import { Layout } from "../Components/Layout";
 import {Image} from 'cloudinary-react';
 import  GenerateRandomCode  from 'react-random-code-generator';
+import { cancelSlides } from "../features/slideSlice";
+import { cancelMedia } from "../features/mediaSlideSlice";
 
 /**
  * Notes for things to maybe implement:
@@ -63,6 +66,10 @@ const CreateStudy = () => {
     if (!params.edit){
       postStudy();
       navigate("../viewstudies");
+      dispatch(cancelled());
+      dispatch(cancelSlides());
+      dispatch(cancelBlocks());
+      dispatch(cancelMedia());
       return;
     }
     
@@ -78,6 +85,11 @@ const CreateStudy = () => {
       requestOptions
     ).then((response) => response.json());
 
+    dispatch(cancelled());
+    dispatch(cancelSlides());
+    dispatch(cancelBlocks());
+    dispatch(cancelMedia());
+    
       navigate(`../viewblocks/${params.studyid}`);
     
   };
@@ -236,6 +248,9 @@ const CreateStudy = () => {
   const cancel = async (e) => {
     e.preventDefault();
     dispatch(cancelled());
+    dispatch(cancelSlides());
+    dispatch(cancelBlocks());
+    dispatch(cancelMedia());
 
     const data = {"public_id": study.imageID};
 

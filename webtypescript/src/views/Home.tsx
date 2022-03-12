@@ -13,17 +13,6 @@ import { Layout } from "../Components/Layout";
  * @returns home page
  */
 const Home = () => {
-  //sets up redux
-  const dispatch = useAppDispatch();
-
-  //hopefully cancels all persisted data
-  useEffect(() => {
-    dispatch(cancelled());
-    dispatch(cancelSlides());
-    dispatch(cancelBlocks());
-    dispatch(cancelMedia());
-  }, [dispatch]);
-
   const navigate = useNavigate(); //sets up navigation
 
   const goToCreateStudy = () => {

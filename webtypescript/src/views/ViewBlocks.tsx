@@ -52,7 +52,17 @@ const ViewBlocks = () => {
     dispatch(setImage({ imageLink: study.imageLink }));
     navigate(`../createstudy/${edit}/${study.id}`);
   };
+  const deleteStudy = (e) => {
+    e.preventDefault();
 
+    fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${study.id}`, {
+        method: 'delete',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .catch((error) => console.error(error));
+
+    navigate(`/viewstudies`);
+  }
   return (
     <Layout>
       <div className="viewHeader">
@@ -66,12 +76,23 @@ const ViewBlocks = () => {
         <button className="buttonText" onClick={createBlock}>
           Add Block
         </button>
+        <button className="buttonText" onClick={(e) => {
+          const confirmBox = window.confirm("Participants will not longer be able to view this study. \n Are you sure you want to delete this Study?")
+          if(confirmBox === true){
+            deleteStudy(e);
+          }
+        }}>Delete Study</button>
       </div>
       <div>
         <h3>Access Code: {study.code}</h3>
       </div>
       <div className="aboveGrid">
-        <h2 className="part">Participants</h2>
+        <div>
+        <h2>Blocks</h2>
+        </div>
+        <div>
+          <h2 >Participants</h2>
+        </div> 
       </div>
       <div className="blockparticipantGrid">
         <div className="blocksGrid">
@@ -102,11 +123,15 @@ const ViewBlocks = () => {
           })}
         </div>
         <div className="participantList">
-          {users.map((user) => {
+          {users?.map((user) => {
             return (
               <p>{user.emailAddress}</p>
             )
           })}
+          {
+            users.length === 0 &&
+            <p>no participants</p>
+          }
         </div>
       </div>
     </Layout>

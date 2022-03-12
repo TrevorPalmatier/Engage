@@ -8,7 +8,7 @@ import {
   setSlideOption,
   cancel,
 } from "../features/slideSlice";
-import { addMedia, cancelBySlide, deleteOneMedia } from "../features/mediaSlideSlice";
+import { addMedia, cancelBySlide, deleteOneMedia, setMediaPosition } from "../features/mediaSlideSlice";
 import { useAppSelector, useAppDispatch } from "../hooks/store";
 
 /**
@@ -28,49 +28,42 @@ const CreateSlide = ({ id }) => {
 
   const selectMedia = (event) => {
     const files = event.target.files;
+    
 
     [...files].forEach((file, index) => {
       if (index > 1) {
         alert("You can only upload a maximum of 2 files");
+        return;
       } else {
         let img = file;
         const reader = new FileReader();
         reader.readAsDataURL(img);
         reader.onloadend = async() => {
-        try{
-          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
-            method: "post",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({file: reader.result}),
-          });
-          const info = await response.json();
-          await dispatch(
-            addMedia({
-              slideId: slide?.id,
-              type: file.type,
-              orientation: findDimensions(info.height, info.width),
-              position: media.length,
-              imageID: info.publicId,
-            })
-          )
-        }catch(error){
-          console.error(error)
+          try{
+            const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+              method: "post",
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({file: reader.result}),
+            });
+            const info = await response.json();
+            await dispatch(
+              addMedia({
+                slideId: slide?.id,
+                type: file.type,
+                orientation: findDimensions(info.height, info.width),
+                imageID: info.publicId,
+              })
+            )
+          }catch(error){
+            console.error(error)
+          }
         }
-    }}
+        }
     });
   };
 
-  const deleteMedia = (mediaid, idOfMedia) => {
+  const deleteMedia = (mediaid) => {
     dispatch(deleteOneMedia({ id: mediaid }));
-
-    if(idOfMedia !== -1){
-      fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${idOfMedia}`,{
-            method: "delete",
-            headers: { 'Content-Type': 'application/json' },
-          })
-          .then(response => response.json())
-          .catch(error => console.log(error));
-    }
     
   };
 
@@ -116,43 +109,60 @@ const CreateSlide = ({ id }) => {
         {media?.map((media1) => {
           return (
             <div key={media1.id}>
+              <p className="texthover">Click to Delete</p>
               {media1.type.split("/")[0] === "video" && (
                 <video
                   className="mediahover"
-                  onClick={() => deleteMedia(media1.id, media1.mediaId)}
+                  onClick={() => deleteMedia(media1.id)}
                   src={media1.imageID}
                 />
               )}
               {media1.type.split("/")[0] === "image" && (
-                <Image className="mediahover" onClick={() => deleteMedia(media1.id, media1.mediaId)} cloudName='engageapp' publicId={media1.imageID}/>
+                <Image className="mediahover" onClick={() => deleteMedia(media1.id)} cloudName='engageapp' publicId={media1.imageID}/>
               )}
-              <p className="texthover">Click to Delete</p>
+              
+              {
+                media.length === 2 &&
+                <div className="submitButtons">
+                  <label>
+                    <input name='position' type='radio' onClick={() => dispatch(setMediaPosition({id: media1.id, position: 0}))}/>
+                    <span>Position 1</span>
+                  </label>
+                  <label>
+                    <input name="position"  type='radio' onClick={() => dispatch(setMediaPosition({id: media1.id, position: 1}))}/>
+                    <span>Position 2</span>
+                  </label>
+                </div>
+              }
             </div>
           );
         })}
       </div>
       <div className="submitButtons">
-        <button
-          type="button"
-          className="buttonText"
-          onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 1 }))}
-        >
-          Select Option 1
-        </button>
-        <button
-        type="button"
-          className="buttonText"
+        <label>
+          <input
+            type="radio"
+            onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 1 }))}
+            name="selectOption"
+          />
+          <span>Select Option 1</span>
+        </label>
+        <label>
+          <input type="radio"
           onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 2 }))}
-        >
-          Select Option 2
-        </button>
-        <button
-          type="button"
-          className="buttonText"
+          name="selectOption"
+        />
+          <span>Select Option 2</span>
+        </label>
+        <label className='radio'>
+          <input
+          type="radio"
           onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 3 }))}
-        >
-          Select Option 3
-        </button>
+          name="selectOption"
+          />
+          <span>Select Option 3</span>
+        </label>
+        
       </div>
       <div>
         <button type="button" className="buttonText" onClick={() => {dispatch(cancel({id:slide?.id})); dispatch(cancelBySlide({slideId:slide?.id}))}}>Delete Slide</button>
