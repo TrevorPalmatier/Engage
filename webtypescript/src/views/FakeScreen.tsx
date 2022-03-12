@@ -21,7 +21,6 @@ const FakeScreen = ({ id }) => {
   }, [id, option]);
 
   const setSlideOption = (slide) => {
-    console.log(slide.medias.length);
     if(slide.medias.length === 2){
       setFirstStr(
         slide.backgroundText.slice(0, slide.backgroundText.length / 3)
@@ -33,7 +32,6 @@ const FakeScreen = ({ id }) => {
         )
       );
       setOption(3);
-      console.log(option);
       return;
     }
 
@@ -80,13 +78,11 @@ const FakeScreen = ({ id }) => {
                 </div>
               );
             } else if (media.position === 0 && option === 3) {
-              console.log("here");
               return(
                 <Image key = {media.id} cloudName='engageapp' publicId={media.imageID}/>
               )
             }
           }else if (media.position === 1 && option === 3) {
-            console.log("there");
             return (
               <div  key = {media.id} className="option3">
                 <p className="text1">{str1}</p>

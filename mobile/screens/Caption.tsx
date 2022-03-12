@@ -32,7 +32,7 @@ export default function Caption({ route, navigation }) {
 					userId: user.id,
 					blockId: route.params.blockId,
 					text: description,
-					imageID: data.publicId,
+					imageID: data.publicID,
 				} as EntryRequest;
 				submitEntry(payload)
 					.then((res) => {

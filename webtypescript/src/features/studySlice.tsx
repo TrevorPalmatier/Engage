@@ -3,7 +3,7 @@ import { RootState } from "../store";
 
 interface StudyState {
   title: string;
-  imageLink: string;
+  imageID: string;
   imgOrientation: string;
   selectedImage: boolean;
   submitted: boolean;
@@ -11,7 +11,7 @@ interface StudyState {
 
 const initialState: StudyState = {
   title: "",
-  imageLink: "",
+  imageID: "",
   imgOrientation: "",
   selectedImage: false,
   submitted: false,
@@ -26,7 +26,7 @@ const studySlice = createSlice({
       return state;
     },
     setImage: (state, { payload }) => {
-      state.imageLink = payload.imageLink;
+      state.imageID = payload.imageID;
       state.imgOrientation = payload.imgOrientation;
       state.selectedImage = true;
       return state;

@@ -64,7 +64,7 @@ const CreateBlock = () => {
         .then((data) =>
           postBlocks(e, {
             title: data.title,
-            imageLink: data.imageLink,
+            imageID: data.imageID,
             id: data.id,
           })
         );
@@ -88,7 +88,7 @@ const CreateBlock = () => {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
-        mediaURL: block?.imageLink,
+        imageID: block?.imageID,
       };
       const requestOptionsBlock = {
         method: "put",
@@ -102,7 +102,6 @@ const CreateBlock = () => {
       )
         .then((response) => response.json())
         .then((info) => postSlides(block?.id, blockDataPut))
-        .then(() => console.log("blockPosted"))
         .catch((err) => console.log(err));
     } else {
       //block data to be posted
@@ -110,7 +109,8 @@ const CreateBlock = () => {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
-        mediaURL: block?.imageLink,
+        imageID: block?.imageID,
+        imgOrientation: block?.imgOrienation,
         study: studyInfo,
       };
 
@@ -125,7 +125,6 @@ const CreateBlock = () => {
       )
         .then((response) => response.json())
         .then((info) => postSlides(block?.id, info))
-        .then(() => console.log("blockPosted"))
         .catch((err) => console.log(err));
     }
 
@@ -166,10 +165,8 @@ const CreateBlock = () => {
                 backgroundText: slide.backgroundText,
               });
             })
-            .then(() => console.log("posted slides"))
             .catch((err) => console.log(err));
         } else {
-          console.log();
           const slideData = {
             title: slide.title,
             backgroundText: slide.backgroundText,
@@ -187,7 +184,6 @@ const CreateBlock = () => {
           )
             .then((response) => response.json())
             .then((info) => postSlideMedia(slide.id, info))
-            .then(() => console.log("posted slides"))
             .catch((err) => console.log(err));
         }
       }
@@ -200,7 +196,7 @@ const CreateBlock = () => {
         if (media.mediaId !== -1) {
           const mediaDataPut = {
             id: media.mediaId,
-            imgID: media.url,
+            imageID: media.imageID,
             type: media.type,
             orientation: media.orientation,
             position: media.position
@@ -219,7 +215,7 @@ const CreateBlock = () => {
             .catch((err) => console.log(err));
         } else {
           const mediaData = {
-            imageID: media.url,
+            imageID: media.imageID,
             type: media.type,
             slide: slideInfo,
             orientation: media.orientation,
@@ -266,7 +262,7 @@ const CreateBlock = () => {
           
           const info = await response.json();
           await  dispatch(
-            setBlockImageLink({ id: block?.id, imageLink: info.publicId, imgOrientation: findDimensions(info.height, info.width)})
+            setBlockImageLink({ id: block?.id, imageID: info.publicId, imgOrientation: findDimensions(info.height, info.width)})
           )
         }catch(error){
           console.error(error)
@@ -338,7 +334,7 @@ const CreateBlock = () => {
             <input type="file" name="image" onChange={selectImage} />
           </fieldset>
           {block?.selectedImage && (
-            <Image className="photo" cloudName='engageapp' publicId={block?.imageLink}/>
+            <Image className="photo" cloudName='engageapp' publicId={block?.imageID}/>
           )}
           <div className="createRect">
             <h2>Create Prompt</h2>

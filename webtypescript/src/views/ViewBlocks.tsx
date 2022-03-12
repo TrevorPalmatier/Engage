@@ -14,6 +14,7 @@ const ViewBlocks = () => {
   const navigate = useNavigate();
   const [study, setStudy] = useState<any>({});
   const [blockData, setBlockData] = useState<any>([]);
+  const [users, setUsers] = useState<any>([]);
 
   const dispatch = useAppDispatch();
 
@@ -27,6 +28,7 @@ const ViewBlocks = () => {
         .then((data) => {
           setStudy(data);
           setBlockData(data.blocks);
+          setUsers(data.users);
         })
         .catch((error) => console.log(error));
 
@@ -100,8 +102,11 @@ const ViewBlocks = () => {
           })}
         </div>
         <div className="participantList">
-          <p>person.one@hope.edu</p>
-          <p>person.two@hope.edu</p>
+          {users.map((user) => {
+            return (
+              <p>{user.emailAddress}</p>
+            )
+          })}
         </div>
       </div>
     </Layout>

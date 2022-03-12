@@ -50,7 +50,7 @@ const CreateSlide = ({ id }) => {
               type: file.type,
               orientation: findDimensions(info.height, info.width),
               position: media.length,
-              url: info.publicId,
+              imageID: info.publicId,
             })
           )
         }catch(error){
@@ -120,11 +120,11 @@ const CreateSlide = ({ id }) => {
                 <video
                   className="mediahover"
                   onClick={() => deleteMedia(media1.id, media1.mediaId)}
-                  src={media1.url}
+                  src={media1.imageID}
                 />
               )}
               {media1.type.split("/")[0] === "image" && (
-                <Image className="mediahover" onClick={() => deleteMedia(media1.id, media1.mediaId)} cloudName='engageapp' publicId={media1.url}/>
+                <Image className="mediahover" onClick={() => deleteMedia(media1.id, media1.mediaId)} cloudName='engageapp' publicId={media1.imageID}/>
               )}
               <p className="texthover">Click to Delete</p>
             </div>

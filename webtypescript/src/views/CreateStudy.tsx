@@ -17,7 +17,6 @@ import "../Styling/CreateStudy.scss";
 import { Layout } from "../Components/Layout";
 import {Image} from 'cloudinary-react';
 import  GenerateRandomCode  from 'react-random-code-generator';
-import { Interface } from "readline";
 
 /**
  * Notes for things to maybe implement:
@@ -67,7 +66,7 @@ const CreateStudy = () => {
       return;
     }
     
-    const postData = { title: study.title, imageLink: study.imageLink };
+    const postData = { title: study.title, imageID: study.imageID };
     const requestOptions = {
       method: "put",
       headers: { "Content-Type": "application/json" },
@@ -87,7 +86,7 @@ const CreateStudy = () => {
     //generate an access code
     const accessCode = GenerateRandomCode.TextNumCode(3,3);
     //post the STUDY data
-    const postData = { title: study.title, "imageID": study.imageLink, imgOrientation: study.imgOrientation, code: accessCode };
+    const postData = { title: study.title, "imageID": study.imageID, imgOrientation: study.imgOrientation, code: accessCode };
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -110,7 +109,7 @@ const CreateStudy = () => {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
-        imageID: block?.imageLink,
+        imageID: block?.imageID,
         imgOrientation: block?.imgOrienation,
         study: studyInfo,
       };
@@ -129,7 +128,6 @@ const CreateStudy = () => {
         );
 
         const info = await response.json();
-        console.log(info);
         await postSlides(block?.id, info)
         }catch(error){
           console.log(error);
@@ -174,7 +172,7 @@ const CreateStudy = () => {
     slideMedia.forEach(async (media) => {
       if (media.slideId === slideId) {
         const mediaData = {
-          imageID: media.url,
+          imageID: media.imageID,
           type: media.type,
           orientation: media.orientation,
           position: media.position,
@@ -219,7 +217,7 @@ const CreateStudy = () => {
           });
           
           const info = await response.json();
-          await dispatch(setImage({imageLink: info.publicId, imgOrientation: findDimensions(info.height, info.width)}));
+          await dispatch(setImage({imageID: info.publicId, imgOrientation: findDimensions(info.height, info.width)}));
         }catch(error){
           console.error(error)
         }
@@ -239,7 +237,7 @@ const CreateStudy = () => {
     e.preventDefault();
     dispatch(cancelled());
 
-    const data = {"public_id": study.imageLink};
+    const data = {"public_id": study.imageID};
 
     fetch(
       "https://ancient-ridge-25388.herokuapp.com/deleteimage",
@@ -285,7 +283,7 @@ const CreateStudy = () => {
             </label>
           </fieldset>
           {study.selectedImage && (
-            <Image className="photo" cloudName='engageapp' publicId={study.imageLink}/>
+            <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
           )}
           {!params.edit && (
             <div className="container_blocks">
@@ -294,7 +292,7 @@ const CreateStudy = () => {
                 {blocks.map((block) => {
                   return (
                     <div key={block.id} onClick={() => editBlock(block.id)}>
-                      <Image className="gridPhoto" cloudName='engageapp' publicId={block.imageLink}/>
+                      <Image className="gridPhoto" cloudName='engageapp' publicId={block.imageID}/>
                       <h3>{block.title}</h3>
                     </div>
                   );

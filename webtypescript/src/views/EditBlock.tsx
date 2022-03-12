@@ -72,7 +72,7 @@ const EditBlock = () => {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
-        imageID: block?.imageLink,
+        imageID: block?.imageID,
         imgOrientation: block?.imgOrienation,
       };
       const requestOptionsBlock = {
@@ -95,7 +95,6 @@ const EditBlock = () => {
    * @param blockInfo 
    */
   const deleteSlides = (blockInfo) => {
-    console.log(blockInfo.slides);
     let toDelete = blockInfo.slides;
     slides.forEach((slide) => {
         toDelete = toDelete.filter((slide1) => slide.slideId !== slide1.id)
@@ -206,7 +205,7 @@ const EditBlock = () => {
       if (slideId === media.slideId) {
         if (media.mediaId === -1) {
             const mediaData = {
-                imageID: media.url,
+                imageID: media.imageID,
                 type: media.type,
                 slide: slideInfo,
                 position: media.position,
@@ -229,7 +228,7 @@ const EditBlock = () => {
 
         const mediaDataPut = {
           id: media.mediaId,
-          imageID: media.url,
+          imageID: media.imageID,
           type: media.type,
           orientation: media.orientation,
           position: media.position
@@ -274,7 +273,7 @@ const EditBlock = () => {
           
           const info = await response.json();
           await  dispatch(
-            setBlockImageLink({ id: block?.id, imageLink: info.publicId, imgOrientation: findDimensions(info.height, info.width)})
+            setBlockImageLink({ id: block?.id, imageID: info.imageID, imgOrientation: findDimensions(info.height, info.width)})
           )
         }catch(error){
           console.error(error)
@@ -346,7 +345,7 @@ const EditBlock = () => {
             <input type="file" name="image" onChange={selectImage} />
           </fieldset>
           {block?.selectedImage && (
-            <Image className="photo" cloudName='engageapp' publicId={block?.imageLink}/>
+            <Image className="photo" cloudName='engageapp' publicId={block?.imageID}/>
           )}
           <div className="createRect">
             <h2>Create Prompt</h2>

@@ -8,7 +8,7 @@ export interface MediaState {
   type: string;
   orientation: string;
   position: number;
-  url: string;
+  imageID: string;
 }
 
 interface MediaSlideState extends Array<MediaState> {}
@@ -32,7 +32,7 @@ const mediaSlideSlice = createSlice({
         type: payload.type,
         orientation: payload.orientation,
         position: payload.position,
-        url: payload.url,
+        imageID: payload.imageID,
       });
       return state;
     },
@@ -44,7 +44,7 @@ const mediaSlideSlice = createSlice({
         type: payload.type,
         orientation: payload.orientation,
         position: payload.position,
-        url: payload.url,
+        imageID: payload.imageID,
       });
     },
     deleteOneMedia: (state, { payload }) => {

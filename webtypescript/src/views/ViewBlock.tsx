@@ -68,7 +68,7 @@ const ViewBlock = () => {
         addOldBlock({
           id: block.id,
           title: block.title,
-          imageLink: block.imageID,
+          imageID: block.imageID,
           imgOriengation: block.imgOrientation,
           promptTitle: block.promptTitle,
           promptText: block.promptText,
@@ -108,8 +108,8 @@ const ViewBlock = () => {
           mediaId: media.id,
           type: media.type,
           orientation: media.orientation,
-          position: media.positioni,
-          url: media.imageID,
+          position: media.position,
+          imageID: media.imageID,
         })
       );
     });
@@ -138,11 +138,11 @@ const ViewBlock = () => {
         </button>
       </div>
       <br />
-      <div className="headersForComponents">
-        <h2>Slides</h2>
-        <h2>Entries</h2>
-      </div>
+
       <div className="maincomponent">
+      <div >
+        <h2>Slides</h2>
+      </div>
         <div className="organizeScreens">
           {block.slides?.map((slide) => {
             return (
@@ -152,27 +152,17 @@ const ViewBlock = () => {
             );
           })}
         </div>
-        <div className="entriesGrid">
+        <div>
+          <h2>Entries</h2>
+        </div>
+        <div className="grid-container">
           {entries?.map((entry) => {
-            var img = new Image();
-            img.src = entry.imageID;
-            const height = img.height;
-            const width = img.width;
-            if (height > width) {
               return (
-                <div className="taller" key={entry.id}>
-                  <img src={img.src} alt="tall" />
-                  <h3>{entry.description}</h3>
+                <div  key={entry.id}>
+                  <Image cloudName='engageapp' publicID={entry.imageID} />
+                  <p>{entry.text}</p>
                 </div>
-              );
-            } else {
-              return (
-                <div className="wider" key={entry.id}>
-                  <img src={img.src} alt="wide" />
-                  <h3>{entry.description}</h3>
-                </div>
-              );
-            }
+              )
           })}
         </div>
       </div>

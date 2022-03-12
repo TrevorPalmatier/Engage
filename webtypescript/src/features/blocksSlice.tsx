@@ -4,7 +4,7 @@ import { RootState } from "../store";
 interface BlockState {
   id: number;
   title: string;
-  imageLink: string;
+  imageID: string;
   imgOrienation: string;
   selectedImage: boolean;
   promptTitle: string;
@@ -32,7 +32,7 @@ const blocksSlice = createSlice({
         {
           id: nextId(state),
           title: "",
-          imageLink: "",
+          imageID: "",
           imgOrienation: "",
           selectedImage: false,
           promptTitle: "",
@@ -49,7 +49,7 @@ const blocksSlice = createSlice({
         {
           id: payload.id,
           title: payload.title,
-          imageLink: payload.imageLink,
+          imageID: payload.imageID,
           imgOrienation: payload.imgOrientation,
           selectedImage: true,
           promptTitle: payload.promptTitle,
@@ -71,7 +71,7 @@ const blocksSlice = createSlice({
     setBlockImageLink: (state, { payload }) => {
       state.forEach((block) => {
         if (block.id === payload.id) {
-          block.imageLink = payload.imageLink;
+          block.imageID = payload.imageID;
           block.selectedImage = true;
           block.imgOrienation = payload.imgOrientation;
         }
