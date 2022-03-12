@@ -9,11 +9,11 @@ export class Entry {
     id: number;
 
     // multiple entries can be submitted to a single prompt
-    @ManyToOne(type => Block, block => block.entries)
+    @ManyToOne(type => Block, block => block.entries, {onUpdate: "CASCADE", onDelete: "CASCADE"})
     block: number;
 
     // multiple entries can be submitted by a user
-    @ManyToOne(type => User, user => user.entries)
+    @ManyToOne(type => User, user => user.entries, {onDelete: "CASCADE", onUpdate: "CASCADE"})
     user: number;
 
     @Column()

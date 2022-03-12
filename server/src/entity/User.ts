@@ -14,7 +14,7 @@ export class User {
 	password: string;
 
 	// a user can sumbit multiple entries
-	@OneToMany((type) => Entry, (entry) => entry.user)
+	@OneToMany((type) => Entry, (entry) => entry.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
 	entries: Entry[];
 
 	// multiple users can be part of multiple Studies

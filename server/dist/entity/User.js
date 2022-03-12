@@ -27,7 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    typeorm_1.OneToMany((type) => Entry_1.Entry, (entry) => entry.user),
+    typeorm_1.OneToMany((type) => Entry_1.Entry, (entry) => entry.user, { onDelete: "CASCADE", onUpdate: "CASCADE" }),
     __metadata("design:type", Array)
 ], User.prototype, "entries", void 0);
 __decorate([

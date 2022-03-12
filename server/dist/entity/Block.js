@@ -50,7 +50,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Block.prototype, "slides", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => Entry_1.Entry, entry => entry.block),
+    typeorm_1.OneToMany(type => Entry_1.Entry, entry => entry.block, { cascade: true }),
     __metadata("design:type", Array)
 ], Block.prototype, "entries", void 0);
 Block = __decorate([

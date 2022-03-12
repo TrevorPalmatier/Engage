@@ -37,6 +37,6 @@ export class Block {
 
     // creates a one-to-many relationship with "Entry"
     // multiple entries can be submitted for each Block
-    @OneToMany(type => Entry, entry => entry.block)
+    @OneToMany(type => Entry, entry => entry.block, {cascade: true})
     entries: Entry[];
 }
