@@ -29,7 +29,7 @@ export default function home({ route, navigation }) {
 
 	const renderItem = ({ item, index }) => {
 		const title = item.title;
-		const image = item.mediaURL;
+		const image = item.imageID;
 		return <Block id={item.id} title={title as String} image={image as String} navigation={navigation} />;
 	};
 

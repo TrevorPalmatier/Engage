@@ -18,13 +18,12 @@ export default function Caption({ route, navigation }) {
 	const imgHeight = Math.min(route.params.photo.height, maxWidth * aspectRatio);
 
 	const uploadImage = (photo) => {
-		const data = new FormData();
-		data.append("file", photo);
-		data.append("upload_preset", "engageapp");
+
 		// data.append("cloud_name", "engageapp");
-		fetch("https://api.cloudinary.com/v1_1/engageapp/upload", {
+		fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage", {
 			method: "POST",
-			body: data,
+			headers: { 'Content-Type': 'application/json'},
+			body: JSON.stringify({file: photo}),
 		})
 			.then((res) => res.json())
 			.then((data) => {
@@ -33,7 +32,7 @@ export default function Caption({ route, navigation }) {
 					userId: user.id,
 					blockId: route.params.blockId,
 					text: description,
-					imageLink: data.secure_url,
+					imageID: data.publicId,
 				} as EntryRequest;
 				submitEntry(payload)
 					.then((res) => {

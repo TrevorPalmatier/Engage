@@ -22,12 +22,13 @@ export interface SignupRequest {
 	repassword: string;
 }
 export interface EntryRequest {
-	imageLink: string;
+	imageID: string;
 	text: string;
 	userId: number;
 	blockId: number;
 }
 export interface EntryResponse {}
+
 export interface StudiesRequest {
 	id: number;
 }
