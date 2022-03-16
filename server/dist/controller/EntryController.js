@@ -40,7 +40,7 @@ class EntryController {
     remove(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const entryToRemove = yield this.entryRepository.findOne(request.params.id);
-            yield this.entryRepository.remove(entryToRemove);
+            return yield this.entryRepository.remove(entryToRemove);
         });
     }
 }

@@ -29,7 +29,7 @@ export class Block {
     @ManyToOne(type => Study, study => study.blocks, {
         onUpdate: 'CASCADE', onDelete: 'CASCADE', eager: true
     })
-    study: Study;
+    study: number;
 
     // multiple slides can be within a block
     @OneToMany(type=>Slide, slide => slide.block, {cascade: true})

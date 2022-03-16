@@ -38,7 +38,7 @@ class StudyController {
     remove(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const userToRemove = yield this.studyRepository.findOne(request.params.id);
-            yield this.studyRepository.remove(userToRemove);
+            return yield this.studyRepository.remove(userToRemove);
         });
     }
     update(request, response, next) {

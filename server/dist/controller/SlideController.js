@@ -44,7 +44,7 @@ class SlideController {
     remove(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const slideToRemove = yield this.slideRepository.findOne(request.params.id);
-            yield this.slideRepository.remove(slideToRemove);
+            return yield this.slideRepository.remove(slideToRemove);
         });
     }
     update(request, response, next) {

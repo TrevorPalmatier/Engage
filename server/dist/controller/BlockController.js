@@ -47,7 +47,7 @@ class BlockController {
     remove(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const blockToRemove = yield this.blockRepository.findOne(request.params.id);
-            yield this.blockRepository.remove(blockToRemove);
+            return yield this.blockRepository.remove(blockToRemove);
         });
     }
     update(request, response, next) {

@@ -32,7 +32,7 @@ class SlideMediaController {
     remove(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const userToRemove = yield this.slideMediaRepository.findOne(request.params.id);
-            yield this.slideMediaRepository.remove(userToRemove);
+            return yield this.slideMediaRepository.remove(userToRemove);
         });
     }
     update(request, response, next) {
