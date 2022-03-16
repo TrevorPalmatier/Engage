@@ -20,7 +20,7 @@ export class SlideMediaController {
 
     async remove(request: Request, response: Response, next: NextFunction) {
         const userToRemove = await this.slideMediaRepository.findOne(request.params.id);
-        await this.slideMediaRepository.remove(userToRemove);
+        return await this.slideMediaRepository.remove(userToRemove);
     }
 
     async update(request: Request, response: Response, next: NextFunction) {

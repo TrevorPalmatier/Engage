@@ -28,7 +28,7 @@ export class SlideController {
 
     async remove(request: Request, response: Response, next: NextFunction) {
         const slideToRemove = await this.slideRepository.findOne(request.params.id);
-        await this.slideRepository.remove(slideToRemove);
+        return await this.slideRepository.remove(slideToRemove);
     }
 
     async update(request: Request, response: Response, next: NextFunction) {

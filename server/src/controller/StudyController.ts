@@ -24,7 +24,7 @@ export class StudyController {
 
 	async remove(request: Request, response: Response, next: NextFunction) {
 		const userToRemove = await this.studyRepository.findOne(request.params.id);
-		await this.studyRepository.remove(userToRemove);
+		return await this.studyRepository.remove(userToRemove);
 	}
 
 	async update(request: Request, response: Response, next: NextFunction) {

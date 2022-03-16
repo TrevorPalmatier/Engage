@@ -27,6 +27,6 @@ export class EntryController {
 
 	async remove(request: Request, response: Response, next: NextFunction) {
 		const entryToRemove = await this.entryRepository.findOne(request.params.id);
-		await this.entryRepository.remove(entryToRemove);
+		return await this.entryRepository.remove(entryToRemove);
 	}
 }

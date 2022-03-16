@@ -32,7 +32,7 @@ export class BlockController {
 
 	async remove(request: Request, response: Response, next: NextFunction) {
 		const blockToRemove = await this.blockRepository.findOne(request.params.id);
-		await this.blockRepository.remove(blockToRemove);
+		return await this.blockRepository.remove(blockToRemove);
 	}
 	async update(request: Request, response: Response, next: NextFunction) {
     	await  this.blockRepository.update(request.params.id, request.body);
