@@ -52,17 +52,22 @@ const ViewBlocks = () => {
     dispatch(setImage({ imageLink: study.imageLink }));
     navigate(`../createstudy/${edit}/${study.id}`);
   };
-  const deleteStudy = (e) => {
+  const deleteStudy = async (e) => {
     e.preventDefault();
 
-    fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${study.id}`, {
-        method: 'delete',
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .catch((error) => console.error(error));
+    try{
+      const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${study.id}`, {
+          method: 'delete',
+          headers: { 'Content-Type': 'application/json' }})
 
-    navigate(`/viewstudies`);
+        navigate(`/viewstudies`);
+        return; 
+      }catch(error){
+        console.error(error);
+      }
+      console.log("did not delete study");
   }
+  
   return (
     <Layout>
       <div className="viewHeader">
