@@ -64,7 +64,7 @@ const CreateStudy = () => {
     event.preventDefault();
 
     if (!params.edit){
-      postStudy();
+      await postStudy(); 
       navigate("../viewstudies");
       dispatch(cancelled());
       dispatch(cancelSlides());
@@ -83,14 +83,14 @@ const CreateStudy = () => {
     fetch(
       `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`,
       requestOptions
-    ).then((response) => response.json());
+    ).then((response) => response.json() );
 
     dispatch(cancelled());
     dispatch(cancelSlides());
     dispatch(cancelBlocks());
     dispatch(cancelMedia());
     
-      navigate(`../viewblocks/${params.studyid}`);
+    navigate(`../viewblocks/${params.studyid}`);
     
   };
 

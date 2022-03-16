@@ -9,6 +9,7 @@ const ViewStudies = () => {
   const [data, setData] = useState<any>([]);
 
   useEffect( () => {
+    console.log('Component is mounting');
     const abortController = new AbortController();
 
     fetch("https://ancient-ridge-25388.herokuapp.com/studies", {
@@ -19,12 +20,14 @@ const ViewStudies = () => {
       })
       .then((data) => {
         setData(data);
+        console.log(data);
       })
       .catch((error) => {
         console.log(error);
       });
 
     return () => {
+      console.log("unmounting");
       abortController.abort(); // cancel pending fetch request on component unmount
     };
   }, []);
