@@ -65,7 +65,6 @@ const ViewBlocks = () => {
       }catch(error){
         console.error(error);
       }
-      console.log("did not delete study");
   }
   
   return (

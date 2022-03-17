@@ -80,10 +80,10 @@ const CreateStudy = () => {
       body: JSON.stringify(postData),
     };
 
-    fetch(
+    const response = await fetch(
       `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`,
       requestOptions
-    ).then((response) => response.json() );
+    )
 
     dispatch(cancelled());
     dispatch(cancelSlides());
@@ -140,7 +140,7 @@ const CreateStudy = () => {
         );
 
         const info = await response.json();
-        await postSlides(block?.id, info)
+        await postSlides(block?.id, info);
         }catch(error){
           console.log(error);
         }
@@ -253,21 +253,25 @@ const CreateStudy = () => {
     dispatch(cancelMedia());
 
     const data = {"public_id": study.imageID};
+    
+    try{
+      await fetch(
+        "https://ancient-ridge-25388.herokuapp.com/deleteimage",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        }
+      )
+    }catch(error){
+      console.error(error);
+    }
 
-    fetch(
-      "https://ancient-ridge-25388.herokuapp.com/deleteimage",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      }
-    )
-      .then(async (response) => await response.json())
 
     if (!params.edit) {
-      await navigate("/viewstudies");
+      navigate("/viewstudies");
     } else {
-      await navigate(`../viewblocks/${params.studyid}`);
+      navigate(`../viewblocks/${params.studyid}`);
     }
   };
 

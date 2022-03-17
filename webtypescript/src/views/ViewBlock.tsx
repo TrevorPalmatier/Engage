@@ -21,9 +21,10 @@ const ViewBlock = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(cancelMedia());
-    dispatch(cancelBlocks());
-    dispatch(cancelSlides());
+    console.log('Component is mounting');
+    dispatch(cancelBlocks);
+    dispatch(cancelSlides);
+    dispatch(cancelMedia);
     const abortController = new AbortController();
 
       fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${params.id}`, {
@@ -48,6 +49,7 @@ const ViewBlock = () => {
         .catch((error) => console.log(error));
 
     return () => {
+      console.log("unmounting");
       abortController.abort(); // cancel pending fetch request on component unmount
     };
 

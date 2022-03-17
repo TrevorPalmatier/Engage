@@ -54,18 +54,18 @@ const EditBlock = () => {
   /**
    * Method is called when the user pushes the "Create" button
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
       
-    postBlocks(e);
+    await postBlocks();
     dispatch(cancelBlocks);
     dispatch(cancelSlides);
     dispatch(cancelMedia);
     navigate(`/viewblock/${params.blockid}`);
+    return;
   };
 
-  const postBlocks = (e) => {
-    e.preventDefault();
+  const postBlocks = async () => {
 
       const blockDataPut = {
         id: params.blockid,
@@ -80,46 +80,53 @@ const EditBlock = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(blockDataPut),
       };
+      
+      try{
+        const response = await fetch(
+          `https://ancient-ridge-25388.herokuapp.com/blocks/${params.blockid}`,
+          requestOptionsBlock
+        )
+        const info = await response.json();
+        await postSlides(blockDataPut); 
+        await deleteSlides(info);
 
-      fetch(
-        `https://ancient-ridge-25388.herokuapp.com/blocks/${params.blockid}`,
-        requestOptionsBlock
-      )
-        .then((response) => response.json())
-        .then((info) => {postSlides(blockDataPut); deleteSlides(info);})
-        .catch((err) => console.log(err));
+        }catch(error){
+          console.log(error);
+        }       
   };
 
   /**
    * this method will delete in slide media or slides that were deleted during the edit
    * @param blockInfo 
    */
-  const deleteSlides = (blockInfo) => {
+  const deleteSlides = async (blockInfo) => {
     let toDelete = blockInfo.slides;
     slides.forEach((slide) => {
         toDelete = toDelete.filter((slide1) => slide.slideId !== slide1.id)
     })
-    console.log(toDelete);
 
     //delete slide media
-    toDelete.forEach((slide) => {
-        fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
-        .then((response) => response.json())
-        .then((info) => info.medias.forEach((media1) => {
-            deleteMedia(media1.id);
-        }));
+    await toDelete.forEach(async (slide) => {
+      try{
+        const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
+        const info = await response.json();
+        await info.medias.forEach(async (media1) => {
+            await deleteMedia(media1.id);
+        });
 
         const requestOptions = {
-            method: "delete",
-            headers: { "Content-Type": "application/json" }
-          };
-        
-          fetch(
-            `https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`,
-            requestOptions
-          )
-            .then((response) => response.json())
-            .catch((err) => console.log(err));
+          method: "delete",
+          headers: { "Content-Type": "application/json" }
+        };
+      
+        const response1 = await fetch(
+          `https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`,
+          requestOptions
+        )
+        const data = response1.json();
+      }catch(error){
+        console.error(error);
+      }
     })
   }
 
@@ -128,27 +135,30 @@ const EditBlock = () => {
    * deletes individual media by id
    * @param id 
    */
-  const deleteMedia = (id) => {
+  const deleteMedia = async (id) => {
     const requestOptions = {
         method: "delete",
         headers: { "Content-Type": "application/json" }
       };
 
-    fetch(
-    `https://ancient-ridge-25388.herokuapp.com/slidemedia/${id}`,
-    requestOptions
+    try{
+      const response = await fetch(
+      `https://ancient-ridge-25388.herokuapp.com/slidemedia/${id}`,
+      requestOptions
     )
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
+     const data = response.json();
+    } catch(err){
+      console.log(err);
+    }
 
   } 
   
   /**
    * This method is able post the slides for the block to the api
    */
-  const postSlides = (blockInfo) => {
+  const postSlides = async (blockInfo) => {
     //loops through all the slides and does a post request for each one
-    slides.forEach((slide) => {
+    await slides.forEach(async (slide) => {
         if (!slide.new) {
           const slideDataPut = {
             id: slide.slideId,
@@ -164,17 +174,18 @@ const EditBlock = () => {
           };
 
           const slide_id = slide.slideId;
-          fetch(
-            `https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`,
-            requestOptionsSlide1
-          )
-            .then((response) => response.json())
-            .then((info) => {
-              deleteMediaForSlide(info.medias);
-              postSlideMedia(slide.id, slideDataPut);
 
-            })
-            .catch((err) => console.log(err));
+          try{
+            const response = await fetch(
+              `https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`,
+              requestOptionsSlide1
+            )
+            const info = await response.json();
+            await deleteMediaForSlide(info.medias);
+            await postSlideMedia(slide.id, slideDataPut);
+          }catch(err){
+             console.log(err);
+          }
         return;
         } 
           const slideData = {
@@ -188,38 +199,43 @@ const EditBlock = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(slideData),
           };
-
-          fetch(
-            `https://ancient-ridge-25388.herokuapp.com/slides`,
-            requestOptionsSlide
-          )
-            .then((response) => response.json())
-            .then((info) => postSlideMedia(slide.id, info))
-            .catch((err) => console.log(err));
+          
+          try{
+            const response = await fetch(
+              `https://ancient-ridge-25388.herokuapp.com/slides`,
+              requestOptionsSlide
+            )
+            const info = await response.json();
+            await postSlideMedia(slide.id, info);
+          }catch(err) {
+            console.log(err);
+          }
       }
     );
   };
 
-  const deleteMediaForSlide = (oldSlideMedia) => {
+  const deleteMediaForSlide = async (oldSlideMedia) => {
     let toDelete = oldSlideMedia;
 
     slideMedia?.forEach((media) => {
       toDelete = toDelete.filter((media1) => media.mediaId !== media1.id);
     });
 
-    toDelete.forEach((media) => {
-        fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.id}`,{
+    await toDelete.forEach(async (media) => {
+      try{
+       const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.id}`,{
               method: "delete",
               headers: { 'Content-Type': 'application/json' },
             })
-            .then(response => response.json())
-            .catch(error => console.log(error));
+            const data = response.json();
+      }catch(error){
+        console.error(error);
+      } 
     })
-
   }
 
-  const postSlideMedia = (slideId, slideInfo) => {
-    slideMedia?.forEach((media) => {
+  const postSlideMedia = async (slideId, slideInfo) => {
+    slideMedia?.forEach(async (media) => {
       if (slideId === media.slideId) {
         if (media.mediaId === -1) {
             const mediaData = {
@@ -234,13 +250,15 @@ const EditBlock = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(mediaData),
               };
-    
-              fetch(
-                "https://ancient-ridge-25388.herokuapp.com/slidemedia",
-                requestOptionsMedia
-              )
-                .then((response) => response.json())
-                .catch((err) => console.error(err));
+              try{
+               const response = await fetch(
+                  "https://ancient-ridge-25388.herokuapp.com/slidemedia",
+                  requestOptionsMedia
+                )
+                const data = response.json();
+              }catch(err) {
+                console.error(err)
+              }
             return;
         } 
 
@@ -256,13 +274,16 @@ const EditBlock = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(mediaDataPut),
         };
-
-        fetch(
-          `https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.mediaId}`,
-          requestOptionsMedia1
-        )
-          .then((response) => response.json())
-          .catch((err) => console.error(err));
+        
+        try{
+          const response = await fetch(
+            `https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.mediaId}`,
+            requestOptionsMedia1
+          )
+          const data = response.json();
+        }catch(err){
+          console.error(err);
+        }
       }
     });
   };
