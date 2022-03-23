@@ -50,7 +50,6 @@ const CreateSlide = ({ id }) => {
               addMedia({
                 slideId: slide?.id,
                 type: file.type,
-                orientation: findDimensions(info.height, info.width),
                 imageID: info.publicId,
               })
             )
@@ -67,13 +66,16 @@ const CreateSlide = ({ id }) => {
     
   };
 
-  const findDimensions = (height, width) => {
-    if (height > width) {
-      return "vertical";
-    } else {
-      return "landscape";
-    }
-  };
+  const getId = (url) => {
+    const regExp = "/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/";
+    const match = url.match(regExp);
+
+    return (match && match[2].length === 11)
+      ? match[2]
+      : null;
+}
+    
+const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
 
   //renders the create study element
   //still needs to handle multiple image upload
@@ -101,12 +103,18 @@ const CreateSlide = ({ id }) => {
           }}
         />
       </fieldset>
+      <label>Upload 1-2 images/videos to display on the slide: </label>
       <fieldset>
-        <label>Upload 1-2 images to display on the slide: </label>
         <input type="file" onChange={(event) => selectMedia(event)} multiple />
       </fieldset>
+      <fieldset>
+        <label>Upload Youtube Videos by inserting Embed Code here: </label>
+        <input type="text" name="video"/>
+        <p>Example: </p> 
+        <img src="youtubeex.jpg"/>
+      </fieldset>
       <div className="slideMedia">
-        {media?.map((media1) => {
+        {media?.map((media1, index) => {
           return (
             <div key={media1.id}>
               <p className="texthover">Click to Delete</p>
@@ -125,12 +133,7 @@ const CreateSlide = ({ id }) => {
                 media.length === 2 &&
                 <div className="submitButtons">
                   <label>
-                    <input name='position' type='radio' onClick={() => dispatch(setMediaPosition({id: media1.id, position: 0}))}/>
-                    <span>Position 1</span>
-                  </label>
-                  <label>
-                    <input name="position"  type='radio' onClick={() => dispatch(setMediaPosition({id: media1.id, position: 1}))}/>
-                    <span>Position 2</span>
+                    <span>Position {index+1}</span>
                   </label>
                 </div>
               }

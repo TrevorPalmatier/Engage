@@ -26,6 +26,7 @@ const ViewStudies = () => {
         console.log(error);
       });
 
+
     return () => {
       console.log("unmounting");
       abortController.abort(); // cancel pending fetch request on component unmount
@@ -52,33 +53,18 @@ const ViewStudies = () => {
           Create Study
         </button>
       </div>
-      <div className="studiesGrid">
+      <div className="square-container">
         {data.map((study) => {
-          var img = new Image();
-          img.src = study.imageLink;
-          if (img.height > img.width) {
             return (
               <div
-                className="taller"
+                className="square"
                 key={study.id}
                 onClick={() => gotToBlocks(study.id)}
               >
-                <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
-                <h3>{study.title}</h3>
+                <Image cloudName='engageapp' publicId={study.imageID}/>
+                <h1>{study.title}</h1>
               </div>
             );
-          } else {
-            return (
-              <div
-                className="wider"
-                key={study.id}
-                onClick={() => gotToBlocks(study.id)}
-              >
-                <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
-                <h3>{study.title}</h3>
-              </div>
-            );
-          }
         })}
       </div>
     </Layout>

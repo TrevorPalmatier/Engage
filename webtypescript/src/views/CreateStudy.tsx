@@ -63,6 +63,8 @@ const CreateStudy = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const date = Date.now();
+
     if (!params.edit){
       await postStudy(); 
       navigate("../viewstudies");
@@ -98,7 +100,7 @@ const CreateStudy = () => {
     //generate an access code
     const accessCode = GenerateRandomCode.TextNumCode(3,3);
     //post the STUDY data
-    const postData = { title: study.title, "imageID": study.imageID, imgOrientation: study.imgOrientation, code: accessCode };
+    const postData = { title: study.title, "imageID": study.imageID, code: accessCode };
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -122,7 +124,6 @@ const CreateStudy = () => {
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
         imageID: block?.imageID,
-        imgOrientation: block?.imgOrienation,
         study: studyInfo,
       };
 
@@ -186,7 +187,6 @@ const CreateStudy = () => {
         const mediaData = {
           imageID: media.imageID,
           type: media.type,
-          orientation: media.orientation,
           position: media.position,
           slide: slideInfo,
         };
@@ -229,18 +229,10 @@ const CreateStudy = () => {
           });
           
           const info = await response.json();
-          await dispatch(setImage({imageID: info.publicId, imgOrientation: findDimensions(info.height, info.width)}));
+          await dispatch(setImage({imageID: info.publicId}));
         }catch(error){
           console.error(error)
         }
-    }
-  };
-
-  const findDimensions = (height, width) => {
-    if (height > width) {
-      return "vertical";
-    } else {
-      return "landscape";
     }
   };
 
@@ -304,24 +296,24 @@ const CreateStudy = () => {
           {study.selectedImage && (
             <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
           )}
+          <div>
+            <h2>Study's Blocks</h2>
+            <button onClick={goToCreateBlock} className="buttonText">
+              Add Block
+            </button>
+          </div>
           {!params.edit && (
             <div className="container_blocks">
-              <h2>Study's Blocks</h2>
-              <div className="blockGrid">
+              
+              <div className="create-blocks-container">
                 {blocks.map((block) => {
                   return (
-                    <div key={block.id} onClick={() => editBlock(block.id)}>
-                      <Image className="gridPhoto" cloudName='engageapp' publicId={block.imageID}/>
-                      <h3>{block.title}</h3>
+                    <div className="square" key={block.id} onClick={() => editBlock(block.id)}>
+                      <Image cloudName='engageapp' publicId={block.imageID}/>
+                      <h2>{block.title}</h2>
                     </div>
                   );
                 })}
-              </div>
-              <div>
-                <button onClick={goToCreateBlock} className="buttonText">
-                  {" "}
-                  Add Block{" "}
-                </button>
               </div>
             </div>
           )}

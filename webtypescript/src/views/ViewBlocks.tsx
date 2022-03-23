@@ -71,7 +71,7 @@ const ViewBlocks = () => {
     <Layout>
       <div className="viewHeader">
         <h1>Study: {study.title}</h1>
-        <Image className="photo" cloudName='engageapp' publicId={study.imageID}/>
+        <Image className="blockImage" cloudName='engageapp' publicId={study.imageID}/>
       </div>
       <div className="submitButtons">
         <button className="buttonText" onClick={editStudy}>
@@ -99,31 +99,18 @@ const ViewBlocks = () => {
         </div> 
       </div>
       <div className="blockparticipantGrid">
-        <div className="blocksGrid">
+        <div className="blocks-container">
           {blockData?.map((block) => {
-            if (block.imgOrienation === "veritcal") {
               return (
                 <div
-                  className="taller"
+                  className="square"
                   key={block.id}
                   onClick={() => goToBlock(block.id)}
                 >
                   <Image cloudName='engageapp' publicId={block.imageID}/>
-                  <h3>{block.title}</h3>
+                  <h2>{block.title}</h2>
                 </div>
               );
-            } else {
-              return (
-                <div
-                  className="wider"
-                  key={block.id}
-                  onClick={() => goToBlock(block.id)}
-                >
-                  <Image cloudName='engageapp' publicId={block.imageID}/>
-                  <h3>{block.title}</h3>
-                </div>
-              );
-            }
           })}
         </div>
         <div className="participantList">

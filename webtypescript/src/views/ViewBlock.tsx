@@ -35,8 +35,11 @@ const ViewBlock = () => {
         })
         .then((data) => {
           setData(data);
+          console.log(data);
         })
         .catch((error) => console.log(error));
+
+
 
       fetch(
         `https://ancient-ridge-25388.herokuapp.com/blocks/entries/${params.id}`,
@@ -70,7 +73,6 @@ const ViewBlock = () => {
           id: block.id,
           title: block.title,
           imageID: block.imageID,
-          imgOriengation: block.imgOrientation,
           promptTitle: block.promptTitle,
           promptText: block.promptText,
         })
@@ -108,7 +110,6 @@ const ViewBlock = () => {
           slideId: slideInfo.id,
           mediaId: media.id,
           type: media.type,
-          orientation: media.orientation,
           position: media.position,
           imageID: media.imageID,
         })

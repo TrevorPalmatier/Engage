@@ -27,7 +27,7 @@ import {
   selectMedia,
 } from "../features/mediaSlideSlice";
 import { Layout } from "../Components/Layout";
-import { useEffect } from "react";
+
 
 /**
  * This will only work to edit a specific block
@@ -54,15 +54,19 @@ const EditBlock = () => {
   /**
    * Method is called when the user pushes the "Create" button
    */
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-      
-    await postBlocks();
-    dispatch(cancelBlocks);
-    dispatch(cancelSlides);
-    dispatch(cancelMedia);
+    
+    try{
+      await postBlocks();
+    }catch(error){
+      console.error(error);
+    }
+    console.log("posted");
+    dispatch(cancelBlocks());
+    dispatch(cancelSlides());
+    dispatch(cancelMedia());
     navigate(`/viewblock/${params.blockid}`);
-    return;
   };
 
   const postBlocks = async () => {
@@ -72,8 +76,7 @@ const EditBlock = () => {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
-        imageID: block?.imageID,
-        imgOrientation: block?.imgOrienation,
+        imageID: block?.imageID
       };
       const requestOptionsBlock = {
         method: "put",
@@ -86,13 +89,15 @@ const EditBlock = () => {
           `https://ancient-ridge-25388.herokuapp.com/blocks/${params.blockid}`,
           requestOptionsBlock
         )
+        
         const info = await response.json();
-        await postSlides(blockDataPut); 
+        await postSlides(info); 
         await deleteSlides(info);
 
         }catch(error){
           console.log(error);
-        }       
+        } 
+        console.log("start");      
   };
 
   /**
@@ -119,11 +124,10 @@ const EditBlock = () => {
           headers: { "Content-Type": "application/json" }
         };
       
-        const response1 = await fetch(
+         await fetch(
           `https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`,
           requestOptions
         )
-        const data = response1.json();
       }catch(error){
         console.error(error);
       }
@@ -142,11 +146,10 @@ const EditBlock = () => {
       };
 
     try{
-      const response = await fetch(
+      await fetch(
       `https://ancient-ridge-25388.herokuapp.com/slidemedia/${id}`,
       requestOptions
     )
-     const data = response.json();
     } catch(err){
       console.log(err);
     }
@@ -183,9 +186,11 @@ const EditBlock = () => {
             const info = await response.json();
             await deleteMediaForSlide(info.medias);
             await postSlideMedia(slide.id, slideDataPut);
+            console.log("start1"); 
           }catch(err){
              console.log(err);
           }
+          
         return;
         } 
           const slideData = {
@@ -207,9 +212,11 @@ const EditBlock = () => {
             )
             const info = await response.json();
             await postSlideMedia(slide.id, info);
+            console.log("start2"); 
           }catch(err) {
             console.log(err);
           }
+          
       }
     );
   };
@@ -223,11 +230,10 @@ const EditBlock = () => {
 
     await toDelete.forEach(async (media) => {
       try{
-       const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.id}`,{
+       await fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.id}`,{
               method: "delete",
               headers: { 'Content-Type': 'application/json' },
             })
-            const data = response.json();
       }catch(error){
         console.error(error);
       } 
@@ -235,15 +241,14 @@ const EditBlock = () => {
   }
 
   const postSlideMedia = async (slideId, slideInfo) => {
-    slideMedia?.forEach(async (media) => {
+    await slideMedia?.forEach(async (media) => {
       if (slideId === media.slideId) {
         if (media.mediaId === -1) {
             const mediaData = {
                 imageID: media.imageID,
                 type: media.type,
                 slide: slideInfo,
-                position: media.position,
-                orientation: media.orientation,
+                position: media.position
               };
               const requestOptionsMedia = {
                 method: "post",
@@ -251,14 +256,15 @@ const EditBlock = () => {
                 body: JSON.stringify(mediaData),
               };
               try{
-               const response = await fetch(
+               await fetch(
                   "https://ancient-ridge-25388.herokuapp.com/slidemedia",
                   requestOptionsMedia
                 )
-                const data = response.json();
+                console.log("start5"); 
               }catch(err) {
                 console.error(err)
               }
+              
             return;
         } 
 
@@ -266,7 +272,6 @@ const EditBlock = () => {
           id: media.mediaId,
           imageID: media.imageID,
           type: media.type,
-          orientation: media.orientation,
           position: media.position
         };
         const requestOptionsMedia1 = {
@@ -276,14 +281,15 @@ const EditBlock = () => {
         };
         
         try{
-          const response = await fetch(
+          await fetch(
             `https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.mediaId}`,
             requestOptionsMedia1
           )
-          const data = response.json();
+          console.log("start4"); 
         }catch(err){
           console.error(err);
         }
+        
       }
     });
   };
@@ -312,7 +318,7 @@ const EditBlock = () => {
           
           const info = await response.json();
           await  dispatch(
-            setBlockImageLink({ id: block?.id, imageID: info.imageID, imgOrientation: findDimensions(info.height, info.width)})
+            setBlockImageLink({ id: block?.id, imageID: info.imageID})
           )
         }catch(error){
           console.error(error)
@@ -320,13 +326,6 @@ const EditBlock = () => {
     }
   };
 
-  const findDimensions = (height, width) => {
-    if (height > width) {
-      return "vertical";
-    } else {
-      return "landscape";
-    }
-  };
   //creates new slide element and adds it through the reducer
   const handleNewSlide = () => {
     dispatch(addSlide({ blockId: block?.id }));

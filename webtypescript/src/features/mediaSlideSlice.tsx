@@ -6,7 +6,6 @@ export interface MediaState {
   mediaId: number;
   slideId: number;
   type: string;
-  orientation: string;
   position: number;
   imageID: string;
 }
@@ -30,7 +29,6 @@ const mediaSlideSlice = createSlice({
         mediaId: -1,
         slideId: payload.slideId,
         type: payload.type,
-        orientation: payload.orientation,
         position: 0,
         imageID: payload.imageID,
       });
@@ -42,7 +40,6 @@ const mediaSlideSlice = createSlice({
         mediaId: payload.mediaId,
         slideId: payload.slideId,
         type: payload.type,
-        orientation: payload.orientation,
         position: payload.position,
         imageID: payload.imageID,
       });

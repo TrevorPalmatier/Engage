@@ -12,7 +12,7 @@ import {
   cancelled,
   enableDisableBlockEdit,
   selectBlock,
-  cancelBlocks,
+  cancelBlocks
 } from "../features/blocksSlice";
 import {
   addSlide,
@@ -85,40 +85,12 @@ const CreateBlock = () => {
   };
 
   const postBlocks = async (studyInfo) => {
-    if (params.blockid != null) {
-      const blockDataPut = {
-        id: params.blockid,
-        title: block?.title,
-        promptTitle: block?.promptTitle,
-        promptText: block?.promptText,
-        imageID: block?.imageID,
-      };
-      const requestOptionsBlock = {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(blockDataPut),
-      };
-      
-      try{
-      const response = await fetch(
-        `https://ancient-ridge-25388.herokuapp.com/blocks/${params.blockid}`,
-        requestOptionsBlock
-      )
-      const info = await response.json();
-      await postSlides(block?.id, blockDataPut);
-      }catch(err){
-        console.log(err);
-      }
-      return;
-    }
-
       //block data to be posted
       const blockData = {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
         imageID: block?.imageID,
-        imgOrientation: block?.imgOrienation,
         study: studyInfo,
       };
 
@@ -209,7 +181,6 @@ const CreateBlock = () => {
             id: media.mediaId,
             imageID: media.imageID,
             type: media.type,
-            orientation: media.orientation,
             position: media.position
           };
           const requestOptionsMedia1 = {
@@ -232,7 +203,6 @@ const CreateBlock = () => {
             imageID: media.imageID,
             type: media.type,
             slide: slideInfo,
-            orientation: media.orientation,
             position: media.position,
           };
           const requestOptionsMedia = {
@@ -277,7 +247,7 @@ const CreateBlock = () => {
           
           const info = await response.json();
           await  dispatch(
-            setBlockImageLink({ id: block?.id, imageID: info.publicId, imgOrientation: findDimensions(info.height, info.width)})
+            setBlockImageLink({ id: block?.id, imageID: info.publicId})
           )
         }catch(error){
           console.error(error)
@@ -285,13 +255,6 @@ const CreateBlock = () => {
     }
   };
 
-  const findDimensions = (height, width) => {
-    if (height > width) {
-      return "vertical";
-    } else {
-      return "landscape";
-    }
-  };
   //creates new slide element and adds it through the reducer
   const handleNewSlide = () => {
     dispatch(addSlide({ blockId: block?.id }));
