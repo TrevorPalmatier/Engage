@@ -11,12 +11,11 @@ export class Study {
     @Column({unique: true})
     code: string;
 
+    @Column()
+    timestamp: number;
+
     @Column({nullable: true})
     imageID: string;
-
-
-    @Column()
-    imgOrientation: string;
 
     @Column()
     title: string;

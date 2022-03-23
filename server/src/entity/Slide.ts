@@ -9,6 +9,9 @@ export class Slide {
     id: number;
 
     @Column()
+    timestamp: number;
+
+    @Column()
     title: string;
 
     @Column()

@@ -20,6 +20,10 @@ __decorate([
 ], Slide.prototype, "id", void 0);
 __decorate([
     typeorm_1.Column(),
+    __metadata("design:type", Number)
+], Slide.prototype, "timestamp", void 0);
+__decorate([
+    typeorm_1.Column(),
     __metadata("design:type", String)
 ], Slide.prototype, "title", void 0);
 __decorate([

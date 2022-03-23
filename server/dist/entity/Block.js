@@ -21,16 +21,16 @@ __decorate([
 ], Block.prototype, "id", void 0);
 __decorate([
     typeorm_1.Column(),
+    __metadata("design:type", Number)
+], Block.prototype, "timestamp", void 0);
+__decorate([
+    typeorm_1.Column(),
     __metadata("design:type", String)
 ], Block.prototype, "title", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], Block.prototype, "imageID", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], Block.prototype, "imgOrientation", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

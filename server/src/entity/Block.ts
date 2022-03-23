@@ -11,13 +11,13 @@ export class Block {
     id: number;
 
     @Column()
+    timestamp: number;
+
+    @Column()
     title: string;
 
     @Column()
     imageID: string;
-
-    @Column()
-    imgOrientation: string;
 
     @Column()
     promptTitle: string;

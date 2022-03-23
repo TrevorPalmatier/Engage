@@ -13,9 +13,6 @@ export class SlideMedia {
     @Column()
     type: string;
 
-    @Column({default: "landscape"} )
-    orientation: string;
-
     @Column({nullable: false})
     position: number;
 
