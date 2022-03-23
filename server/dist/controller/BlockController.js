@@ -34,7 +34,8 @@ class BlockController {
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const slides = this.slideRepository
-                .createQueryBuilder("slide")
+                .createQueryBuilder("block")
+                .leftJoinAndSelect("block.slides", "slide")
                 .orderBy('timestamp', "ASC")
                 .getMany();
             const blockResult = yield this.blockRepository.findOne(request.params.id);

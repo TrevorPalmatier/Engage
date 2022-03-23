@@ -22,7 +22,8 @@ export class BlockController {
 
 	async one(request: Request, response: Response, next: NextFunction) {
 		const slides = this.slideRepository
-			.createQueryBuilder("slide")
+			.createQueryBuilder("block")
+			.leftJoinAndSelect("block.slides", "slide")
 			.orderBy('timestamp', "ASC")
 			.getMany();
 		const blockResult = await this.blockRepository.findOne(request.params.id);
