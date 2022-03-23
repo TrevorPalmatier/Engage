@@ -23,7 +23,7 @@ export class BlockController {
 	async one(request: Request, response: Response, next: NextFunction) {
 		const slides = this.slideRepository
 			.createQueryBuilder("slide")
-			.where("\"slide.blockId\"= :blockid", {blockid: request.params.id})
+			.where("slide.blockId= :blockid", {blockid: request.params.id})
 			.orderBy('timestamp', "ASC")
 			.getMany();
 		const blockResult = await this.blockRepository.findOne(request.params.id);
