@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, ManyToOne} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, ManyToOne, CreateDateColumn} from "typeorm";
 import { Block } from "./Block";
 import { SlideMedia } from "./SlideMedia";
 
@@ -8,7 +8,7 @@ export class Slide {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @CreateDateColumn()
     timestamp: number;
 
     @Column()

@@ -23,7 +23,7 @@ __decorate([
     __metadata("design:type", String)
 ], Study.prototype, "code", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.CreateDateColumn(),
     __metadata("design:type", Number)
 ], Study.prototype, "timestamp", void 0);
 __decorate([

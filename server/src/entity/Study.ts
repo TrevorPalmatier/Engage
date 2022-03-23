@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, OneToMany, ManyToMany, JoinTable} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, OneToMany, ManyToMany, JoinTable, CreateDateColumn} from "typeorm";
 import { User } from "./User";
 import { Block } from "./Block";
 
@@ -11,7 +11,7 @@ export class Study {
     @Column({unique: true})
     code: string;
 
-    @Column()
+    @CreateDateColumn()
     timestamp: number;
 
     @Column({nullable: true})

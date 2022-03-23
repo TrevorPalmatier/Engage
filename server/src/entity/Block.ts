@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, ManyToOne, OneToOne, JoinColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, ManyToOne, OneToOne, JoinColumn, CreateDateColumn} from "typeorm";
 import { Study } from "./Study";
 import { Entry } from "./Entry";
 import { User } from "./User";
@@ -10,8 +10,8 @@ export class Block {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    timestamp: number;
+    @CreateDateColumn()
+    timestamp: Date;
 
     @Column()
     title: string;

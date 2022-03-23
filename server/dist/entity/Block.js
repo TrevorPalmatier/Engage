@@ -20,8 +20,8 @@ __decorate([
     __metadata("design:type", Number)
 ], Block.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Number)
+    typeorm_1.CreateDateColumn(),
+    __metadata("design:type", Date)
 ], Block.prototype, "timestamp", void 0);
 __decorate([
     typeorm_1.Column(),
