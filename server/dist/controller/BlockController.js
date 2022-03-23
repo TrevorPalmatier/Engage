@@ -40,7 +40,13 @@ class BlockController {
             const blockResult = yield this.blockRepository.findOne(request.params.id);
             const result = {
                 slides: yield slides,
-                blockResult
+                id: blockResult.id,
+                title: blockResult.title,
+                promptTitle: blockResult.promptTitle,
+                promptText: blockResult.promptText,
+                timestamp: blockResult.timestamp,
+                imageID: blockResult.imageID,
+                study: blockResult.study
             };
             return yield result;
         });
