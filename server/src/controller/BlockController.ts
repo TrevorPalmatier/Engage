@@ -6,7 +6,7 @@ export class BlockController {
 	private blockRepository = getRepository(Block);
 
 	async all(request: Request, response: Response, next: NextFunction) {
-		return this.blockRepository.find();
+		return this.blockRepository.find({order: {timestamp: "ASC"}});
 	}
 
 	async slides(request: Request, response: Response, next: NextFunction) {

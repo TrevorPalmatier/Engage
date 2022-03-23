@@ -6,7 +6,7 @@ export class StudyController {
 	private studyRepository = getRepository(Study);
 
 	async all(request: Request, response: Response, next: NextFunction) {
-		return this.studyRepository.find();
+		return this.studyRepository.find({order: {timestamp: "DESC"}});
 	}
 
 	async blocks(request: Request, response: Response, next: NextFunction) {

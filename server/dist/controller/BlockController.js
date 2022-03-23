@@ -16,7 +16,7 @@ class BlockController {
     }
     all(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.find();
+            return this.blockRepository.find({ order: { timestamp: "ASC" } });
         });
     }
     slides(request, response, next) {

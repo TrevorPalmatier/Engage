@@ -16,7 +16,7 @@ class StudyController {
     }
     all(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.studyRepository.find();
+            return this.studyRepository.find({ order: { timestamp: "DESC" } });
         });
     }
     blocks(request, response, next) {
