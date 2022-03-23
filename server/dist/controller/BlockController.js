@@ -37,10 +37,11 @@ class BlockController {
                 .createQueryBuilder("slide")
                 .orderBy('timestamp', "ASC")
                 .getMany();
-            const result = [
-                ...(yield slides),
-                yield this.blockRepository.findOne(request.params.id)
-            ];
+            const blockResult = yield this.blockRepository.findOne(request.params.id);
+            const result = {
+                slides: yield slides,
+                blockResult
+            };
             return yield result;
         });
     }

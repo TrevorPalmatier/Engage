@@ -25,11 +25,11 @@ export class BlockController {
 			.createQueryBuilder("slide")
 			.orderBy('timestamp', "ASC")
 			.getMany();
-
-		const result = [
-			...(await slides),
-			await this.blockRepository.findOne(request.params.id)
-		]
+		const blockResult = await this.blockRepository.findOne(request.params.id);
+		const result = {
+			slides: await slides,
+			blockResult
+		}
 		return await result;
 	}
 
