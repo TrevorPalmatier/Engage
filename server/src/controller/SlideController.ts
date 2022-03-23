@@ -6,7 +6,11 @@ export class SlideController {
 	private slideRepository = getRepository(Slide);
 
 	async all(request: Request, response: Response, next: NextFunction) {
-		return this.slideRepository.find({order: {timestamp: "DESC"}});
+		const result = this.slideRepository
+			.createQueryBuilder("slide")
+			.orderBy('timestamp', "ASC")
+			.getMany();
+		return await result;
 	}
 
 	async media(request: Request, response: Response, next: NextFunction) {
