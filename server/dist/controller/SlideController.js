@@ -18,7 +18,7 @@ class SlideController {
         return __awaiter(this, void 0, void 0, function* () {
             const result = this.slideRepository
                 .createQueryBuilder("slide")
-                .orderBy('timestamp', "DESC")
+                .orderBy('timestamp', "ASC")
                 .getMany();
             return yield result;
         });

@@ -8,7 +8,7 @@ export class SlideController {
 	async all(request: Request, response: Response, next: NextFunction) {
 		const result = this.slideRepository
 			.createQueryBuilder("slide")
-			.orderBy('timestamp', "DESC")
+			.orderBy('timestamp', "ASC")
 			.getMany();
 		return await result;
 	}

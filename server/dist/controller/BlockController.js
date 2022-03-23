@@ -10,9 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Block_1 = require("../entity/Block");
+const Slide_1 = require("../entity/Slide");
 class BlockController {
     constructor() {
         this.blockRepository = typeorm_1.getRepository(Block_1.Block);
+        this.slideRepository = typeorm_1.getRepository(Slide_1.Slide);
     }
     all(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +33,15 @@ class BlockController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+            const slides = this.slideRepository
+                .createQueryBuilder("slide")
+                .orderBy('timestamp', "ASC")
+                .getMany();
+            const result = [
+                ...(yield slides),
+                yield this.blockRepository.findOne(request.params.id)
+            ];
+            return yield result;
         });
     }
     oneEntries(request, response, next) {

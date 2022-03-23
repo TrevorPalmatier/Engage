@@ -1,9 +1,11 @@
 import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
 import { Block } from "../entity/Block";
+import { Slide } from "../entity/Slide";
 
 export class BlockController {
 	private blockRepository = getRepository(Block);
+	private slideRepository = getRepository(Slide);
 
 	async all(request: Request, response: Response, next: NextFunction) {
 		return this.blockRepository.find({order: {timestamp: "ASC"}});
@@ -19,7 +21,16 @@ export class BlockController {
 	}
 
 	async one(request: Request, response: Response, next: NextFunction) {
-		return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+		const slides = this.slideRepository
+			.createQueryBuilder("slide")
+			.orderBy('timestamp', "ASC")
+			.getMany();
+
+		const result = [
+			...(await slides),
+			await this.blockRepository.findOne(request.params.id)
+		]
+		return await result;
 	}
 
 	async oneEntries(request: Request, response: Response, next: NextFunction) {
