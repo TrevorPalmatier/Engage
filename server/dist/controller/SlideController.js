@@ -16,7 +16,7 @@ class SlideController {
     }
     all(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideRepository.find({ order: { timestamp: "ASC" } });
+            return this.slideRepository.find({ order: { timestamp: "DESC" } });
         });
     }
     media(request, response, next) {
