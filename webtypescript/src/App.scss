@@ -113,7 +113,12 @@
     border: 0px hidden white;
     padding-bottom: 10px;
     padding-top: 10px;
+
+    input {
+      margin-right: 10px;
+    }
   }
+  
 
   .createRect {
     height: auto;

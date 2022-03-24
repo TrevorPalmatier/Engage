@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.scss";
 import "../Styling/CreateSlide.scss";
 import { Image } from "cloudinary-react";
+import example from "./youtubeex.jpg";
 import {
   setText,
   setTitle,
@@ -10,6 +11,7 @@ import {
 } from "../features/slideSlice";
 import { addMedia, cancelBySlide, deleteOneMedia, setMediaPosition } from "../features/mediaSlideSlice";
 import { useAppSelector, useAppDispatch } from "../hooks/store";
+import { fileURLToPath } from "url";
 
 /**
  * This renders an element that allows a slide for a block to be created
@@ -17,6 +19,8 @@ import { useAppSelector, useAppDispatch } from "../hooks/store";
  * It uses the slideSlice to persist data when page is refreshed or new slides are added
  */
 const CreateSlide = ({ id }) => {
+  const [embedCode, setVideo] = useState("");
+  const [position, setPosition] = useState(1);
   //set up reducers and redux
   const slide = useAppSelector((state) => state.persistedReducer.slides).find(
     (slide) => slide.id === id
@@ -49,10 +53,12 @@ const CreateSlide = ({ id }) => {
             await dispatch(
               addMedia({
                 slideId: slide?.id,
-                type: file.type,
+                type: "image",
                 imageID: info.publicId,
+                position: position
               })
             )
+            setPosition(position+1);
           }catch(error){
             console.error(error)
           }
@@ -66,16 +72,11 @@ const CreateSlide = ({ id }) => {
     
   };
 
-  const getId = (url) => {
-    const regExp = "/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/";
-    const match = url.match(regExp);
-
-    return (match && match[2].length === 11)
-      ? match[2]
-      : null;
-}
     
-const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
+const uploadVideo = () => {
+  dispatch(addMedia({slideId: slide?.id, type: "video", imageID: embedCode, position: position}));
+  setPosition(position+1);
+}
 
   //renders the create study element
   //still needs to handle multiple image upload
@@ -109,23 +110,26 @@ const videoId = getId('http://www.youtube.com/watch?v=zbYf5_S7oJo');
       </fieldset>
       <fieldset>
         <label>Upload Youtube Videos by inserting Embed Code here: </label>
-        <input type="text" name="video"/>
-        <p>Example: </p> 
-        <img src="youtubeex.jpg"/>
+        
+        <input type="text" name="video" onChange={(e) => setVideo(e.target.value)}/>
+        <button type="button" className="buttonText" onClick={(e) => uploadVideo()}>Upload Video</button>
       </fieldset>
+      <div className="flex">
+        <p>Example: </p> 
+        <img src={example}/>
+      </div>
       <div className="slideMedia">
         {media?.map((media1, index) => {
           return (
             <div key={media1.id}>
               <p className="texthover">Click to Delete</p>
-              {media1.type.split("/")[0] === "video" && (
-                <video
-                  className="mediahover"
+              {media1.type === "video" && (
+                <iframe width="200px" height="auto" 
                   onClick={() => deleteMedia(media1.id)}
-                  src={media1.imageID}
+                  src={`https://www.youtube.com/embed/${media1.imageID}`}
                 />
               )}
-              {media1.type.split("/")[0] === "image" && (
+              {media1.type === "image" && (
                 <Image className="mediahover" onClick={() => deleteMedia(media1.id)} cloudName='engageapp' publicId={media1.imageID}/>
               )}
               

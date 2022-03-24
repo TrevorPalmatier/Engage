@@ -19,6 +19,7 @@ const nextMediId = (media) => {
   return maxId + 1;
 };
 
+
 const mediaSlideSlice = createSlice({
   name: "media",
   initialState,
@@ -29,7 +30,7 @@ const mediaSlideSlice = createSlice({
         mediaId: -1,
         slideId: payload.slideId,
         type: payload.type,
-        position: 0,
+        position: payload.position,
         imageID: payload.imageID,
       });
       return state;

@@ -47,14 +47,35 @@
   overflow-y: scroll;
   border: 2.5% solid black;
   border-radius: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr 1fr;
-  grid-template-areas:
-    "one one"
-    "two two"
-    "three three";
-  gap: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;;
+
+  img {
+    width: 95%;
+    padding: 2.5%;
+  }
+
+  iframe {
+    width: 95%;
+    padding: 1.5%;
+  }
+
+  .header {
+    width: 100%;
+    text-align: center;
+    background-color: black;
+    color: white;
+  }
+
+  .text {
+    font-size: small;
+    text-align: left;
+    word-break: keep-all;
+    padding-right: 2px;
+    padding-left: 2px;
+  }
 }
 
 .smartphone .content1::-webkit-scrollbar-track {
@@ -76,77 +97,3 @@
   margin: 1px;
 }
 
-.smartphone .content1 .header {
-  grid-area: one;
-  width: 100%;
-  text-align: center;
-  background-color: black;
-  color: white;
-}
-
-.smartphone .content1 .option1 {
-  grid-area: three;
-  display: flex;
-  flex-flow: column;
-}
-
-.smartphone .content1 img:nth-of-type(1) {
-  grid-area: two;
-  width: 100%;
-}
-
-.smartphone .content1 .option1 img:nth-of-type(1) {
-  width: 100%;
-}
-
-.smartphone .content1 .option1 .text {
-  font-size: small;
-  text-align: left;
-  word-break: keep-all;
-  padding-right: 2px;
-  padding-left: 2px;
-}
-
-.smartphone .content1 .option2 {
-  grid-area: three;
-  display: flex;
-  flex-flow: column;
-}
-
-.smartphone .content1 .option2 .img:nth-of-type(1) {
-  width: 100%;
-}
-
-.smartphone .content1 .option2 .text1,
-.smartphone .content1 .option2 .text2 {
-  font-size: small;
-  text-align: left;
-  word-break: keep-all;
-  padding-right: 2px;
-  padding-left: 2px;
-}
-
-.smartphone .content1 .option3 {
-  grid-area: three;
-  display: "flexbox";
-  position: relative;
-}
-
-.smartphone .content1 .option3 img:nth-of-type(1) {
-  width: 50%;
-  float: right;
-}
-
-.smartphone .content1 .option3 .text1,
-.smartphone .content1 .option3 .text2 {
-  /* position: relative; */
-  font-size: small;
-  text-align: left;
-  word-break: keep-all;
-  padding-right: 2px;
-  padding-left: 2px;
-}
-
-.smartphone .content1 .option3 .text2 {
-  margin-top: -1em;
-}

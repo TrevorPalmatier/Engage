@@ -64,30 +64,57 @@ const FakeScreen = ({ id }) => {
             if(option === 1){
               return (
                 <div key = {media.id} className="option1">
-                  <Image cloudName='engageapp' publicId={media.imageID}/>
+                  {media.type === "video" && 
+                    <iframe
+                    src={`https://www.youtube.com/embed/${media.imageID}`}/>
+                  }
+                  {media.type === "image" && 
+                   <Image cloudName='engageapp' publicId={media.imageID}/>
+                   }
                   <p className="text">{str1}</p>
                 </div>
               );
             }
             else if(option === 2){
               return (
-                <div  key = {media.id} className="option2">
-                  <p className="text1">{str1}</p>
-                  <Image cloudName='engageapp' publicId={media.imageID}/>
-                  <p className="text2">{str2}</p>
+                <div  key = {media.id}>
+                  <p className="text">{str1}</p>
+                  {media.type === "video" && 
+                    <iframe
+                    src={`https://www.youtube.com/embed/${media.imageID}`}/>
+                  }
+                  {media.type === "image" && 
+                   <Image cloudName='engageapp' publicId={media.imageID}/>
+                   }
+                 
+                  <p className="text">{str2}</p>
                 </div>
               );
             } else if (media.position === 0 && option === 3) {
               return(
-                <Image key = {media.id} cloudName='engageapp' publicId={media.imageID}/>
+                <div>
+                {media.type === "video" && 
+                    <iframe
+                    src={`https://www.youtube.com/embed/${media.imageID}`}/>
+                  }
+                  {media.type === "image" && 
+                   <Image cloudName='engageapp' publicId={media.imageID}/>
+                   }
+                  </div>
               )
             }
           }else if (media.position === 1 && option === 3) {
             return (
-              <div  key = {media.id} className="option3">
-                <p className="text1">{str1}</p>
-                <Image cloudName='engageapp' publicId={media.imageID}/>
-                <p className="text2">{str2}</p>
+              <div  key = {media.id}>
+                <p className="text">{str1}</p>
+                {media.type === "video" && 
+                    <iframe
+                    src={`https://www.youtube.com/embed/${media.imageID}`}/>
+                  }
+                {media.type === "image" && 
+                  <Image cloudName='engageapp' publicId={media.imageID}/>
+                  }
+                <p className="text">{str2}</p>
               </div>
             );
           }
