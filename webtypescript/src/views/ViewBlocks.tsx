@@ -21,7 +21,7 @@ const ViewBlocks = () => {
   useEffect(() => {
     const abortController = new AbortController();
 
-      fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${params.id}`, {
+      fetch(`/studies/${params.id}`, {
         signal: abortController.signal,
       })
         .then((res) => res.json())
@@ -56,7 +56,7 @@ const ViewBlocks = () => {
     e.preventDefault();
 
     try{
-      const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${study.id}`, {
+      const response = await fetch(`/studies/${study.id}`, {
           method: 'delete',
           headers: { 'Content-Type': 'application/json' }})
 

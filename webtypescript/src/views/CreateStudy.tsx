@@ -83,7 +83,7 @@ const CreateStudy = () => {
     };
 
     const response = await fetch(
-      `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`,
+      `/studies/${params.studyid}`,
       requestOptions
     )
 
@@ -108,7 +108,7 @@ const CreateStudy = () => {
     };
     
     try{
-      const response = await fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions);
+      const response = await fetch("/studies", requestOptions);
       const info = await response.json();
       postBlocks(info);
     }catch(error) {
@@ -136,7 +136,7 @@ const CreateStudy = () => {
       try{
         // ***  need to save the block id before calling the "postSlides()" function
         const response = await fetch(
-          "https://ancient-ridge-25388.herokuapp.com/blocks",
+          "/blocks",
           requestOptionsBlock
         );
 
@@ -169,7 +169,7 @@ const CreateStudy = () => {
         };
         try{
           const response = await fetch(
-            "https://ancient-ridge-25388.herokuapp.com/slides",
+            "/slides",
             requestOptionsSlide
           )
           const info = await response.json();
@@ -197,7 +197,7 @@ const CreateStudy = () => {
         };
         try{
           const response = await fetch(
-            "https://ancient-ridge-25388.herokuapp.com/slidemedia",
+            "/slidemedia",
             requestOptionsMedia
         )
         }catch(error){
@@ -222,7 +222,7 @@ const CreateStudy = () => {
     
     reader.onloadend = async() => {
         try{
-          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+          const response = await fetch("/uploadimage",{
             method: "post",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({file: reader.result}),
@@ -248,7 +248,7 @@ const CreateStudy = () => {
     
     try{
       await fetch(
-        "https://ancient-ridge-25388.herokuapp.com/deleteimage",
+        "/deleteimage",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

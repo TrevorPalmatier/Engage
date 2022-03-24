@@ -12,7 +12,7 @@ const ViewStudies = () => {
     console.log('Component is mounting');
     const abortController = new AbortController();
 
-    fetch("https://ancient-ridge-25388.herokuapp.com/studies", {
+    fetch("/studies", {
       signal: abortController.signal,
     })
       .then((res) => {

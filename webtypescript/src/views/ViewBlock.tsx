@@ -27,7 +27,7 @@ const ViewBlock = () => {
     dispatch(cancelMedia);
     const abortController = new AbortController();
 
-      fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${params.id}`, {
+      fetch(`/blocks/${params.id}`, {
         signal: abortController.signal,
       })
         .then((res) => {
@@ -42,7 +42,7 @@ const ViewBlock = () => {
 
 
       fetch(
-        `https://ancient-ridge-25388.herokuapp.com/blocks/entries/${params.id}`,
+        `/blocks/entries/${params.id}`,
         { signal: abortController.signal }
       )
         .then((res) => res.json())
@@ -94,7 +94,7 @@ const ViewBlock = () => {
         
         try{
             //fetch media for slides and dispatch
-            fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
+            fetch(`/slides/${slide.id}`)
             .then((response) => response.json())
             .then((info) => {dispatchMedia(info)});
         }catch(error) {
@@ -120,7 +120,7 @@ const ViewBlock = () => {
   const deleteBlock = async () => {
     
     try{
-      await fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${block.id}`, {
+      await fetch(`/blocks/${block.id}`, {
         method: 'delete',
         headers: { 'Content-Type': 'application/json' },
       });

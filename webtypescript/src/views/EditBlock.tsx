@@ -86,7 +86,7 @@ const EditBlock = () => {
       
       try{
         const response = await fetch(
-          `https://ancient-ridge-25388.herokuapp.com/blocks/${params.blockid}`,
+          `/blocks/${params.blockid}`,
           requestOptionsBlock
         )
         
@@ -113,7 +113,7 @@ const EditBlock = () => {
     //delete slide media
     await toDelete.forEach(async (slide) => {
       try{
-        const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
+        const response = await fetch(`/slides/${slide.id}`)
         const info = await response.json();
         await info.medias.forEach(async (media1) => {
             await deleteMedia(media1.id);
@@ -125,7 +125,7 @@ const EditBlock = () => {
         };
       
          await fetch(
-          `https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`,
+          `/slides/${slide.id}`,
           requestOptions
         )
       }catch(error){
@@ -147,7 +147,7 @@ const EditBlock = () => {
 
     try{
       await fetch(
-      `https://ancient-ridge-25388.herokuapp.com/slidemedia/${id}`,
+      `/slidemedia/${id}`,
       requestOptions
     )
     } catch(err){
@@ -180,7 +180,7 @@ const EditBlock = () => {
 
           try{
             const response = await fetch(
-              `https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`,
+              `/slides/${slide_id}`,
               requestOptionsSlide1
             )
             const info = await response.json();
@@ -207,7 +207,7 @@ const EditBlock = () => {
           
           try{
             const response = await fetch(
-              `https://ancient-ridge-25388.herokuapp.com/slides`,
+              `/slides`,
               requestOptionsSlide
             )
             const info = await response.json();
@@ -230,7 +230,7 @@ const EditBlock = () => {
 
     await toDelete.forEach(async (media) => {
       try{
-       await fetch(`https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.id}`,{
+       await fetch(`/slidemedia/${media.id}`,{
               method: "delete",
               headers: { 'Content-Type': 'application/json' },
             })
@@ -257,7 +257,7 @@ const EditBlock = () => {
               };
               try{
                await fetch(
-                  "https://ancient-ridge-25388.herokuapp.com/slidemedia",
+                  "/slidemedia",
                   requestOptionsMedia
                 )
                 console.log("start5"); 
@@ -282,7 +282,7 @@ const EditBlock = () => {
         
         try{
           await fetch(
-            `https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.mediaId}`,
+            `/slidemedia/${media.mediaId}`,
             requestOptionsMedia1
           )
           console.log("start4"); 
@@ -310,7 +310,7 @@ const EditBlock = () => {
     reader.readAsDataURL(img);
     reader.onloadend = async() => {
         try{
-          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+          const response = await fetch("/uploadimage",{
             method: "post",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({file: reader.result}),

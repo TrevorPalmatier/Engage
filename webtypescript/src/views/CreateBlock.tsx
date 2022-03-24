@@ -60,7 +60,7 @@ const CreateBlock = () => {
     } else {
       try{
         const response = await fetch(
-          `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`
+          `/studies/${params.studyid}`
         )
         const data = await response.json();
         
@@ -102,7 +102,7 @@ const CreateBlock = () => {
 
       try{
         const response = await fetch(
-          "https://ancient-ridge-25388.herokuapp.com/blocks",
+          "/blocks",
           requestOptionsBlock
         )
         const info = await response.json();
@@ -136,7 +136,7 @@ const CreateBlock = () => {
           
           try{
             const response = await fetch(
-              `https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`,
+              `/slides/${slide_id}`,
               requestOptionsSlide1
             )
             const info = await response.json();
@@ -160,7 +160,7 @@ const CreateBlock = () => {
           };
           try{
             const response = await fetch(
-              `https://ancient-ridge-25388.herokuapp.com/slides`,
+              `/slides`,
               requestOptionsSlide
             )
             const info = await response.json();
@@ -191,7 +191,7 @@ const CreateBlock = () => {
 
           try{
           await fetch(
-            `https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.mediaId}`,
+            `/slidemedia/${media.mediaId}`,
             requestOptionsMedia1
           )
           }catch(error){
@@ -213,7 +213,7 @@ const CreateBlock = () => {
 
           try{
             await fetch(
-              "https://ancient-ridge-25388.herokuapp.com/slidemedia",
+              "/slidemedia",
               requestOptionsMedia
             )
           }catch(err) {
@@ -239,7 +239,7 @@ const CreateBlock = () => {
     reader.readAsDataURL(img);
     reader.onloadend = async() => {
         try{
-          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+          const response = await fetch("/uploadimage",{
             method: "post",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({file: reader.result}),

@@ -44,7 +44,7 @@ const CreateSlide = ({ id }) => {
         reader.readAsDataURL(img);
         reader.onloadend = async() => {
           try{
-            const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
+            const response = await fetch("/uploadimage",{
               method: "post",
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({file: reader.result}),

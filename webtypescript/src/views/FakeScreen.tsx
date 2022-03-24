@@ -12,7 +12,7 @@ const FakeScreen = ({ id }) => {
   const [option, setOption] = useState(1);
 
   useEffect(() => {
-    fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${id}`)
+    fetch(`/slides/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
