@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../../App.scss";
 import "./ViewStudy.scss";
 import { useAppDispatch } from "../../hooks/store";
-import { addBlock } from "../../features/blocksSlice";
+import blocksSlice, { addBlock } from "../../features/blocksSlice";
 import { setOriginalImage, setTitle } from "../../features/studySlice";
 import { setImage } from "../../features/studySlice";
 import { Layout } from "../../Components/Layout";
@@ -17,52 +17,53 @@ const ViewStudy = () => {
   const [study, setStudy] = useState<any>({});
   const [blockData, setBlockData] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-  const [incompleteUsers, setIncompleteUsers] = useState([""]);
-
+  const [completeUsers, setCompleteUsers] = useState<any>([]);
+ 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const abortController = new AbortController();
 
-      fetch(`/studies/${params.id}`, {
+    const fetchData = async () => {
+      try{
+        const response = await fetch(`/studies/${params.id}`, {
         signal: abortController.signal,
-      })
-        .then((res) => res.json())
-        .then(async (data) => {
+        });
+        const data = await response.json();
+        
           setStudy(data);
           setBlockData(data.blocks);
           setUsers(data.users);
-          await organizeUsers(data.blocks, data.users);
-        })
-        .catch((error) => console.log(error));
+          setCompleteUsers(organizeUsers(data.users));
+        }catch(error) {
+             console.error(error)
+        };
+    }
+    fetchData();
 
     return () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
   }, [params.id]);
 
-  const organizeUsers = async (blocks,  users) => {
-    let usersIncomplete = await users;
-    await blocks.forEach(async (block) => {
+  const organizeUsers = async (usersList) => {
+    let complete = usersList;
+    blockData.forEach(async (block) => {
+      let incompleteblock = complete;
       const entries = await StudyAPI.fetchEntries(block.id);
-      let usersEntry = new Array<number>();
-      await entries.forEach((entry) => {
-        console.log(entry);
-        usersEntry.push(entry.userId);
+      entries.forEach((entry)=>{
+        incompleteblock = incompleteblock.filter((user) => user.id !== entry.user.id);
       })
-      usersEntry.forEach((id) =>{
-        usersIncomplete = usersIncomplete.filter((user) => user.id !== id)
+      console.log(incompleteblock);
+      incompleteblock.forEach((user)=>{
+        complete = complete.filter((complete) => complete.id !== user.id);
       })
-      console.log(usersEntry);
+      console.log(incompleteblock);
     })
 
-    let emails = new Array<string> ();
-    await usersIncomplete.forEach((user) => {
-      emails.push(user.emailAddress);
-    })
-    setIncompleteUsers(emails);
+    console.log(complete);
+    return await complete;
   }
-
   const createBlock = () => {
     dispatch(addBlock());
     navigate(`/createblock/${study.id}`);
@@ -152,23 +153,15 @@ const ViewStudy = () => {
         </div>
         <div className="participantList">
           {users?.map((user) => {
-            if(incompleteUsers.includes(user.emailAddress)){
-              console.log("incomplete");
-              return(
-                <div id={user.id}>
-                  <input type="checkbox"  id={user.id} checked={false}/>
-                  <label>{user.emailAddress}</label>
-                </div>
+              return (   
+                <p>{user.emailAddress}</p>
               )
-            }else{
-              console.log(user.emailAddress);
-              return (
-                <div id={user.id}>
-                    <input type="checkbox" disabled checked={true} id={user.id}/>
-                    <label>{user.emailAddress}</label>
-                  </div>
-              )}
-            })}
+          })}
+          {users.length() < 1 &&
+            return (   
+              <p>No participants in this study</p>
+            )
+          }
         </div>
       </div>
     </Layout>
