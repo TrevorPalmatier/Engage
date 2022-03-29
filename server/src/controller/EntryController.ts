@@ -10,7 +10,7 @@ export class EntryController {
 	}
 
 	async one(request: Request, response: Response, next: NextFunction) {
-		return this.entryRepository.findOne(request.params.id);
+		return this.entryRepository.findOne(request.params.id, {relations: ["user"] });
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
