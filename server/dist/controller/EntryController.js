@@ -21,7 +21,7 @@ class EntryController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.entryRepository.findOne(request.params.id);
+            return this.entryRepository.findOne(request.params.id, { relations: ["user"] });
         });
     }
     save(request, response, next) {
