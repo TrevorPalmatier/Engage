@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../App.scss";
-import "../Styling/FakeScreen.scss";
+import "../../App.scss";
+import "./FakeScreen.scss";
 import {Image} from "cloudinary-react";
 /**
  * this is to show a fake screen for each slide of a block
@@ -15,6 +15,7 @@ const FakeScreen = ({ id }) => {
     fetch(`/slides/${id}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setData(data);
         setSlideOption(data);
       });
@@ -38,6 +39,7 @@ const FakeScreen = ({ id }) => {
     if (slide.option === 1) {
       setOption(1);
       setFirstStr(slide.backgroundText);
+      console.log(str1);
     } else {
       setOption(2);
       setFirstStr(
@@ -59,8 +61,8 @@ const FakeScreen = ({ id }) => {
         <div className="header">
           <h2>{slideData.title}</h2>
         </div>
-        {slideData.medias?.map((media, index) => {
-          if (media.position === 0) {
+        {slideData.medias?.map((media) => {
+          if (media.position === 1) {
             if(option === 1){
               return (
                 <div key = {media.id} className="option1">
@@ -90,9 +92,9 @@ const FakeScreen = ({ id }) => {
                   <p className="text">{str2}</p>
                 </div>
               );
-            } else if (media.position === 0 && option === 3) {
+            } else if (media.position === 1 && option === 3) {
               return(
-                <div>
+                <div key = {media.id}>
                 {media.type === "video" && 
                     <iframe
                     src={`https://www.youtube.com/embed/${media.imageID}`}/>
@@ -103,7 +105,7 @@ const FakeScreen = ({ id }) => {
                   </div>
               )
             }
-          }else if (media.position === 1 && option === 3) {
+          }else if (media.position === 2 && option === 3) {
             return (
               <div  key = {media.id}>
                 <p className="text">{str1}</p>

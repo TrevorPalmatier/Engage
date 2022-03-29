@@ -8,9 +8,11 @@
   padding-left: 15px;
 
   div {
-    display: block;
+    display: flex;
+    flex-direction: column;
     place-items: center;
     text-align: center;
+    gap: 10px;
 
     .mediahover {
       max-width: 200px;
@@ -21,11 +23,25 @@
     }
 
     .texthover {
-      max-width: 200px;
-      max-height: 200px;
-      width: auto;
-      height: auto;
+      font-family: Roboto;
+      background-color: #ffffff;
+      min-height: 40px;
+      max-height: auto;
+      text-decoration: none;
+      border: 2px solid black;
+      border-radius: 10px;
+      color: black;
+      text-transform: uppercase;
+      letter-spacing: 2px;
       visibility: hidden;
+      
+      &:hover{
+        background-color: black;
+        color: white;
+        border: 5px double white;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+      }
     }
   }
 

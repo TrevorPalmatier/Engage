@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../App.scss";
-import "../Styling/CreateSlide.scss";
+import "../../App.scss";
+import "./CreateSlide.scss";
 import { Image } from "cloudinary-react";
 import example from "./youtubeex.jpg";
 import {
@@ -8,10 +8,10 @@ import {
   setTitle,
   setSlideOption,
   cancel,
-} from "../features/slideSlice";
-import { addMedia, cancelBySlide, deleteOneMedia, setMediaPosition } from "../features/mediaSlideSlice";
-import { useAppSelector, useAppDispatch } from "../hooks/store";
-import { fileURLToPath } from "url";
+} from "../../features/slideSlice";
+import { addMedia, cancelBySlide, deleteOneMedia, setMediaPosition } from "../../features/mediaSlideSlice";
+import { useAppSelector, useAppDispatch } from "../../hooks/store";
+import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
 
 /**
  * This renders an element that allows a slide for a block to be created
@@ -43,14 +43,9 @@ const CreateSlide = ({ id }) => {
         const reader = new FileReader();
         reader.readAsDataURL(img);
         reader.onloadend = async() => {
-          try{
-            const response = await fetch("/uploadimage",{
-              method: "post",
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({file: reader.result}),
-            });
-            const info = await response.json();
-            await dispatch(
+          
+            const info = await CloudinaryAPI.uploadSingleImage(reader);
+            dispatch(
               addMedia({
                 slideId: slide?.id,
                 type: "image",
@@ -59,23 +54,34 @@ const CreateSlide = ({ id }) => {
               })
             )
             setPosition(position+1);
-          }catch(error){
-            console.error(error)
-          }
         }
         }
     });
   };
 
-  const deleteMedia = (mediaid) => {
-    dispatch(deleteOneMedia({ id: mediaid }));
-    
+  const deleteMedia = async (media) => {
+    if(!media.original && media.type === "image"){
+      await CloudinaryAPI.destroyImage(media.imageID);
+    }
+    dispatch(deleteOneMedia({ id: media.id }));
+    console.log("deleted");
   };
 
     
 const uploadVideo = () => {
   dispatch(addMedia({slideId: slide?.id, type: "video", imageID: embedCode, position: position}));
   setPosition(position+1);
+}
+
+const deleteSlide = async (e) => {
+  e.preventDefault();
+
+  media?.forEach(async (med) => {
+    await CloudinaryAPI.destroyImage(med.imageID)
+  })
+  
+  dispatch(cancel({id:slide?.id}));
+  dispatch(cancelBySlide({slideId:slide?.id}));
 }
 
   //renders the create study element
@@ -121,16 +127,15 @@ const uploadVideo = () => {
       <div className="slideMedia">
         {media?.map((media1, index) => {
           return (
-            <div key={media1.id}>
-              <p className="texthover">Click to Delete</p>
+            <div key={media1.id} >
+              <button type="button" className="texthover" onClick={() => deleteMedia(media1)}>Delete Image/Video</button>
               {media1.type === "video" && (
                 <iframe width="200px" height="auto" 
-                  onClick={() => deleteMedia(media1.id)}
                   src={`https://www.youtube.com/embed/${media1.imageID}`}
                 />
               )}
               {media1.type === "image" && (
-                <Image className="mediahover" onClick={() => deleteMedia(media1.id)} cloudName='engageapp' publicId={media1.imageID}/>
+                <Image className="mediahover" cloudName='engageapp' publicId={media1.imageID}/>
               )}
               
               {
@@ -172,7 +177,7 @@ const uploadVideo = () => {
         
       </div>
       <div>
-        <button type="button" className="buttonText" onClick={() => {dispatch(cancel({id:slide?.id})); dispatch(cancelBySlide({slideId:slide?.id}))}}>Delete Slide</button>
+        <button type="button" className="buttonText" onClick={ (e) => {deleteSlide(e)}}>Delete Slide</button>
       </div>
     </div>
   );

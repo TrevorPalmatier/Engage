@@ -1,9 +1,9 @@
-import "../App.scss";
-import "../Styling/CreateBlock.scss";
-import CreateSlide from "./CreateSlide";
+import "../../App.scss";
+import "../CreateBlock/CreateBlock.scss";
+import CreateSlide from "../CreateSlide/CreateSlide";
 import { Image } from "cloudinary-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import {
   setBlockTitle,
   setBlockImageLink,
@@ -13,21 +13,22 @@ import {
   selectBlock,
   cancelBlocks,
   addOldBlock,
-} from "../features/blocksSlice";
+} from "../../features/blocksSlice";
 import {
     addOldSlide,
   addSlide,
   cancelByBlock,
   cancelSlides,
-} from "../features/slideSlice";
+} from "../../features/slideSlice";
 import {
     addOldMedia,
   cancelBySlide,
   cancelMedia,
   selectMedia,
-} from "../features/mediaSlideSlice";
-import { Layout } from "../Components/Layout";
-
+} from "../../features/mediaSlideSlice";
+import { Layout } from "../../Components/Layout";
+import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+import * as EditBlockAPI from "./EditBlockAPI";
 
 /**
  * This will only work to edit a specific block
@@ -71,32 +72,19 @@ const EditBlock = () => {
 
   const postBlocks = async () => {
 
-      const blockDataPut = {
-        id: params.blockid,
+      const blockData = {
         title: block?.title,
         promptTitle: block?.promptTitle,
         promptText: block?.promptText,
         imageID: block?.imageID
       };
-      const requestOptionsBlock = {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(blockDataPut),
-      };
-      
-      try{
-        const response = await fetch(
-          `/blocks/${params.blockid}`,
-          requestOptionsBlock
-        )
         
-        const info = await response.json();
+        const info = await EditBlockAPI.updateBlock(params.blockid, blockData);
+
+        console.log(info);
         await postSlides(info); 
         await deleteSlides(info);
 
-        }catch(error){
-          console.log(error);
-        } 
         console.log("start");      
   };
 
@@ -112,49 +100,9 @@ const EditBlock = () => {
 
     //delete slide media
     await toDelete.forEach(async (slide) => {
-      try{
-        const response = await fetch(`/slides/${slide.id}`)
-        const info = await response.json();
-        await info.medias.forEach(async (media1) => {
-            await deleteMedia(media1.id);
-        });
-
-        const requestOptions = {
-          method: "delete",
-          headers: { "Content-Type": "application/json" }
-        };
-      
-         await fetch(
-          `/slides/${slide.id}`,
-          requestOptions
-        )
-      }catch(error){
-        console.error(error);
-      }
+      await EditBlockAPI.deleteSlide(slide.id);
     })
   }
-
-
-  /**
-   * deletes individual media by id
-   * @param id 
-   */
-  const deleteMedia = async (id) => {
-    const requestOptions = {
-        method: "delete",
-        headers: { "Content-Type": "application/json" }
-      };
-
-    try{
-      await fetch(
-      `/slidemedia/${id}`,
-      requestOptions
-    )
-    } catch(err){
-      console.log(err);
-    }
-
-  } 
   
   /**
    * This method is able post the slides for the block to the api
@@ -163,33 +111,16 @@ const EditBlock = () => {
     //loops through all the slides and does a post request for each one
     await slides.forEach(async (slide) => {
         if (!slide.new) {
-          const slideDataPut = {
-            id: slide.slideId,
+          const slideData = {
             title: slide.title,
             backgroundText: slide.backgroundText,
             option: slide.option
-
           }; //slide data
-          const requestOptionsSlide1 = {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(slideDataPut),
-          };
-
-          const slide_id = slide.slideId;
-
-          try{
-            const response = await fetch(
-              `/slides/${slide_id}`,
-              requestOptionsSlide1
-            )
-            const info = await response.json();
+         
+            const info = await EditBlockAPI.updateSlide(slide.slideId, slideData);
             await deleteMediaForSlide(info.medias);
-            await postSlideMedia(slide.id, slideDataPut);
+            await postSlideMedia(info);
             console.log("start1"); 
-          }catch(err){
-             console.log(err);
-          }
           
         return;
         } 
@@ -199,23 +130,11 @@ const EditBlock = () => {
             block: blockInfo,
             option: slide.option,
           }; //slide data
-          let requestOptionsSlide = {
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(slideData),
-          };
           
-          try{
-            const response = await fetch(
-              `/slides`,
-              requestOptionsSlide
-            )
-            const info = await response.json();
-            await postSlideMedia(slide.id, info);
+            const info = await EditBlockAPI.postSlide(slideData);
+            await postSlideMedia(info);
             console.log("start2"); 
-          }catch(err) {
-            console.log(err);
-          }
+          
           
       }
     );
@@ -229,20 +148,13 @@ const EditBlock = () => {
     });
 
     await toDelete.forEach(async (media) => {
-      try{
-       await fetch(`/slidemedia/${media.id}`,{
-              method: "delete",
-              headers: { 'Content-Type': 'application/json' },
-            })
-      }catch(error){
-        console.error(error);
-      } 
+      await EditBlockAPI.deleteMedia(media);
     })
   }
 
-  const postSlideMedia = async (slideId, slideInfo) => {
-    await slideMedia?.forEach(async (media) => {
-      if (slideId === media.slideId) {
+  const postSlideMedia = async ( slideInfo) => {
+    slideMedia?.forEach(async (media) => {
+      if (slideInfo.id === media.slideId) {
         if (media.mediaId === -1) {
             const mediaData = {
                 imageID: media.imageID,
@@ -250,46 +162,18 @@ const EditBlock = () => {
                 slide: slideInfo,
                 position: media.position
               };
-              const requestOptionsMedia = {
-                method: "post",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(mediaData),
-              };
-              try{
-               await fetch(
-                  "/slidemedia",
-                  requestOptionsMedia
-                )
-                console.log("start5"); 
-              }catch(err) {
-                console.error(err)
-              }
-              
+            await EditBlockAPI.postSlideMedia(mediaData);   
             return;
         } 
 
-        const mediaDataPut = {
-          id: media.mediaId,
+        const mediaData = {
           imageID: media.imageID,
           type: media.type,
           position: media.position
         };
-        const requestOptionsMedia1 = {
-          method: "put",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mediaDataPut),
-        };
-        
-        try{
-          await fetch(
-            `/slidemedia/${media.mediaId}`,
-            requestOptionsMedia1
-          )
-          console.log("start4"); 
-        }catch(err){
-          console.error(err);
-        }
-        
+
+        await EditBlockAPI.updateSlideMedia(media.mediaId, mediaData);
+          console.log("start4");     
       }
     });
   };
@@ -310,16 +194,16 @@ const EditBlock = () => {
     reader.readAsDataURL(img);
     reader.onloadend = async() => {
         try{
-          const response = await fetch("/uploadimage",{
-            method: "post",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({file: reader.result}),
-          });
-          
-          const info = await response.json();
-          await  dispatch(
-            setBlockImageLink({ id: block?.id, imageID: info.imageID})
+          const erase = block?.imageID;
+
+          const info = await CloudinaryAPI.uploadSingleImage(reader); 
+          dispatch(
+            setBlockImageLink({ id: block?.id, imageID: info.publicId})
           )
+
+          if(erase !== block?.originalImage){
+            await CloudinaryAPI.destroyImage(erase);
+          }
         }catch(error){
           console.error(error)
         }
@@ -332,7 +216,19 @@ const EditBlock = () => {
   };
 
   //handles discarding the block and slides when cancelled
-  const handleCancel = () => {
+  const handleCancel = async (e) => {
+    e.preventDefault();
+
+    if(block?.imageID !== block?.originalImage){
+      await CloudinaryAPI.destroyImage(block?.imageID);
+    }
+    
+    slideMedia?.forEach(async (media) => {
+      if(!media.original){
+        await CloudinaryAPI.destroyImage(media.imageID);
+      }
+    })
+    
     dispatch(cancelled({ id: block?.id }));
     slides.forEach((slide) => {
       dispatch(cancelBySlide({ slideId: slide.id }));
@@ -367,7 +263,7 @@ const EditBlock = () => {
           </fieldset>
           <fieldset>
             <label> Upload Front Cover for Block:</label>
-            <input type="file" name="image" onChange={selectImage} />
+            <input type="file" name="image" onChange={(e) => selectImage(e)} />
           </fieldset>
           {block?.selectedImage && (
             <Image className="photo" cloudName='engageapp' publicId={block?.imageID}/>
@@ -427,8 +323,8 @@ const EditBlock = () => {
             <button className="buttonText" type="submit">
               Save
             </button>
-            <button className="buttonText" onClick={handleCancel}>
-              Delete & Cancel
+            <button className="buttonText" onClick={(e) => handleCancel(e)}>
+              Cancel
             </button>
           </div>
         </form>
