@@ -19,7 +19,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Entry.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => Block_1.Block, block => block.entries, { onUpdate: "CASCADE", onDelete: "CASCADE" }),
+    typeorm_1.ManyToOne(type => Block_1.Block, block => block.entries, { onUpdate: "CASCADE", onDelete: "CASCADE", eager: true }),
     __metadata("design:type", Number)
 ], Entry.prototype, "block", void 0);
 __decorate([
