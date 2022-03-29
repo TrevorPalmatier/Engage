@@ -6,6 +6,7 @@ interface StudyState {
   imageID: string;
   selectedImage: boolean;
   submitted: boolean;
+  originalImage: string
 }
 
 const initialState: StudyState = {
@@ -13,6 +14,7 @@ const initialState: StudyState = {
   imageID: "",
   selectedImage: false,
   submitted: false,
+  originalImage: ""
 };
 
 const studySlice = createSlice({
@@ -21,6 +23,12 @@ const studySlice = createSlice({
   reducers: {
     setTitle: (state, { payload }) => {
       state.title = payload.title;
+      return state;
+    },
+    setOriginalImage: (state, {payload}) =>{
+      state.originalImage = payload.imageID;
+      state.imageID = payload.imageID;
+      state.selectedImage = true;
       return state;
     },
     setImage: (state, { payload }) => {
@@ -36,6 +44,6 @@ const studySlice = createSlice({
 });
 
 export default studySlice.reducer;
-export const { setTitle, setImage, cancelled } = studySlice.actions;
+export const { setTitle, setOriginalImage, setImage, cancelled } = studySlice.actions;
 export const selectStudy = (state: RootState) =>
   state.persistedReducer.study.study;

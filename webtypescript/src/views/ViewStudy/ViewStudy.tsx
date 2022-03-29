@@ -1,42 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "../App.scss";
-import "../Styling/ViewBlocks.scss";
-import { useAppDispatch } from "../hooks/store";
-import { addBlock } from "../features/blocksSlice";
-import { setTitle } from "../features/studySlice";
-import { setImage } from "../features/studySlice";
-import { Layout } from "../Components/Layout";
+import "../../App.scss";
+import "./ViewStudy.scss";
+import { useAppDispatch } from "../../hooks/store";
+import blocksSlice, { addBlock } from "../../features/blocksSlice";
+import { setOriginalImage, setTitle } from "../../features/studySlice";
+import { setImage } from "../../features/studySlice";
+import { Layout } from "../../Components/Layout";
 import { Image } from "cloudinary-react";
+import * as StudyAPI from "./ViewStudyAPI";
+import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
 
-const ViewBlocks = () => {
+const ViewStudy = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [study, setStudy] = useState<any>({});
   const [blockData, setBlockData] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-
+  const [completeUsers, setCompleteUsers] = useState<any>([]);
+ 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const abortController = new AbortController();
 
-      fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${params.id}`, {
+    const fetchData = async () => {
+      try{
+        const response = await fetch(`/studies/${params.id}`, {
         signal: abortController.signal,
-      })
-        .then((res) => res.json())
-        .then((data) => {
+        });
+        const data = await response.json();
+        
           setStudy(data);
           setBlockData(data.blocks);
           setUsers(data.users);
-        })
-        .catch((error) => console.log(error));
+          setCompleteUsers(organizeUsers(data.users));
+        }catch(error) {
+             console.error(error)
+        };
+    }
+    fetchData();
 
     return () => {
       abortController.abort(); // cancel pending fetch request on component unmount
     };
   }, [params.id]);
 
+  const organizeUsers = async (usersList) => {
+    let complete = usersList;
+    blockData.forEach(async (block) => {
+      let incompleteblock = complete;
+      const entries = await StudyAPI.fetchEntries(block.id);
+      entries.forEach((entry)=>{
+        incompleteblock = incompleteblock.filter((user) => user.id !== entry.user.id);
+      })
+      console.log(incompleteblock);
+      incompleteblock.forEach((user)=>{
+        complete = complete.filter((complete) => complete.id !== user.id);
+      })
+      console.log(incompleteblock);
+    })
+
+    console.log(complete);
+    return await complete;
+  }
   const createBlock = () => {
     dispatch(addBlock());
     navigate(`/createblock/${study.id}`);
@@ -49,22 +76,33 @@ const ViewBlocks = () => {
   const editStudy = () => {
     const edit = true;
     dispatch(setTitle({ title: study.title }));
-    dispatch(setImage({ imageLink: study.imageLink }));
+    dispatch(setOriginalImage({ imageID: study.imageID }));
     navigate(`../createstudy/${edit}/${study.id}`);
   };
+
   const deleteStudy = async (e) => {
     e.preventDefault();
 
-    try{
-      const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/studies/${study.id}`, {
-          method: 'delete',
-          headers: { 'Content-Type': 'application/json' }})
+    //destroy images in cloudinary that are associated with the study
+    await CloudinaryAPI.destroyImage(study.imageID);
 
-        navigate(`/viewstudies`);
-        return; 
-      }catch(error){
-        console.error(error);
-      }
+    await blockData.forEach(async (block) => {
+      const entries = await StudyAPI.fetchEntries(block.id);
+      await entries.forEach( async (entry) => {
+        await CloudinaryAPI.destroyImage(entry.imageID);
+      });
+      const slides = await StudyAPI.fetchSlides(block.id);
+      await slides.forEach(async (slide) => {
+        const medias = await StudyAPI.fetchMedia(slide.id);
+        await medias.forEach(async (media) => {
+          await CloudinaryAPI.destroyImage(media.imageID);
+        })
+      })
+    })
+    
+    await StudyAPI.deleteOneStudy(study.id);
+
+    navigate(`/viewstudies`);   
   }
   
   return (
@@ -129,4 +167,4 @@ const ViewBlocks = () => {
   );
 };
 
-export default ViewBlocks;
+export default ViewStudy;

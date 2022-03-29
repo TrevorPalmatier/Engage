@@ -1,26 +1,28 @@
 import React from "react";
-import "../App.scss";
+import "../../App.scss";
+import "./CreateStudy.scss";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import {
   setTitle,
   setImage,
   cancelled,
   selectStudy,
-} from "../features/studySlice";
+} from "../../features/studySlice";
 import {
   addBlock,
   cancelBlocks,
   enableDisableBlockEdit,
-} from "../features/blocksSlice";
-import { RootState } from "../store";
-import "../Styling/CreateStudy.scss";
-import { Layout } from "../Components/Layout";
+} from "../../features/blocksSlice";
+import { RootState } from "../../store";
+
+import { Layout } from "../../Components/Layout";
 import {Image} from 'cloudinary-react';
 import  GenerateRandomCode  from 'react-random-code-generator';
-import { cancelSlides } from "../features/slideSlice";
-import { cancelMedia } from "../features/mediaSlideSlice";
-
+import { cancelSlides } from "../../features/slideSlice";
+import { cancelMedia } from "../../features/mediaSlideSlice";
+import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+import * as CreateStudyAPI from "./CreateStudyAPI";
 /**
  * Notes for things to maybe implement:
  *   create blocks similar to slides?
@@ -49,9 +51,9 @@ const CreateStudy = () => {
     navigate("/createblock");
   };
 
-  const goToViewBlocks = () => {
+  const goToViewStudy = () => {
     dispatch(cancelled());
-    navigate(`/viewblocks/${params.studyid}`);
+    navigate(`/viewstudy/${params.studyid}`);
   };
 
   const editBlock = (id) => {
@@ -63,8 +65,6 @@ const CreateStudy = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const date = Date.now();
-
     if (!params.edit){
       await postStudy(); 
       navigate("../viewstudies");
@@ -74,25 +74,19 @@ const CreateStudy = () => {
       dispatch(cancelMedia());
       return;
     }
-    
-    const postData = { title: study.title, imageID: study.imageID };
-    const requestOptions = {
-      method: "put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postData),
-    };
+    if(study.originalImage !== study.imageID){
+      await CloudinaryAPI.destroyImage(study.originalImage);
+    }
+    const studyData = { title: study.title, imageID: study.imageID };
 
-    const response = await fetch(
-      `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`,
-      requestOptions
-    )
+    await CreateStudyAPI.updateStudy(params.studyid, studyData);
 
     dispatch(cancelled());
     dispatch(cancelSlides());
     dispatch(cancelBlocks());
     dispatch(cancelMedia());
     
-    navigate(`../viewblocks/${params.studyid}`);
+    navigate(`../viewstudy/${params.studyid}`);
     
   };
 
@@ -101,19 +95,10 @@ const CreateStudy = () => {
     const accessCode = GenerateRandomCode.TextNumCode(3,3);
     //post the STUDY data
     const postData = { title: study.title, "imageID": study.imageID, code: accessCode };
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postData),
-    };
-    
-    try{
-      const response = await fetch("https://ancient-ridge-25388.herokuapp.com/studies", requestOptions);
-      const info = await response.json();
-      postBlocks(info);
-    }catch(error) {
-      console.log(error)
-    }
+
+    const info = await CreateStudyAPI.postStudy(postData);
+
+    await postBlocks(info);
   };
 
   const postBlocks = async(studyInfo) => {
@@ -128,23 +113,10 @@ const CreateStudy = () => {
       };
 
       //post request options for the block
-      const requestOptionsBlock = {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(blockData),
-      };
-      try{
-        // ***  need to save the block id before calling the "postSlides()" function
-        const response = await fetch(
-          "https://ancient-ridge-25388.herokuapp.com/blocks",
-          requestOptionsBlock
-        );
+        const info = await CreateStudyAPI.postBlock(blockData);
 
-        const info = await response.json();
         await postSlides(block?.id, info);
-        }catch(error){
-          console.log(error);
-        }
+
     });
   };
 
@@ -162,21 +134,8 @@ const CreateStudy = () => {
           block: blockInfo,
         }; //slide data
 
-        const requestOptionsSlide = {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(slideData),
-        };
-        try{
-          const response = await fetch(
-            "https://ancient-ridge-25388.herokuapp.com/slides",
-            requestOptionsSlide
-          )
-          const info = await response.json();
+          const info = await CreateStudyAPI.postSlide(slideData);
           await postSlideMedia(slide.id, info);
-        }catch(error){
-          console.log(error);
-        }     
       }
     });
   };
@@ -190,19 +149,8 @@ const CreateStudy = () => {
           position: media.position,
           slide: slideInfo,
         };
-        const requestOptionsMedia = {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mediaData),
-        };
-        try{
-          const response = await fetch(
-            "https://ancient-ridge-25388.herokuapp.com/slidemedia",
-            requestOptionsMedia
-        )
-        }catch(error){
-          console.log(error);
-        }
+        
+        await CreateStudyAPI.postSlideMedia(mediaData);
       }
     });
   }
@@ -221,49 +169,43 @@ const CreateStudy = () => {
     reader.readAsDataURL(img);
     
     reader.onloadend = async() => {
-        try{
-          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
-            method: "post",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({file: reader.result}),
-          });
-          
-          const info = await response.json();
-          await dispatch(setImage({imageID: info.publicId}));
-        }catch(error){
-          console.error(error)
-        }
+      const info = await CloudinaryAPI.uploadSingleImage(reader);
+      if(study?.imageID !== study.originalImage){
+        await CloudinaryAPI.destroyImage(study?.imageID);
+      }
+      dispatch(setImage({imageID: info.publicId}));
     }
   };
 
   //called if the user wants to cancel the form
   const cancel = async (e) => {
     e.preventDefault();
+
+    //only destroy during creation of study
+    if(!params.edit) {
+        await CloudinaryAPI.destroyImage(study.imageID);
+
+      slideMedia?.forEach(async (media) => {
+          await CloudinaryAPI.destroyImage(media.imageID);
+      })
+      blocks?.forEach(async (block) => {
+        await CloudinaryAPI.destroyImage(block.imageID);
+      })
+    }
+
+    if(study.imageID !== study.originalImage){
+      await CloudinaryAPI.destroyImage(study.imageID);
+    }
+    
     dispatch(cancelled());
     dispatch(cancelSlides());
     dispatch(cancelBlocks());
     dispatch(cancelMedia());
 
-    const data = {"public_id": study.imageID};
-    
-    try{
-      await fetch(
-        "https://ancient-ridge-25388.herokuapp.com/deleteimage",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        }
-      )
-    }catch(error){
-      console.error(error);
-    }
-
-
     if (!params.edit) {
-      navigate("/viewstudies");
+      navigate(-1);
     } else {
-      navigate(`../viewblocks/${params.studyid}`);
+      navigate(`../viewstudy/${params.studyid}`);
     }
   };
 
@@ -271,7 +213,10 @@ const CreateStudy = () => {
   return (
     <Layout>
       <div className="viewHeader">
-        <h1>Create a Study</h1>
+        {params.edit === 'true' ? <h1>Edit Study: {study.title}</h1>
+         : <h1>Create a Study</h1>
+          
+        }
       </div>
 
       <div className="form">
@@ -298,28 +243,31 @@ const CreateStudy = () => {
           )}
           <div>
             <h2>Study's Blocks</h2>
-            <button onClick={goToCreateBlock} className="buttonText">
-              Add Block
-            </button>
           </div>
           {!params.edit && (
-            <div className="container_blocks">
-              
-              <div className="create-blocks-container">
-                {blocks.map((block) => {
-                  return (
-                    <div className="square" key={block.id} onClick={() => editBlock(block.id)}>
-                      <Image cloudName='engageapp' publicId={block.imageID}/>
-                      <h2>{block.title}</h2>
-                    </div>
-                  );
-                })}
+            <div>
+              <button onClick={goToCreateBlock} className="buttonText">
+              Add Block
+              </button>
+            
+              <div className="container_blocks">
+                
+                <div className="create-blocks-container">
+                  {blocks.map((block) => {
+                    return (
+                      <div className="square" key={block.id} onClick={() => editBlock(block.id)}>
+                        <Image cloudName='engageapp' publicId={block.imageID}/>
+                        <h2>{block.title}</h2>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
           {params.edit && (
             <div>
-              <button onClick={goToViewBlocks} className="buttonText">
+              <button onClick={goToViewStudy} className="buttonText">
                 {" "}
                 Edit Blocks{" "}
               </button>
@@ -327,10 +275,10 @@ const CreateStudy = () => {
           )}
           <div className="submitButtons">
             <button type="submit" className="buttonText">
-              Create
+              Save
             </button>
             <button onClick={(e) => cancel(e)} className="buttonText">
-              Delete & Cancel
+              Cancel
             </button>
           </div>
         </form>

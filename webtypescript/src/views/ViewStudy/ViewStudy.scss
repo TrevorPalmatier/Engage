@@ -73,13 +73,16 @@
 
 .participantList {
   width: 40%;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   border: 1px solid rgb(0, 0, 0);
-  overflow: visible;
+  overflow-y: scroll;
   position: relative;
   align-self: flex-start;
   padding: 10px;
+  min-height: 100px;
 }
+
 
 .blockparticipantGrid {
   display: flex;

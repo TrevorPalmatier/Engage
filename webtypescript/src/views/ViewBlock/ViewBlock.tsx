@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {Image} from "cloudinary-react";
-import "../App.scss";
-import "../Styling/ViewBlock.scss";
-import FakeScreen from "./FakeScreen";
-import { useAppDispatch } from "../hooks/store";
-import { addOldBlock, cancelBlocks } from "../features/blocksSlice";
-import { addOldSlide, cancelSlides } from "../features/slideSlice";
+import "../../App.scss";
+import "./ViewBlock.scss";
+import FakeScreen from "../FakeScreen/FakeScreen";
+import { useAppDispatch } from "../../hooks/store";
+import { addOldBlock, cancelBlocks } from "../../features/blocksSlice";
+import { addOldSlide, cancelSlides } from "../../features/slideSlice";
 import {
   addOldMedia,
   cancelMedia,
-} from "../features/mediaSlideSlice";
-import { Layout } from "../Components/Layout";
+} from "../../features/mediaSlideSlice";
+import { Layout } from "../../Components/Layout";
+import * as ViewBlockAPI from "./ViewBlockAPI";
+import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+
 const ViewBlock = () => {
   const [block, setData] = useState<any>({});
   const [entries, setEntries] = useState<any>([]);
@@ -27,7 +30,7 @@ const ViewBlock = () => {
     dispatch(cancelMedia);
     const abortController = new AbortController();
 
-      fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${params.id}`, {
+      fetch(`/blocks/${params.id}`, {
         signal: abortController.signal,
       })
         .then((res) => {
@@ -39,10 +42,8 @@ const ViewBlock = () => {
         })
         .catch((error) => console.log(error));
 
-
-
       fetch(
-        `https://ancient-ridge-25388.herokuapp.com/blocks/entries/${params.id}`,
+        `/blocks/entries/${params.id}`,
         { signal: abortController.signal }
       )
         .then((res) => res.json())
@@ -79,11 +80,10 @@ const ViewBlock = () => {
     );
 
     //dispatch slides
-    block.slides.forEach((slide) => {
+    block.slides.forEach(async (slide) => {
         //create old slide in persist store
         dispatch(
           addOldSlide({
-            id: slide.id,
             blockId: block.id,
             slideId: slide.id,
             option: slide.option,
@@ -92,14 +92,8 @@ const ViewBlock = () => {
           })
         );
         
-        try{
-            //fetch media for slides and dispatch
-            fetch(`https://ancient-ridge-25388.herokuapp.com/slides/${slide.id}`)
-            .then((response) => response.json())
-            .then((info) => {dispatchMedia(info)});
-        }catch(error) {
-            console.error(error);
-        }
+        const info = await ViewBlockAPI.fetchSlides(slide.id);
+        dispatchMedia(info);
     });
     };
 
@@ -118,17 +112,20 @@ const ViewBlock = () => {
   };
 
   const deleteBlock = async () => {
-    
-    try{
-      await fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/${block.id}`, {
-        method: 'delete',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      
-    }catch(error){
-      console.error(error);
-    }
-    navigate(`/viewblocks/${block.study.id}`);
+    await CloudinaryAPI.destroyImage(block.imageID);
+    block.slides.forEach(async (slide) => {
+      const slideInfo = await ViewBlockAPI.fetchSlides(slide.id);
+      slideInfo.medias.forEach(async (media) => {
+        if(media.type === "image"){
+          await CloudinaryAPI.destroyImage(media.imageID);
+        }
+      })
+    })
+    entries.forEach( async (entry) => {
+      await CloudinaryAPI.destroyImage(entry.imageID);
+    })
+    await ViewBlockAPI.deleteBlock(params.id);
+    navigate(`/viewstudy/${block.study.id}`);
   }
   return (
     <Layout>

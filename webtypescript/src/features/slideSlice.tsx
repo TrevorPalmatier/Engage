@@ -37,8 +37,8 @@ const slideSlice = createSlice({
     },
     addOldSlide: (state, { payload }) => {
       state.push({
+        id: nextSlideId(state),
         blockId: payload.blockId,
-        id: payload.id,
         slideId: payload.slideId,
         title: payload.title,
         backgroundText: payload.backgroundText,

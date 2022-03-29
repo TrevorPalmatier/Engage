@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../App.scss";
-import "../Styling/ViewStudies.scss";
+import "../../App.scss";
+import "./ViewStudies.scss";
 import { useNavigate } from "react-router-dom";
-import { Layout } from "../Components/Layout";
+import { Layout } from "../../Components/Layout";
 import { Image } from "cloudinary-react";
 
 const ViewStudies = () => {
@@ -12,7 +12,7 @@ const ViewStudies = () => {
     console.log('Component is mounting');
     const abortController = new AbortController();
 
-    fetch("https://ancient-ridge-25388.herokuapp.com/studies", {
+    fetch("/studies", {
       signal: abortController.signal,
     })
       .then((res) => {
@@ -40,7 +40,7 @@ const ViewStudies = () => {
   };
 
   const gotToBlocks = (id) => {
-    navigate(`/viewblocks/${id}`);
+    navigate(`/viewstudy/${id}`);
   };
 
   return (

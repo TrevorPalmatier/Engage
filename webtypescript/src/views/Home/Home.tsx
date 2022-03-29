@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import "../App.scss";
+import "../../App.scss";
 import { useNavigate } from "react-router-dom";
-import { cancelled } from "../features/studySlice";
-import { cancelBlocks } from "../features/blocksSlice";
-import { cancelSlides } from "../features/slideSlice";
-import { useAppDispatch } from "../hooks/store";
-import { cancelMedia } from "../features/mediaSlideSlice";
-import { Layout } from "../Components/Layout";
+import { cancelled as cancelStudy} from "../../features/studySlice";
+import { cancelBlocks} from "../../features/blocksSlice";
+import { cancelSlides } from "../../features/slideSlice";
+import { cancelMedia } from "../../features/mediaSlideSlice";
+import { useAppDispatch } from "../../hooks/store";
+import { Layout } from "../../Components/Layout";
 
 /**
  * First page ** most likely after login
@@ -14,7 +14,20 @@ import { Layout } from "../Components/Layout";
  */
 const Home = () => {
   const navigate = useNavigate(); //sets up navigation
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const abortController = new AbortController();
+    console.log("mounting");
+    dispatch(cancelStudy());
+    dispatch(cancelBlocks());
+    dispatch(cancelMedia());
+    dispatch(cancelSlides());
 
+    return () => {
+      abortController.abort();
+      console.log("unmounting");
+    }
+  }, []);
   const goToCreateStudy = () => {
     navigate(`/createstudy`);
   };

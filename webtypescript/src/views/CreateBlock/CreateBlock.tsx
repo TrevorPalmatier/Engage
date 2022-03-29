@@ -1,9 +1,9 @@
-import "../App.scss";
-import "../Styling/CreateBlock.scss";
-import CreateSlide from "./CreateSlide";
+import "../../App.scss";
+import "./CreateBlock.scss";
+import CreateSlide from "../CreateSlide/CreateSlide";
 import { Image } from "cloudinary-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import {
   setBlockTitle,
   setBlockImageLink,
@@ -13,19 +13,20 @@ import {
   enableDisableBlockEdit,
   selectBlock,
   cancelBlocks
-} from "../features/blocksSlice";
+} from "../../features/blocksSlice";
 import {
   addSlide,
   cancelByBlock,
   cancelSlides,
-} from "../features/slideSlice";
+} from "../../features/slideSlice";
 import {
   cancelBySlide,
   cancelMedia,
   selectMedia,
-} from "../features/mediaSlideSlice";
-import { Layout } from "../Components/Layout";
-import { responseInterceptor } from "http-proxy-middleware";
+} from "../../features/mediaSlideSlice";
+import { Layout } from "../../Components/Layout";
+import * as CreateBlockAPI from "./CreateBlockAPI";
+import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -58,26 +59,19 @@ const CreateBlock = () => {
       dispatch(enableDisableBlockEdit({ id: block?.id, edit: false }));
       return;
     } else {
-      try{
-        const response = await fetch(
-          `https://ancient-ridge-25388.herokuapp.com/studies/${params.studyid}`
-        )
-        const data = await response.json();
-        
-        await postBlocks({
-          title: data.title,
-          imageID: data.imageID,
-          id: data.id,
-        })
-      }catch(error){
-        console.error(error);
-      }
+      const data = await CreateBlockAPI.getStudyInfo(params.studyid);
+      
+      await postBlocks({
+        title: data.title,
+        imageID: data.imageID,
+        id: data.id,
+      });
 
       dispatch(cancelMedia());
       dispatch(cancelBlocks());
       dispatch(cancelSlides());
       if (params.blockid == null) {
-        navigate(`../viewblocks/${params.studyid}`); //go back to viewing blocks
+        navigate(`../viewstudy/${params.studyid}`); //go back to viewing blocks
       } else {
         navigate(`/viewblock/${params.blockid}`);
       }
@@ -94,22 +88,8 @@ const CreateBlock = () => {
         study: studyInfo,
       };
 
-      const requestOptionsBlock = {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(blockData),
-      };
-
-      try{
-        const response = await fetch(
-          "https://ancient-ridge-25388.herokuapp.com/blocks",
-          requestOptionsBlock
-        )
-        const info = await response.json();
-        await postSlides(block?.id, info);
-      }catch(err) {
-        console.log(err);
-      } 
+      const info = await CreateBlockAPI.postBlock(blockData);
+      await postSlides(block?.id, info);
   };
 
   /**
@@ -117,108 +97,33 @@ const CreateBlock = () => {
    */
   const postSlides = async (blockId, blockInfo) => {
     //loops through all the slides and does a post request for each one
-    await slides.forEach(async (slide) => {
+    slides.forEach(async (slide) => {
       if (slide.blockId === blockId) {
-        if (!slide.new) {
-          const slideDataPut = {
-            id: slide.slideId,
-            title: slide.title,
-            backgroundText: slide.backgroundText,
-            option: slide.option
-          }; //slide data
-          const requestOptionsSlide1 = {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(slideDataPut),
-          };
-
-          const slide_id = slide.slideId;
-          
-          try{
-            const response = await fetch(
-              `https://ancient-ridge-25388.herokuapp.com/slides/${slide_id}`,
-              requestOptionsSlide1
-            )
-            const info = await response.json();
-             await postSlideMedia(slide.id, slideDataPut);
-
-            }catch(error){
-              console.error(error);
-            }
-            return;
-        }
           const slideData = {
             title: slide.title,
             backgroundText: slide.backgroundText,
             block: blockInfo,
             option: slide.option,
           }; //slide data
-          let requestOptionsSlide = {
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(slideData),
-          };
-          try{
-            const response = await fetch(
-              `https://ancient-ridge-25388.herokuapp.com/slides`,
-              requestOptionsSlide
-            )
-            const info = await response.json();
-            await postSlideMedia(slide.id, info);
+          
+          const info = await CreateBlockAPI.postSlide(slideData);
+          await postSlideMedia(slide.id, info);
 
-          }catch(error) {
-            console.error(error);
-          }
         }
     });
   };
 
   const postSlideMedia = async (slideId, slideInfo) => {
-    await slideMedia?.forEach(async (media) => {
+    slideMedia?.forEach(async (media) => {
       if (slideId === media.slideId) {
-        if (media.mediaId !== -1) {
-          const mediaDataPut = {
-            id: media.mediaId,
-            imageID: media.imageID,
-            type: media.type,
-            position: media.position
-          };
-          const requestOptionsMedia1 = {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(mediaDataPut),
-          };
-
-          try{
-          await fetch(
-            `https://ancient-ridge-25388.herokuapp.com/slidemedia/${media.mediaId}`,
-            requestOptionsMedia1
-          )
-          }catch(error){
-            console.error(error);
-          }
-          return;
-        } 
           const mediaData = {
             imageID: media.imageID,
             type: media.type,
             slide: slideInfo,
             position: media.position,
           };
-          const requestOptionsMedia = {
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(mediaData),
-          };
-
-          try{
-            await fetch(
-              "https://ancient-ridge-25388.herokuapp.com/slidemedia",
-              requestOptionsMedia
-            )
-          }catch(err) {
-            console.log(err);
-          }
+          
+          await CreateBlockAPI.postSlideMedia(mediaData);
         }
     });
   };
@@ -239,14 +144,11 @@ const CreateBlock = () => {
     reader.readAsDataURL(img);
     reader.onloadend = async() => {
         try{
-          const response = await fetch("https://ancient-ridge-25388.herokuapp.com/uploadimage",{
-            method: "post",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({file: reader.result}),
-          });
-          
-          const info = await response.json();
-          await  dispatch(
+          const info = await CloudinaryAPI.uploadSingleImage( reader );
+          if(block?.imageID !== ""){
+            await CloudinaryAPI.destroyImage(block?.imageID);
+          }
+          dispatch(
             setBlockImageLink({ id: block?.id, imageID: info.publicId})
           )
         }catch(error){
@@ -261,8 +163,14 @@ const CreateBlock = () => {
   };
 
   //handles discarding the block and slides when cancelled
-  const handleCancel = () => {
+  const handleCancel = async (e) => {
+    e.preventDefault();
+
+    await CloudinaryAPI.destroyImage( block?.imageID);
     dispatch(cancelled({ id: block?.id }));
+    slideMedia?.forEach(async (media) => {
+        await CloudinaryAPI.destroyImage(media.imageID);
+    })
     slides.forEach((slide) => {
       dispatch(cancelBySlide({ slideId: slide.id }));
     });
@@ -270,7 +178,7 @@ const CreateBlock = () => {
 
     //cancel the block and any slide
     if (params.studyid) {
-      navigate(`../viewblocks/${params.studyid}`);
+      navigate(`../viewstudy/${params.studyid}`);
       return;
     }
 
@@ -361,8 +269,12 @@ const CreateBlock = () => {
             <button className="buttonText" type="submit">
               Save
             </button>
-            <button className="buttonText" onClick={handleCancel}>
-              Delete & Cancel
+            <button className="buttonText" onClick={(e) => {
+              const confirmBox = window.confirm("Are you sure you want to delete this Block? \n Click \"Save\" to save any changes.")
+              if(confirmBox === true){
+                handleCancel(e);
+              }}}>
+              Delete
             </button>
           </div>
         </form>

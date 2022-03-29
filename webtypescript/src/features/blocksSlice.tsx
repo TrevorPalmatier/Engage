@@ -10,6 +10,7 @@ interface BlockState {
   promptText: string;
   edit: boolean;
   new: boolean;
+  originalImage: string;
 }
 
 interface BlocksState extends Array<BlockState> {}
@@ -37,9 +38,13 @@ const blocksSlice = createSlice({
           promptText: "",
           edit: true,
           new: true,
+          originalImage: ""
         },
       ];
       return state;
+    },
+    changeToEditBlock: (state, {payload}) => {
+
     },
     addOldBlock: (state, { payload }) => {
       state = [
@@ -53,6 +58,7 @@ const blocksSlice = createSlice({
           promptText: payload.promptText,
           edit: true,
           new: false,
+          originalImage: payload.imageID
         },
       ];
       return state;

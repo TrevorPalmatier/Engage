@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../App.scss";
-import { Layout } from "../Components/Layout";
+import "../../App.scss";
+import { Layout } from "../../Components/Layout";
 /**
  * This page shares what Engage is all about
  * @returns
