@@ -10,7 +10,12 @@ export class EntryController {
 	}
 
 	async one(request: Request, response: Response, next: NextFunction) {
-		return this.entryRepository.findOne(request.params.id, {relations: ["user"] });
+		const result = this.entryRepository.createQueryBuilder("entry")
+		.leftJoinAndSelect("entry.user", "user")
+		.where("entry.id = :id", {id: request.params.id})
+		.getOne();
+		return await result;
+
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {

@@ -19,11 +19,11 @@ __decorate([
     __metadata("design:type", Number)
 ], Entry.prototype, "id", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => Block_1.Block, block => block.entries, { onUpdate: "CASCADE", onDelete: "CASCADE", eager: true }),
+    typeorm_1.ManyToOne(type => Block_1.Block, block => block.entries, { onUpdate: "CASCADE", onDelete: "CASCADE" }),
     __metadata("design:type", Number)
 ], Entry.prototype, "block", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => User_1.User, user => user.entries, { onDelete: "CASCADE", onUpdate: "CASCADE" }),
+    typeorm_1.ManyToOne(type => User_1.User, user => user.entries, { onDelete: "CASCADE", onUpdate: "CASCADE", eager: true }),
     __metadata("design:type", Number)
 ], Entry.prototype, "user", void 0);
 __decorate([

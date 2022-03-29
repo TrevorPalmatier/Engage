@@ -9,7 +9,7 @@ export class Entry {
     id: number;
 
     // multiple entries can be submitted to a single prompt
-    @ManyToOne(type => Block, block => block.entries, {onUpdate: "CASCADE", onDelete: "CASCADE", eager: true})
+    @ManyToOne(type => Block, block => block.entries, {onUpdate: "CASCADE", onDelete: "CASCADE"})
     block: number;
 
     // multiple entries can be submitted by a user

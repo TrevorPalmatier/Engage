@@ -21,7 +21,11 @@ class EntryController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.entryRepository.findOne(request.params.id, { relations: ["user"] });
+            const result = this.entryRepository.createQueryBuilder("entry")
+                .leftJoinAndSelect("entry.user", "user")
+                .where("entry.id = :id", { id: request.params.id })
+                .getOne();
+            return yield result;
         });
     }
     save(request, response, next) {
