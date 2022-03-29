@@ -153,14 +153,13 @@ const ViewStudy = () => {
         </div>
         <div className="participantList">
           {users?.map((user) => {
-              return (   
-                <p>{user.emailAddress}</p>
-              )
-          })}
-          {users.length() < 1 &&
-            return (   
-              <p>No participants in this study</p>
+            return (
+              <p>{user.emailAddress}</p>
             )
+          })}
+          {
+            users.length === 0 &&
+            <p>no participants</p>
           }
         </div>
       </div>
