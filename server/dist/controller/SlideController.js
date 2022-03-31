@@ -37,7 +37,12 @@ class SlideController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.slideRepository.findOne(request.params.id, { relations: ["medias"] });
+            const result = this.slideRepository.createQueryBuilder("slide")
+                .leftJoinAndSelect("slide.medias", "media")
+                .where("slide.id = :id", { id: request.params.id })
+                .orderBy("media.position")
+                .getMany();
+            return yield result;
         });
     }
     save(request, response, next) {

@@ -23,7 +23,13 @@ export class SlideController {
 		return (await result).medias;
 	}
     async one(request: Request, response: Response, next: NextFunction) {
-        return await this.slideRepository.findOne(request.params.id, {relations: ["medias"]});
+		const result = this.slideRepository.createQueryBuilder("slide")
+		.leftJoinAndSelect("slide.medias", "media")
+		.where("slide.id = :id", {id: request.params.id})
+		.orderBy("media.position")
+		.getMany();
+
+		return await result;
     }
 
 	async save(request: Request, response: Response, next: NextFunction) {
