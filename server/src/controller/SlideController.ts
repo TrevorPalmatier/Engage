@@ -23,11 +23,11 @@ export class SlideController {
 		return (await result).medias;
 	}
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.slideRepository.findOne(request.params.id, {relations: ["medias"]});
+        return await this.slideRepository.findOne(request.params.id, {relations: ["medias"]});
     }
 
 	async save(request: Request, response: Response, next: NextFunction) {
-		return this.slideRepository.save(request.body);
+		return await this.slideRepository.save(request.body);
 	}
 
     async remove(request: Request, response: Response, next: NextFunction) {

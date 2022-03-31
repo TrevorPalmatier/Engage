@@ -35,7 +35,7 @@ class BlockController {
         return __awaiter(this, void 0, void 0, function* () {
             const slides = this.slideRepository
                 .createQueryBuilder("slide")
-                .where("slide.blockId= :blockid", { blockid: request.params.id })
+                .where("slide.blockId = :blockid", { blockid: request.params.id })
                 .orderBy('timestamp', "ASC")
                 .getMany();
             const blockResult = yield this.blockRepository.findOne(request.params.id);
@@ -71,7 +71,7 @@ class BlockController {
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.blockRepository.update(request.params.id, request.body);
-            return this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
+            return yield this.blockRepository.findOne(request.params.id, { relations: ["slides"] });
         });
     }
 }

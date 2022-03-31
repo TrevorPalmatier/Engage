@@ -37,12 +37,12 @@ class SlideController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideRepository.findOne(request.params.id, { relations: ["medias"] });
+            return yield this.slideRepository.findOne(request.params.id, { relations: ["medias"] });
         });
     }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideRepository.save(request.body);
+            return yield this.slideRepository.save(request.body);
         });
     }
     remove(request, response, next) {

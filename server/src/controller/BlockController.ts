@@ -54,6 +54,6 @@ export class BlockController {
 	}
 	async update(request: Request, response: Response, next: NextFunction) {
     	await  this.blockRepository.update(request.params.id, request.body);
-		return this.blockRepository.findOne(request.params.id, {relations: ["slides"]});
+		return await this.blockRepository.findOne(request.params.id, {relations: ["slides"]});
     }
 }

@@ -27,7 +27,7 @@ class StudyController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.studyRepository.findOne(request.params.id, { relations: ["blocks", "users"] });
+            return yield this.studyRepository.findOne(request.params.id, { relations: ["blocks", "users"] });
         });
     }
     save(request, response, next) {

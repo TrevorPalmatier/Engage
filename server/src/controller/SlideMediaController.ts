@@ -15,7 +15,7 @@ export class SlideMediaController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
-        return this.slideMediaRepository.save(request.body);
+        return await this.slideMediaRepository.save(request.body);
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
@@ -24,6 +24,7 @@ export class SlideMediaController {
     }
 
     async update(request: Request, response: Response, next: NextFunction) {
-        return  this.slideMediaRepository.update(request.params.id, request.body);
+        await this.slideMediaRepository.update(request.params.id, request.body);
+        return await this.slideMediaRepository.findOne(request.params.id);
     }
 }

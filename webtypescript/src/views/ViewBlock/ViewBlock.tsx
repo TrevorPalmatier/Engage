@@ -14,6 +14,7 @@ import {
 import { Layout } from "../../Components/Layout";
 import * as ViewBlockAPI from "./ViewBlockAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+import XLSX from 'xlsx';
 
 const ViewBlock = () => {
   const [block, setData] = useState<any>({});
@@ -58,6 +59,34 @@ const ViewBlock = () => {
     };
 
   }, []);
+
+  const downloadData = async (e) =>{
+    e.preventDefault();
+    console.log("download button is pressed")
+
+    //get the data 
+    const response = await fetch(`https://ancient-ridge-25388.herokuapp.com/blocks/entries/${params.id}`)
+    // const entries = response.json()
+
+    //create a new worksheet
+    const workSheet = XLSX.utils.json_to_sheet(entries)
+
+    //create a new workbook
+    const workBook = XLSX.utils.book_new()
+
+    //attach the sheet to the book
+    XLSX.utils.book_append_sheet(workBook, workSheet,"entries")
+
+    //buffer 
+    let buf = XLSX.write(workBook, {bookType:"xlsx", type: "buffer"})
+
+    //generate a binary string with browser 
+    XLSX.write(workBook, {bookType: "xlsx", type: "binary"})
+
+    //download the file as blockData
+    const nameOfStudy = block.title + "_entries.xlsx"
+    XLSX.writeFile(workBook, nameOfStudy) 
+  }
 
   const goToEditBlock = async (e) => {
     e.preventDefault();
@@ -155,6 +184,8 @@ const ViewBlock = () => {
         }}>
           Delete Block
         </button>
+        <button className="buttonText" onClick={(e) => { downloadData(e);
+          }}>Download Data</button>
       </div>
       <div className="maincomponent">
       <div >

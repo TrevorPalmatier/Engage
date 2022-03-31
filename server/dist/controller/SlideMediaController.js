@@ -26,7 +26,7 @@ class SlideMediaController {
     }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideMediaRepository.save(request.body);
+            return yield this.slideMediaRepository.save(request.body);
         });
     }
     remove(request, response, next) {
@@ -37,7 +37,8 @@ class SlideMediaController {
     }
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.slideMediaRepository.update(request.params.id, request.body);
+            yield this.slideMediaRepository.update(request.params.id, request.body);
+            return yield this.slideMediaRepository.findOne(request.params.id);
         });
     }
 }
