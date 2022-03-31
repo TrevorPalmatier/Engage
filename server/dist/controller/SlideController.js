@@ -41,7 +41,7 @@ class SlideController {
                 .leftJoinAndSelect("slide.medias", "media")
                 .where("slide.id = :id", { id: request.params.id })
                 .orderBy("media.position")
-                .getMany();
+                .getOne();
             return yield result;
         });
     }
