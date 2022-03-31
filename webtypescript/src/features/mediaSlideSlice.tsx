@@ -38,6 +38,7 @@ const mediaSlideSlice = createSlice({
       return state;
     },
     addOldMedia: (state, { payload }) => {
+      console.log("addingd Old media");
       state.push({
         id: nextMediId(state),
         mediaId: payload.mediaId,
@@ -47,6 +48,7 @@ const mediaSlideSlice = createSlice({
         imageID: payload.imageID,
         original: true
       });
+      console.log(state);
     },
     setMediaPosition: (state, { payload }) => {
       state.map((media1) => {

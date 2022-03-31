@@ -22,7 +22,8 @@ const FakeScreen = ({ id }) => {
   }, [id, option]);
 
   const setSlideOption = (slide) => {
-    if(slide.medias.length === 2){
+    console.log(slide.medias);
+    if(slide.medias?.length === 2){
       setFirstStr(
         slide.backgroundText.slice(0, slide.backgroundText.length / 3)
       );

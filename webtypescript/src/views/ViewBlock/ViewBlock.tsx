@@ -4,7 +4,7 @@ import {Image} from "cloudinary-react";
 import "../../App.scss";
 import "./ViewBlock.scss";
 import FakeScreen from "../FakeScreen/FakeScreen";
-import { useAppDispatch } from "../../hooks/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
 import { addOldBlock, cancelBlocks } from "../../features/blocksSlice";
 import { addOldSlide, cancelSlides } from "../../features/slideSlice";
 import {
@@ -14,7 +14,7 @@ import {
 import { Layout } from "../../Components/Layout";
 import * as ViewBlockAPI from "./ViewBlockAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 
 const ViewBlock = () => {
   const [block, setData] = useState<any>({});
@@ -24,13 +24,17 @@ const ViewBlock = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const mediaApp = useAppSelector((state) => state.persistedReducer.media).filter(
+    (media1) => media1.slideId === 130
+  );
+
   useEffect(() => {
     console.log('Component is mounting');
-    dispatch(cancelBlocks);
-    dispatch(cancelSlides);
-    dispatch(cancelMedia);
+    
     const abortController = new AbortController();
-
+      dispatch(cancelBlocks);
+      dispatch(cancelSlides);
+      dispatch(cancelMedia);
       fetch(`/blocks/${params.id}`, {
         signal: abortController.signal,
       })
@@ -90,9 +94,8 @@ const ViewBlock = () => {
 
   const goToEditBlock = async (e) => {
     e.preventDefault();
-    
-    dispatchData();
-    navigate(`/editblock/${block.study.id}/${block.id}`);
+
+    await dispatchData();
   };
 
   const dispatchData = async () => {
@@ -113,6 +116,7 @@ const ViewBlock = () => {
         //create old slide in persist store
         dispatch(
           addOldSlide({
+            id: slide.id,
             blockId: block.id,
             slideId: slide.id,
             option: slide.option,
@@ -122,22 +126,25 @@ const ViewBlock = () => {
         );
         
         const info = await ViewBlockAPI.fetchSlides(slide.id);
-        dispatchMedia(info);
+        await dispatchMedia(info);
     });
     };
 
-  const dispatchMedia = (slideInfo) => {
+  const dispatchMedia = async (slideInfo) => {
     slideInfo.medias.forEach((media) => {
+      console.log(media);
       dispatch(
         addOldMedia({
-          slideId: slideInfo.id,
           mediaId: media.id,
+          slideId: slideInfo.id,
           type: media.type,
           position: media.position,
           imageID: media.imageID,
         })
       );
     });
+    console.log(mediaApp);
+    navigate(`/editblock/${block.study.id}/${block.id}`);
   };
 
   const deleteBlock = async () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../App.scss";
 import "./CreateSlide.scss";
 import { Image } from "cloudinary-react";
@@ -27,9 +27,18 @@ const CreateSlide = ({ id }) => {
   );
   const dispatch = useAppDispatch();
   const media = useAppSelector((state) => state.persistedReducer.media).filter(
-    (media) => media.slideId === slide?.id
+    (media1) => media1.slideId === slide?.id
   );
 
+  useEffect(() => {
+    const abortController = new AbortController();
+    setPosition(media?.length + 1);
+    console.log(position);
+    return () => {
+      console.log("unmounting");
+      abortController.abort(); // cancel pending fetch request on component unmount
+    };
+  }, [position])
   const selectMedia = (event) => {
     const files = event.target.files;
     
@@ -64,7 +73,6 @@ const CreateSlide = ({ id }) => {
       await CloudinaryAPI.destroyImage(media.imageID);
     }
     dispatch(deleteOneMedia({ id: media.id }));
-    console.log("deleted");
   };
 
     
@@ -112,7 +120,7 @@ const deleteSlide = async (e) => {
       </fieldset>
       <label>Upload 1-2 images/videos to display on the slide: </label>
       <fieldset>
-        <input type="file" onChange={(event) => selectMedia(event)} multiple />
+        <input type="file" onChange={(event) => selectMedia(event)} />
       </fieldset>
       <fieldset>
         <label>Upload Youtube Videos by inserting Embed Code here: </label>

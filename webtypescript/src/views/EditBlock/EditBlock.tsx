@@ -60,14 +60,15 @@ const EditBlock = () => {
     
     try{
       await postBlocks();
-    }catch(error){
-      console.error(error);
-    }
-    console.log("posted");
+      console.log("posted");
     dispatch(cancelBlocks());
     dispatch(cancelSlides());
     dispatch(cancelMedia());
     navigate(`/viewblock/${params.blockid}`);
+    }catch(error){
+      console.error(error);
+    }
+    
   };
 
   const postBlocks = async () => {
