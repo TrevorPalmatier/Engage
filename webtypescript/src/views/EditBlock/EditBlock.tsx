@@ -61,10 +61,10 @@ const EditBlock = () => {
     try{
       await postBlocks();
       console.log("posted");
-    dispatch(cancelBlocks());
-    dispatch(cancelSlides());
-    dispatch(cancelMedia());
-    navigate(`/viewblock/${params.blockid}`);
+      dispatch(cancelBlocks());
+      dispatch(cancelSlides());
+      dispatch(cancelMedia());
+      navigate(`/viewblock/${params.blockid}`);
     }catch(error){
       console.error(error);
     }
@@ -82,7 +82,6 @@ const EditBlock = () => {
         
         const info = await EditBlockAPI.updateBlock(params.blockid, blockData);
 
-        console.log(info);
         await postSlides(info); 
         await deleteSlides(info);
 
@@ -100,9 +99,10 @@ const EditBlock = () => {
     })
 
     //delete slide media
-    await toDelete.forEach(async (slide) => {
+    await toDelete.reduce(async (a, slide) => {
+      await a;
       await EditBlockAPI.deleteSlide(slide.id);
-    })
+    }, Promise.resolve())
   }
   
   /**
@@ -110,21 +110,19 @@ const EditBlock = () => {
    */
   const postSlides = async (blockInfo) => {
     //loops through all the slides and does a post request for each one
-    await slides.forEach(async (slide) => {
+    await slides.reduce(async (a, slide) => {
+      await a;
         if (!slide.new) {
           const slideData = {
             title: slide.title,
             backgroundText: slide.backgroundText,
             option: slide.option
-          }; //slide data
+          }//slide data
          
             const info = await EditBlockAPI.updateSlide(slide.slideId, slideData);
             await deleteMediaForSlide(info.medias);
             await postSlideMedia(info);
-            console.log("start1"); 
-          
-        return;
-        } 
+        }else{ 
           const slideData = {
             title: slide.title,
             backgroundText: slide.backgroundText,
@@ -133,12 +131,11 @@ const EditBlock = () => {
           }; //slide data
           
             const info = await EditBlockAPI.postSlide(slideData);
-            await postSlideMedia(info);
+            await postNewSlideMedia(slide.id, info);
             console.log("start2"); 
-          
-          
-      }
-    );
+        }
+      }, Promise.resolve()
+    )
   };
 
   const deleteMediaForSlide = async (oldSlideMedia) => {
@@ -148,13 +145,15 @@ const EditBlock = () => {
       toDelete = toDelete.filter((media1) => media.mediaId !== media1.id);
     });
 
-    await toDelete.forEach(async (media) => {
+    await toDelete.reduce(async (a, media) => {
+      await a;
       await EditBlockAPI.deleteMedia(media);
-    })
+    }, Promise.resolve())
   }
 
   const postSlideMedia = async ( slideInfo) => {
-    slideMedia?.forEach(async (media) => {
+    await slideMedia?.reduce( async (a, media) => {
+      await a;
       if (slideInfo.id === media.slideId) {
         if (media.mediaId === -1) {
             const mediaData = {
@@ -163,20 +162,35 @@ const EditBlock = () => {
                 slide: slideInfo,
                 position: media.position
               };
-            await EditBlockAPI.postSlideMedia(mediaData);   
-            return;
-        } 
+             await EditBlockAPI.postSlideMedia(mediaData);   
+        } else{
+          const mediaData = {
+            imageID: media.imageID,
+            type: media.type,
+            position: media.position
+          };
 
-        const mediaData = {
-          imageID: media.imageID,
-          type: media.type,
-          position: media.position
-        };
-
-        await EditBlockAPI.updateSlideMedia(media.mediaId, mediaData);
-          console.log("start4");     
+          await EditBlockAPI.updateSlideMedia(media.mediaId, mediaData);
+            console.log("start4");   
+        }  
       }
-    });
+    }, Promise.resolve());
+  };
+
+  const postNewSlideMedia = async (id,  slideInfo) => {
+    await slideMedia?.reduce( async (a, media) => {
+      await a;
+      if (id === media.slideId) {
+            const mediaData = {
+                imageID: media.imageID,
+                type: media.type,
+                slide: slideInfo,
+                position: media.position
+              };
+             await EditBlockAPI.postSlideMedia(mediaData);   
+        
+      }
+    }, Promise.resolve());
   };
 
   /**
@@ -248,7 +262,7 @@ const EditBlock = () => {
         <h1>Create a Block</h1>
       </div>
       <div className="form">
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={async (e) => await handleSubmit(e)}>
           <fieldset>
             <label>Name of Block:</label>
             <input

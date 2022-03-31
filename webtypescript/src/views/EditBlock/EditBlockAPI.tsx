@@ -57,9 +57,10 @@ const deleteSlide = async (slideID) => {
         const response = await fetch(`/slides/${slideID}`);
         const slideData = await response.json();
 
-        await slideData.medias.forEach(async (media) => {
+        await slideData.medias.reduce(async (a, media) => {
+           await a;
             await deleteMedia(media);
-        });
+        }, Promise.resolve());
 
         await fetch(`/slides/${slideID}`, {
             method: 'delete',
@@ -74,6 +75,7 @@ const deleteSlide = async (slideID) => {
 const deleteMedia = async(media) => {
     try{
         await CloudinaryAPI.destroyImage(media.imageID);
+
         await fetch(`/slidemedia/${media.id}`,{
             method: 'delete',
             headers: { "Content-Type": "application/json" }
