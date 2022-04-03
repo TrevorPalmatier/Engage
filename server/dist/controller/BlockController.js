@@ -77,7 +77,7 @@ class BlockController {
         return __awaiter(this, void 0, void 0, function* () {
             const invalid = saveBlockSchema.validate(request.body, options);
             if (invalid.error) {
-                throw new Error("invalid");
+                throw invalid.error;
             }
             else {
                 return this.blockRepository.save(request.body);

@@ -61,7 +61,7 @@ export class BlockController {
 	async save(request: Request, response: Response, next: NextFunction) {
 		const invalid = saveBlockSchema.validate(request.body, options);
 		if(invalid.error){
-			throw new Error("invalid");
+			throw invalid.error;
 		}else{
 			return this.blockRepository.save(request.body);
 		}
