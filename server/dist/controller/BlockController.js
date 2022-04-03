@@ -76,10 +76,7 @@ class BlockController {
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { error, value } = saveBlockSchema.validate(request.body, options);
-            console.log("saving");
-            console.log(error);
             if (error) {
-                console.log(error);
                 return response.status(400).json({
                     message: "An error occured when creating this block."
                 });
