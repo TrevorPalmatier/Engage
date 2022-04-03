@@ -77,9 +77,10 @@ class BlockController {
         return __awaiter(this, void 0, void 0, function* () {
             const invalid = saveBlockSchema.validate(request.body, options);
             if (invalid.error) {
-                return response.status(400).send({
+                return {
+                    status: 400,
                     message: "An error occured when creating this block."
-                });
+                };
             }
             else {
                 return this.blockRepository.save(request.body);

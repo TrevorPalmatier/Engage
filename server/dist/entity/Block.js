@@ -57,4 +57,7 @@ Block = __decorate([
     typeorm_1.Entity()
 ], Block);
 exports.Block = Block;
+function Min() {
+    throw new Error("Function not implemented.");
+}
 //# sourceMappingURL=Block.js.map

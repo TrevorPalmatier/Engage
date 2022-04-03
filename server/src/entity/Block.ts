@@ -40,3 +40,7 @@ export class Block {
     @OneToMany(type => Entry, entry => entry.block, {cascade: true})
     entries: Entry[];
 }
+function Min() {
+    throw new Error("Function not implemented.");
+}
+
