@@ -74,10 +74,10 @@ exports.Routes = [
         action: "update",
     },
     {
-        method: "put",
-        route: "/studies/:code",
+        method: "post",
+        route: "/studies/addUser",
         controller: StudyController_1.StudyController,
-        action: "addUser"
+        action: "addUser",
     },
     {
         method: "get",
@@ -108,11 +108,12 @@ exports.Routes = [
         route: "/slides/:id",
         controller: SlideController_1.SlideController,
         action: "remove",
-    }, {
+    },
+    {
         method: "put",
         route: "/slides/:id",
         controller: SlideController_1.SlideController,
-        action: "update"
+        action: "update",
     },
     {
         method: "get",
@@ -149,11 +150,12 @@ exports.Routes = [
         route: "/blocks/:id",
         controller: BlockController_1.BlockController,
         action: "remove",
-    }, {
+    },
+    {
         method: "put",
         route: "/blocks/:id",
         controller: BlockController_1.BlockController,
-        action: "update"
+        action: "update",
     },
     {
         method: "get",
@@ -168,6 +170,12 @@ exports.Routes = [
         action: "one",
     },
     {
+        method: "get",
+        route: "/entries/user/:id",
+        controller: EntryController_1.EntryController,
+        action: "allUser",
+    },
+    {
         method: "post",
         route: "/entries",
         controller: EntryController_1.EntryController,
@@ -178,31 +186,36 @@ exports.Routes = [
         route: "/entries/:id",
         controller: EntryController_1.EntryController,
         action: "remove",
-    }, {
+    },
+    {
         method: "get",
         route: "/slidemedia",
         controller: SlideMediaController_1.SlideMediaController,
-        action: "all"
-    }, {
+        action: "all",
+    },
+    {
         method: "get",
         route: "/slidemedia/:id",
         controller: SlideMediaController_1.SlideMediaController,
-        action: "one"
-    }, {
+        action: "one",
+    },
+    {
         method: "post",
         route: "/slidemedia",
         controller: SlideMediaController_1.SlideMediaController,
-        action: "save"
-    }, {
+        action: "save",
+    },
+    {
         method: "delete",
         route: "/slidemedia/:id",
         controller: SlideMediaController_1.SlideMediaController,
-        action: "remove"
-    }, {
+        action: "remove",
+    },
+    {
         method: "put",
         route: "/slidemedia/:id",
         controller: SlideMediaController_1.SlideMediaController,
-        action: "update"
+        action: "update",
     },
 ];
 //# sourceMappingURL=routes.js.map

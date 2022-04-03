@@ -35,11 +35,22 @@ export interface StudiesRequest {
 export interface ArrayResponse {
 	array: Array<any>;
 }
+export interface JoinStudyRequest {
+	userid: number;
+	studyCode: string;
+}
+export interface JoinStudyResponse {
+	studyid: number;
+	studyname: string;
+}
+export interface ImageResponse {
+	url: string;
+}
 
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: "https://ancient-ridge-25388.herokuapp.com/",
-		// baseUrl: "http://192.168.0.241:80/",
+		// baseUrl: "http://192.168.0.141:80/",
 		prepareHeaders: (headers, { getState }) => {
 			// By default, if we have a token in the store, let's use that for authenticated requests
 			const token = (getState() as RootState).auth.token;
@@ -71,12 +82,16 @@ export const api = createApi({
 				body: payload,
 			}),
 		}),
-		protected: builder.mutation<{ message: string }, void>({
-			query: () => "protected",
+		joinStudy: builder.mutation<JoinStudyResponse, JoinStudyRequest>({
+			query: (payload) => ({
+				url: `studies/addUser`,
+				method: "POST",
+				body: { userid: payload.userid, code: payload.studyCode },
+			}),
 		}),
 		studies: builder.query<ArrayResponse, number>({
 			query(id) {
-				return `studies`;
+				return `users/studies/${id}`;
 			},
 		}),
 		blocks: builder.query<ArrayResponse, number>({
@@ -94,16 +109,28 @@ export const api = createApi({
 				return `slides/media/${id}`;
 			},
 		}),
+		imageURI: builder.query<ImageResponse, string>({
+			query(id) {
+				return `/getimageurl/${id}`;
+			},
+		}),
+		userEntries: builder.query<ArrayResponse, number>({
+			query(id) {
+				return `/entries/user/${id}`;
+			},
+		}),
 	}),
 });
 
 export const {
 	useLoginMutation,
 	useSignupMutation,
-	useProtectedMutation,
+	useJoinStudyMutation,
 	useSumbitEntryMutation,
 	useStudiesQuery,
 	useBlocksQuery,
 	usePromptAndSlidesQuery,
 	useSlideMediaQuery,
+	useImageURIQuery,
+	useUserEntriesQuery,
 } = api;

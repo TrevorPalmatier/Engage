@@ -1,45 +1,31 @@
-import { View, Text, StyleSheet, Dimensions, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image, ScrollView, Button } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useSlideMediaQuery } from "../app/services/engage";
+import { useSlideMediaQuery } from "../../app/services/engage";
 import { useHeaderHeight } from "@react-navigation/elements";
+import SlideType1 from "./SlideType1";
 
 export default function Slide({ slideId, title, text }) {
 	const { data = [], isFetching } = useSlideMediaQuery(slideId);
-	const [uri, setUri] = useState(undefined);
-	const maxWidth = Dimensions.get("window").width * 0.9;
-	const baseHeight = (maxWidth / 4) * 3;
-	const [imgSize, setSize] = useState({ width: maxWidth, height: baseHeight });
+	const [pid, setPid] = useState(undefined);
 	useEffect(() => {
+		if (isFetching) return;
 		const res = data[0];
 		if (res) {
-			setUri(res.mediaUrl);
-			Image.getSize(res.mediaUrl, (w, h) => {
-				setSize({ width: w, height: h });
-			});
+			setPid(res.imageID);
 		}
 	}, [data]);
-	const ratio = imgSize.height / imgSize.width;
-	const imgWidth = Math.min(imgSize.width, maxWidth);
-	const imgHeight = Math.min(imgSize.height, maxWidth * ratio);
 
 	return (
-		<View style={[styles.main]}>
-			<ScrollView
-				style={{ flex: 1 }}
-				nestedScrollEnabled
-				showsVerticalScrollIndicator={false}
-				contentContainerStyle={{ alignItems: "center" }}>
-				<View style={[styles.titleContainer]}>
-					<Text style={[styles.titleText]}>{title}</Text>
+		<>
+			{isFetching || pid === undefined ? (
+				<></>
+			) : (
+				<View style={[styles.main]}>
+					{/* <Button title='check' onPress={() => console.log(pid)} /> */}
+					<SlideType1 title={title} text={text} pid={pid} />
 				</View>
-				<View style={[{ width: "100%", alignItems: "center" }]}>
-					{uri && <Image style={{ height: imgHeight, width: imgWidth, marginTop: 20 }} source={{ uri }} />}
-					<View style={[styles.textContainer]}>
-						<Text style={[styles.text2]}>{text}</Text>
-					</View>
-				</View>
-			</ScrollView>
-		</View>
+			)}
+		</>
 	);
 }
 

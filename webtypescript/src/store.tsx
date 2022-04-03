@@ -1,4 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { api } from "./features/engage";
+import userReducer from "./features/userSlice";
+import authReducer from "./features/authSlice";
 import studyReducer from "./features/studySlice";
 import BlocksReducer from "./features/blocksSlice";
 import { combineReducers } from "redux";
@@ -39,13 +42,17 @@ export const store = configureStore({
   reducer: {
     //reducers
     persistedReducer,
+    [api.reducerPath]: api.reducer,
+    user: userReducer,
+    auth: authReducer,
   },
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(api.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

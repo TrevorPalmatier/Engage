@@ -21,6 +21,19 @@ const routes_1 = require("./routes");
 const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+function authCheck(req, res, next) {
+    console.log(req.path);
+    if (auth_1.isAuth(req, res, next) ||
+        req.path === "/login" ||
+        req.path === "/signup" ||
+        req.path === "/login/admin" ||
+        req.path === "/") {
+        next();
+    }
+    else {
+        res.status(403).json({ message: "unauthorized" });
+    }
+}
 typeorm_1.createConnection()
     .then((connection) => __awaiter(this, void 0, void 0, function* () {
     // create express app
@@ -29,8 +42,9 @@ typeorm_1.createConnection()
     app.use(cors_1.default({
         origin: "*",
     }));
-    app.use(body_parser_1.default.json({ limit: '50mb' }));
-    app.use(body_parser_1.default.urlencoded({ limit: '100mb', extended: true }));
+    app.use(authCheck);
+    app.use(body_parser_1.default.json({ limit: "50mb" }));
+    app.use(body_parser_1.default.urlencoded({ limit: "100mb", extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
@@ -47,18 +61,25 @@ typeorm_1.createConnection()
         res.send("hello world");
     });
     app.post("/login", auth_1.login);
+    app.post("/login/admin", auth_1.loginAdmin);
     app.post("/signup", auth_1.signup);
-    app.post("/private", auth_1.isAuth);
+    app.get("/private", auth_1.isAuth);
     app.post("/uploadimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         console.log(req.body);
         try {
             const fileStr = req.body.file;
-            const uploadedResponse = yield cloudinary_1.cloudinary2.uploader.
-                upload(fileStr, {
+            const uploadedResponse = yield cloudinary_1.cloudinary2.uploader.upload(fileStr, {
                 upload_preset: "engageapp",
             });
             console.log(uploadedResponse.type);
-            res.json({ publicId: uploadedResponse.public_id, imageURL: uploadedResponse.secure_url, type: uploadedResponse.type, version: uploadedResponse.version, height: uploadedResponse.height, width: uploadedResponse.width });
+            res.json({
+                publicId: uploadedResponse.public_id,
+                imageURL: uploadedResponse.secure_url,
+                type: uploadedResponse.type,
+                version: uploadedResponse.version,
+                height: uploadedResponse.height,
+                width: uploadedResponse.width,
+            });
         }
         catch (error) {
             res.status(500).json({ err: "Could not upload" + req.body.file.toString() });
@@ -67,8 +88,7 @@ typeorm_1.createConnection()
     app.post("/deleteimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
             const public_id = req.body.public_id;
-            const deleteResponse = yield cloudinary_1.cloudinary2.uploader.
-                destroy(public_id);
+            const deleteResponse = yield cloudinary_1.cloudinary2.uploader.destroy(public_id);
             res.json({ msg: "deleted the image" });
         }
         catch (error) {
@@ -78,10 +98,13 @@ typeorm_1.createConnection()
     app.get("/getimageurl/:publicid", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
             const publicId = req.params.publicid;
+            console.log(publicId);
             const getResponse = yield cloudinary_1.cloudinary2.api.resource(publicId);
+            console.log("Found");
             res.json({ url: yield getResponse.secure_url });
         }
         catch (error) {
+            console.log(error);
             res.status(500).json({ error: "could not get the photo" });
         }
     }));

@@ -4,61 +4,24 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 export default function StudyCard(props) {
 	const handleClick = () => {
-		props.select(props.id);
-	};
-
-	const handleDelete = () => {
-		props.delete(props.index);
-	};
-
-	const renderRightActions = () => {
-		return (
-			<View
-				style={{
-					backgroundColor: "#e60000",
-					justifyContent: "center",
-					alignItems: "flex-end",
-				}}>
-				<Pressable
-					style={styles.button}
-					onPress={() => {
-						handleDelete();
-					}}>
-					<Text
-						style={{
-							color: "white",
-							// paddingHorizontal: 10,
-							fontWeight: "600",
-							paddingHorizontal: 30,
-							paddingVertical: 20,
-						}}>
-						Delete
-					</Text>
-				</Pressable>
-			</View>
-		);
+		props.select(props.id, props.name);
 	};
 
 	return (
-		<Swipeable renderRightActions={renderRightActions} rightThreshold={40}>
-			<View style={styles.main}>
-				<Pressable
-					style={({ pressed }) => [
-						styles.button,
-						{
-							backgroundColor: pressed ? "#ccc" : "#fff",
-						},
-					]}
-					onPress={() => {
-						handleClick();
-					}}
-					onLongPress={() => {
-						console.log("long press");
-					}}>
-					<Text style={{ fontSize: 16 }}>{props.name}</Text>
-				</Pressable>
-			</View>
-		</Swipeable>
+		<View style={styles.main}>
+			<Pressable
+				style={({ pressed }) => [
+					styles.button,
+					{
+						backgroundColor: pressed ? "#ccc" : "#fff",
+					},
+				]}
+				onPress={() => {
+					handleClick();
+				}}>
+				<Text style={{ fontSize: 16 }}>{props.name}</Text>
+			</Pressable>
+		</View>
 	);
 }
 

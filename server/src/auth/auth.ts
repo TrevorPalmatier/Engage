@@ -66,6 +66,7 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
 							.save({
 								emailAddress: req.body.email,
 								password: passwordHash,
+								admin: false,
 							})
 							.then(() => {
 								res.status(200).json({ message: "User created" });
@@ -141,23 +142,82 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 		});
 };
 
+const loginAdmin = (req: Request, res: Response, next: NextFunction) => {
+	const repo = getConnection().getRepository(User);
+	// checks if email exists
+	const inputValid = loginSchema.validate({
+		password: req.body.password,
+		email: req.body.email,
+	});
+
+	if (inputValid.error) {
+		const invalid = inputValid.error.details[0].type;
+		if (invalid === "string.empty") {
+			return res.status(400).json({ message: "All fields must be filled" });
+		} else {
+			return res.status(400).json({ message: "Email or Password is incorrect" });
+		}
+	}
+
+	repo.findOne({
+		where: {
+			emailAddress: req.body.email,
+		},
+	})
+		.then((dbUser: User) => {
+			if (!dbUser) {
+				return res.status(404).json({ message: "user not found" });
+			} else if (dbUser.admin) {
+				// password hash
+				bcrypt.compare(req.body.password, dbUser.password, (err: Error, compareRes: Boolean) => {
+					if (err) {
+						// error while comparing
+						res.status(502).json({ message: "error while checking user password" });
+					} else if (compareRes) {
+						// password match
+						const token = jwt.sign({ email: req.body.email }, "secret", { expiresIn: "1h" });
+						const user = {
+							id: dbUser.id,
+							email: dbUser.emailAddress,
+						};
+						res.status(200).json({ user, token });
+					} else {
+						// password doesnt match
+						res.status(400).json({ message: "Email or Password is incorrect" });
+					}
+				});
+			} else {
+				return res.status(403).json({ message: "Not Authorized" });
+			}
+		})
+		.catch((err: Error) => {
+			// tslint:disable-next-line:no-console
+			console.log("error", err);
+		});
+};
+
 const isAuth = (req: Request, res: Response, next: NextFunction) => {
+	console.log("Checking Auth");
 	const authHeader = req.get("Authorization");
 	if (!authHeader) {
-		return res.status(401).json({ message: "not authenticated" });
+		// return res.status(401).json({ message: "not authenticated" });
+		return false;
 	}
 	const token = authHeader.split(" ")[1];
 	let decodedToken;
 	try {
 		decodedToken = jwt.verify(token, "secret");
 	} catch (err) {
-		return res.status(500).json({ message: err.message || "could not decode the token" });
+		// return res.status(500).json({ message: err.message || "could not decode the token" });
+		return false;
 	}
 	if (!decodedToken) {
-		res.status(401).json({ message: "unauthorized" });
+		// res.status(403).json({ message: "unauthorized" });
+		return false;
 	} else {
-		res.status(200).json({ message: "here is your resource" });
+		// res.status(200).json({ message: "here is your resource" });
+		return true;
 	}
 };
 
-export { signup, login, isAuth };
+export { signup, login, isAuth, loginAdmin };

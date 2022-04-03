@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert, Button, Pressable } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert, Button, Pressable, Dimensions } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
+import * as Progress from "react-native-progress";
 import { logout, selectCurrentUser } from "../features/auth/authSlice";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/core";
@@ -10,7 +11,7 @@ import { useStudiesQuery } from "../app/services/engage";
 export default function CharacterSelectScreen({ navigation }) {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(selectCurrentUser);
-	const { data = [], isFetching } = useStudiesQuery(user.id);
+	const { data = [], isFetching, refetch } = useStudiesQuery(user.id);
 
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
@@ -26,32 +27,30 @@ export default function CharacterSelectScreen({ navigation }) {
 		});
 	}, [navigation]);
 
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			// The screen is focused
+			// Call any action and update data
+			refetch();
+		});
+
+		// Return the function to unsubscribe from the event so it gets removed on unmount
+		return unsubscribe;
+	}, [navigation]);
+
 	const handleAddStudy = () => {
-		Alert.alert("Does nothing for now");
+		navigation.navigate("AddStudies");
 		// navigation.navigate("CharacterCreation");
 	};
 
 	// You can move these function inside renderItem too remove the need for functions in the StudyCard.
 	// All information exists within this class so there is no need to require the StudyCard to have anything other than the function to call itself.
-	const handleSelectStudy = (id) => {
-		navigation.navigate("Home", { id });
-	};
-
-	const handleDeleteStudy = () => {
-		Alert.alert("Does nothing for now");
+	const handleSelectStudy = (id, name) => {
+		navigation.navigate("Home", { id, name });
 	};
 
 	const renderItem = ({ item, index }) => {
-		return (
-			<StudyCard
-				key={item.id}
-				id={item.id}
-				index={index}
-				name={item.title}
-				select={handleSelectStudy}
-				delete={handleDeleteStudy}
-			/>
-		);
+		return <StudyCard key={item.id} id={item.id} index={index} name={item.title} select={handleSelectStudy} />;
 	};
 
 	// if(isFetching){ return;} return early instead of ternary opperator
@@ -59,32 +58,37 @@ export default function CharacterSelectScreen({ navigation }) {
 	return (
 		<>
 			{isFetching ? (
-				<View style={styles.main}>
-					<Text>Is loading</Text>
+				<View style={styles.spinnerContainer}>
+					<Progress.Circle
+						style={styles.spinner}
+						size={100}
+						indeterminate={true}
+						borderWidth={5}
+						color={"#33BBFF"}
+					/>
 				</View>
 			) : (
-				<View style={styles.main}>
-					<FlatList
-						ItemSeparatorComponent={
-							Platform.OS !== "android" && (() => <View style={[styles.separator]} />)
-						}
-						style={{ width: "100%" }}
-						// contentContainerStyle={styles.container}
-						showsVerticalScrollIndicator={false}
-						data={data as any}
-						renderItem={renderItem}
-					/>
-					<View style={styles.buttonContainer}>
-						<TouchableOpacity
-							style={styles.button}
-							onPress={() => {
-								handleAddStudy();
-							}}>
-							<Text style={[{ color: "white", fontSize: 18 }]}>Join Study</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
+				<></>
 			)}
+			<View style={styles.main}>
+				<FlatList
+					ItemSeparatorComponent={Platform.OS !== "android" && (() => <View style={[styles.separator]} />)}
+					style={{ width: "100%" }}
+					// contentContainerStyle={styles.container}
+					showsVerticalScrollIndicator={false}
+					data={data as any}
+					renderItem={renderItem}
+				/>
+				<View style={styles.buttonContainer}>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							handleAddStudy();
+						}}>
+						<Text style={[{ color: "white", fontSize: 18 }]}>Join Study</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
 		</>
 	);
 }
@@ -116,5 +120,22 @@ const styles = StyleSheet.create({
 	separator: {
 		borderBottomColor: "#666",
 		borderBottomWidth: 1,
+	},
+	spinner: {
+		position: "absolute",
+		top: Dimensions.get("window").height / 2 - 180,
+		left: Dimensions.get("window").width / 2 - 50,
+		opacity: 1,
+		zIndex: 3,
+	},
+	spinnerContainer: {
+		position: "absolute",
+		justifyContent: "center",
+		alignItems: "center",
+		width: "100%",
+		height: "100%",
+		backgroundColor: "grey",
+		opacity: 0.4,
+		zIndex: 2,
 	},
 });

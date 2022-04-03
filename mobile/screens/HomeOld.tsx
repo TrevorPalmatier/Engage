@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Button, Dimensions, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Button, FlatList, Platform, Image, Dimensions, ActivityIndicator } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { logout, selectCurrentUser } from "../features/auth/authSlice";
-import { useBlocksQuery, useUserEntriesQuery } from "../app/services/engage";
+import { ArrayResponse, useBlocksQuery, useUserEntriesQuery } from "../app/services/engage";
 import * as Progress from "react-native-progress";
 import Block from "../components/Block";
+import Slide from "../components/slides/Slide";
+const img = require("../assets/landscape.jpg");
+const imgURI = Image.resolveAssetSource(img).uri;
 
 export default function home({ route, navigation }) {
 	const [completed, setCompleted] = useState([]);
@@ -66,7 +69,7 @@ export default function home({ route, navigation }) {
 		}
 	}, [entries, blocks]);
 
-	const renderItem = (item) => {
+	const renderItem = ({ item, index }) => {
 		const title = item.title;
 		const image = item.imageID;
 		const completed = item.hasSubmit;
@@ -95,9 +98,17 @@ export default function home({ route, navigation }) {
 				</View>
 			) : (
 				<View style={styles.container}>
-					<ScrollView style={{ width: "100%" }} contentContainerStyle={styles.listContainer}>
-						<View style={styles.blockList}>{completed.map(renderItem)}</View>
-					</ScrollView>
+					<FlatList
+						style={{ width: "100%" }}
+						horizontal
+						snapToInterval={175}
+						showsHorizontalScrollIndicator={false}
+						contentContainerStyle={styles.listContainer}
+						showsVerticalScrollIndicator={false}
+						data={completed}
+						keyExtractor={(item) => item.id}
+						renderItem={renderItem}
+					/>
 				</View>
 			)}
 		</>
@@ -116,14 +127,9 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 	},
 	listContainer: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		justifyContent: "center",
-		// alignItems: "flex-start",
-		// width: "100%",
-		// paddingLeft: Dimensions.get("window").width / 2 - 87.5,
-		// paddingRight: Dimensions.get("window").width / 2 - 87.5,
-		// padding: 30,
+		paddingLeft: Dimensions.get("window").width / 2 - 87.5,
+		paddingRight: Dimensions.get("window").width / 2 - 87.5,
+		padding: 30,
 	},
 	spinner: {
 		position: "absolute",
@@ -141,11 +147,5 @@ const styles = StyleSheet.create({
 		backgroundColor: "grey",
 		opacity: 0.4,
 		zIndex: 2,
-	},
-	blockList: {
-		flex: 1,
-		flexDirection: "row",
-		flexWrap: "wrap",
-		justifyContent: "center",
 	},
 });

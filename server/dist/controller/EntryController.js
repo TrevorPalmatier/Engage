@@ -21,22 +21,37 @@ class EntryController {
     }
     one(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = this.entryRepository.createQueryBuilder("entry")
+            const result = this.entryRepository
+                .createQueryBuilder("entry")
                 .leftJoinAndSelect("entry.user", "user")
                 .where("entry.id = :id", { id: request.params.id })
                 .getOne();
             return yield result;
         });
     }
+    allUser(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.entryRepository
+                .createQueryBuilder("entry")
+                .leftJoinAndSelect("entry.block", "block")
+                .leftJoinAndSelect("entry.user", "user")
+                .where("entry.userId = :id", { id: request.params.id })
+                .getMany();
+            const blocks = result.map((value) => {
+                return value.block;
+            });
+            return blocks;
+        });
+    }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            // console.log(request.body);
+            console.log(request.body);
             // return { message: "you are a dumbo" };
             const entry = new Entry_1.Entry();
             const body = request.body;
             entry.user = body.userId;
             entry.block = body.blockId;
-            entry.imageID = body.imageLink;
+            entry.imageID = body.imageID;
             entry.text = body.text;
             return this.entryRepository.save(entry);
         });

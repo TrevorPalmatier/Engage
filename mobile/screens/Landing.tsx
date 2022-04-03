@@ -9,14 +9,14 @@ export default function Landing({ navigation }) {
 			</View>
 			<View style={styles.buttonContainer}>
 				<Pressable
-					style={styles.button}
+					style={({ pressed }) => [{ backgroundColor: pressed ? "#1199DD" : "#33BBFF" }, styles.button]}
 					onPress={() => {
 						navigation.navigate("Signup");
 					}}>
 					<Text style={styles.buttonText}>Sign Up</Text>
 				</Pressable>
 				<Pressable
-					style={styles.button}
+					style={({ pressed }) => [{ backgroundColor: pressed ? "#1199DD" : "#33BBFF" }, styles.button]}
 					onPress={() => {
 						navigation.navigate("Login");
 					}}>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 		padding: 5,
 		height: 50,
 		width: "60%",
-		backgroundColor: "#33BBFF",
+		// backgroundColor: "#33BBFF",
 		alignItems: "center",
 		justifyContent: "center",
 		borderRadius: 5,

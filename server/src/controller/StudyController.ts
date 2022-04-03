@@ -6,7 +6,7 @@ export class StudyController {
 	private studyRepository = getRepository(Study);
 
 	async all(request: Request, response: Response, next: NextFunction) {
-		return this.studyRepository.find({order: {timestamp: "DESC"}});
+		return this.studyRepository.find({ order: { timestamp: "DESC" } });
 	}
 
 	async blocks(request: Request, response: Response, next: NextFunction) {
@@ -32,14 +32,24 @@ export class StudyController {
 	}
 
 	async addUser(request: Request, response: Response, next: NextFunction) {
-		const accessCode = request.params.code;
+		const accessCode = request.body.code;
 
-		const result = this.studyRepository
+		const result = await this.studyRepository
 			.createQueryBuilder("study")
-			.where("study.code = :id" , { id: accessCode })
+			.where("study.code = :code", { code: accessCode })
 			.getOne();
 
-		return this.studyRepository.update((await result).id, {users: request.body})
-	}
+		if (result === undefined) return { studyid: null, studyname: null };
 
+		await this.studyRepository
+			.createQueryBuilder()
+			.relation(Study, "users")
+			.of(result)
+			.add(request.body.userid)
+			.catch((err) => {
+				// return { studyid: null, studyname: null };
+			});
+
+		return { studyid: result.id, studyname: result.title };
+	}
 }

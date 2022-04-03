@@ -48,12 +48,22 @@ class StudyController {
     }
     addUser(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const accessCode = request.params.code;
-            const result = this.studyRepository
+            const accessCode = request.body.code;
+            const result = yield this.studyRepository
                 .createQueryBuilder("study")
-                .where("study.code = :id", { id: accessCode })
+                .where("study.code = :code", { code: accessCode })
                 .getOne();
-            return this.studyRepository.update((yield result).id, { users: request.body });
+            if (result === undefined)
+                return { studyid: null, studyname: null };
+            yield this.studyRepository
+                .createQueryBuilder()
+                .relation(Study_1.Study, "users")
+                .of(result)
+                .add(request.body.userid)
+                .catch((err) => {
+                // return { studyid: null, studyname: null };
+            });
+            return { studyid: result.id, studyname: result.title };
         });
     }
 }

@@ -73,10 +73,10 @@ export const Routes = [
 		action: "update",
 	},
 	{
-		method: "put",
-		route: "/studies/:code",
+		method: "post",
+		route: "/studies/addUser",
 		controller: StudyController,
-		action: "addUser"
+		action: "addUser",
 	},
 	{
 		method: "get",
@@ -107,11 +107,12 @@ export const Routes = [
 		route: "/slides/:id",
 		controller: SlideController,
 		action: "remove",
-	},{
+	},
+	{
 		method: "put",
 		route: "/slides/:id",
 		controller: SlideController,
-		action: "update"
+		action: "update",
 	},
 	{
 		method: "get",
@@ -148,11 +149,12 @@ export const Routes = [
 		route: "/blocks/:id",
 		controller: BlockController,
 		action: "remove",
-	},{
+	},
+	{
 		method: "put",
 		route: "/blocks/:id",
 		controller: BlockController,
-		action: "update"
+		action: "update",
 	},
 	{
 		method: "get",
@@ -167,6 +169,12 @@ export const Routes = [
 		action: "one",
 	},
 	{
+		method: "get",
+		route: "/entries/user/:id",
+		controller: EntryController,
+		action: "allUser",
+	},
+	{
 		method: "post",
 		route: "/entries",
 		controller: EntryController,
@@ -177,30 +185,35 @@ export const Routes = [
 		route: "/entries/:id",
 		controller: EntryController,
 		action: "remove",
-	},{
+	},
+	{
 		method: "get",
 		route: "/slidemedia",
 		controller: SlideMediaController,
-		action: "all"
-	}, {
+		action: "all",
+	},
+	{
 		method: "get",
 		route: "/slidemedia/:id",
 		controller: SlideMediaController,
-		action: "one"
-	}, {
+		action: "one",
+	},
+	{
 		method: "post",
 		route: "/slidemedia",
 		controller: SlideMediaController,
-		action: "save"
-	}, {
+		action: "save",
+	},
+	{
 		method: "delete",
 		route: "/slidemedia/:id",
 		controller: SlideMediaController,
-		action: "remove"
-	},{
+		action: "remove",
+	},
+	{
 		method: "put",
 		route: "/slidemedia/:id",
 		controller: SlideMediaController,
-		action: "update"
+		action: "update",
 	},
 ];

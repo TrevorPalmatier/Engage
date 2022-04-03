@@ -27,11 +27,15 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Boolean)
+], User.prototype, "admin", void 0);
+__decorate([
     typeorm_1.OneToMany((type) => Entry_1.Entry, (entry) => entry.user, { onDelete: "CASCADE", onUpdate: "CASCADE" }),
     __metadata("design:type", Array)
 ], User.prototype, "entries", void 0);
 __decorate([
-    typeorm_1.ManyToMany((type) => Study_1.Study, study => study.users, { cascade: true }),
+    typeorm_1.ManyToMany((type) => Study_1.Study, (study) => study.users, { cascade: true }),
     __metadata("design:type", Array)
 ], User.prototype, "studies", void 0);
 User = __decorate([

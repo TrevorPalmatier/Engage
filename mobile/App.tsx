@@ -10,13 +10,13 @@ import { selectCurrentUser } from "./features/auth/authSlice";
 import { store } from "./app/store";
 import Home from "./screens/Home";
 import Landing from "./screens/Landing";
-import Waiting from "./screens/Waiting";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import CameraScreen from "./screens/CameraScreen";
 import Caption from "./screens/Caption";
 import Prompt from "./screens/Prompt";
 import Studies from "./screens/Studies";
+import AddStudies from "./screens/AddStudies";
 
 const Stack = createNativeStackNavigator();
 const PromptStack = createNativeStackNavigator();
@@ -35,17 +35,21 @@ function Main() {
 
 	return (
 		<NavigationContainer>
-			<Stack.Navigator>
+			<Stack.Navigator screenOptions={{ headerTintColor: "black" }}>
 				{user ? (
 					<>
 						<Stack.Screen name='Studies' component={Studies} />
+						<Stack.Screen
+							name='AddStudies'
+							component={AddStudies}
+							options={{ presentation: "modal", title: "Join Study" }}
+						/>
 						<Stack.Screen name='Home' component={Home} />
 						<Stack.Screen name='PromptTabs' component={PromptTabScreens} />
 					</>
 				) : (
 					<>
 						<Stack.Screen name='Landing' component={Landing} options={{ headerShown: false }} />
-						<Stack.Screen name='Waiting' component={Waiting} />
 						<Stack.Screen name='Login' component={Login} />
 						<Stack.Screen name='Signup' component={Register} />
 					</>

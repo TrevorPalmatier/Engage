@@ -13,11 +13,14 @@ export class User {
 	@Column()
 	password: string;
 
+	@Column()
+	admin: boolean;
+
 	// a user can sumbit multiple entries
-	@OneToMany((type) => Entry, (entry) => entry.user, {onDelete: "CASCADE", onUpdate: "CASCADE"})
+	@OneToMany((type) => Entry, (entry) => entry.user, { onDelete: "CASCADE", onUpdate: "CASCADE" })
 	entries: Entry[];
 
 	// multiple users can be part of multiple Studies
-	@ManyToMany((type) => Study, study => study.users, {cascade:true})
+	@ManyToMany((type) => Study, (study) => study.users, { cascade: true })
 	studies: Study[];
 }

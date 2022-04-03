@@ -13,7 +13,7 @@ const NavbarScroller = () => {
 
       <div className="right">
         <li>
-          <a className="nav-link" href="/">
+          <a className="nav-link" href="/home">
             Home
           </a>
         </li>

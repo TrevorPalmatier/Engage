@@ -14,7 +14,7 @@ import * as PhotoPicker from "expo-image-picker";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { usePromptAndSlidesQuery } from "../app/services/engage";
-import Slide from "../components/Slide";
+import Slide from "../components/slides/Slide";
 const img = require("../assets/landscape.jpg");
 const imgURI = Image.resolveAssetSource(img).uri;
 
@@ -75,14 +75,14 @@ export default function Prompt({ route, navigation }) {
 							: "Submit a response"}
 					</Text>
 					<Pressable
-						style={styles.button}
+						style={({ pressed }) => [{ backgroundColor: pressed ? "#1199DD" : "#33BBFF" }, styles.button]}
 						onPress={() => {
 							pickImage();
 						}}>
 						<Text style={[styles.text, { color: "white" }]}>Select Photo</Text>
 					</Pressable>
 					<Pressable
-						style={styles.button}
+						style={({ pressed }) => [{ backgroundColor: pressed ? "#1199DD" : "#33BBFF" }, styles.button]}
 						onPress={() => {
 							navigation.navigate("Camera");
 						}}>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
 		padding: 5,
 		height: 50,
 		width: "60%",
-		backgroundColor: "#33BBFF",
+		// backgroundColor: "#33BBFF",
 		alignItems: "center",
 		justifyContent: "center",
 		borderRadius: 5,
