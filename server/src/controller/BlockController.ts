@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Block } from "../entity/Block";
 import { Slide } from "../entity/Slide";
 import joi from "joi";
+import { Http2ServerRequest } from "http2";
 
 const saveBlockSchema = joi
 	.object({
@@ -61,7 +62,7 @@ export class BlockController {
 	async save(request: Request, response: Response, next: NextFunction) {
 		const invalid = saveBlockSchema.validate(request.body, options);
 		if(invalid.error){
-			throw invalid.error;
+			return {status: 400, error: invalid.error.details[0], message: "Missing Fields"}
 		}else{
 			return this.blockRepository.save(request.body);
 		}

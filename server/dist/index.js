@@ -34,33 +34,12 @@ typeorm_1.createConnection()
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
-            try {
-                const result = new route.controller()[route.action](req, res, next);
-                if (result instanceof Promise) {
-                    result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
-                }
-                else if (result !== null && result !== undefined) {
-                    res.json(result);
-                }
+            const result = new route.controller()[route.action](req, res, next);
+            if (result instanceof Promise) {
+                result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
             }
-            catch (error) {
-                if (error.details[0].type === "string.emptry") {
-                    if (error.details[0].path.contains("title")) {
-                        res.status(400).send("Title is Required");
-                    }
-                    else if (error.details[0].path.contains("imageID")) {
-                        res.status(400).send("Image is Required");
-                    }
-                    else if (error.details[0].path.contains("promptTitle")) {
-                        res.status(400).send("Prompt Title is Required");
-                    }
-                    else if (error.details[0].path.contains("promptText")) {
-                        res.status(400).send("Prompt Text is Required");
-                    }
-                    else {
-                        res.status(400).send("Unknown error");
-                    }
-                }
+            else if (result !== null && result !== undefined) {
+                res.json(result);
             }
         });
     });
