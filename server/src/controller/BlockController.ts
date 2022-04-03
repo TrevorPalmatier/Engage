@@ -2,7 +2,21 @@ import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
 import { Block } from "../entity/Block";
 import { Slide } from "../entity/Slide";
+import joi from "joi";
 
+const saveBlockSchema = joi 
+	.object({
+		title: joi.string().min(1).required(),
+		imageID: joi.string().min(1).required(),
+		promptTitle: joi.string().min(1),
+		promtText: joi.string().min(1)
+
+	});
+const options = {
+	abortEarly: false,
+	allowUnknown: true,
+	stripUnknown: true
+}
 export class BlockController {
 	private blockRepository = getRepository(Block);
 	private slideRepository = getRepository(Slide);
@@ -45,7 +59,17 @@ export class BlockController {
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
-		return this.blockRepository.save(request.body);
+		const {error, value} = saveBlockSchema.validate(request.body, options);
+		
+		if(error){
+			console.log(error);
+			return response.status(400).json({
+				message: "An error occured when creating this block."
+			})
+
+		}else{
+			return this.blockRepository.save(request.body);
+		}
 	}
 
 	async remove(request: Request, response: Response, next: NextFunction) {
