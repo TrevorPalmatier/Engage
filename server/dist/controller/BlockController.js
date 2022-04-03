@@ -7,10 +7,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const Block_1 = require("../entity/Block");
 const Slide_1 = require("../entity/Slide");
+const joi_1 = __importDefault(require("joi"));
+const saveBlockSchema = joi_1.default
+    .object({
+    title: joi_1.default.string().min(1).required(),
+    imageID: joi_1.default.string().min(1).required(),
+    promptTitle: joi_1.default.string().min(1),
+    promtText: joi_1.default.string().min(1)
+});
+const options = {
+    abortEarly: false,
+    allowUnknown: true,
+    stripUnknown: true
+};
 class BlockController {
     constructor() {
         this.blockRepository = typeorm_1.getRepository(Block_1.Block);
@@ -59,7 +75,18 @@ class BlockController {
     }
     save(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.blockRepository.save(request.body);
+            const { error, value } = saveBlockSchema.validate(request.body, options);
+            console.log("saving");
+            console.log(error);
+            if (error) {
+                console.log(error);
+                return response.status(400).json({
+                    message: "An error occured when creating this block."
+                });
+            }
+            else {
+                return this.blockRepository.save(request.body);
+            }
         });
     }
     remove(request, response, next) {

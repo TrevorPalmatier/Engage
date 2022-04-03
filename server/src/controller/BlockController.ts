@@ -4,7 +4,7 @@ import { Block } from "../entity/Block";
 import { Slide } from "../entity/Slide";
 import joi from "joi";
 
-const saveBlockSchema = joi 
+const saveBlockSchema = joi
 	.object({
 		title: joi.string().min(1).required(),
 		imageID: joi.string().min(1).required(),
@@ -60,7 +60,8 @@ export class BlockController {
 
 	async save(request: Request, response: Response, next: NextFunction) {
 		const {error, value} = saveBlockSchema.validate(request.body, options);
-		
+		console.log("saving");
+		console.log(error);
 		if(error){
 			console.log(error);
 			return response.status(400).json({
