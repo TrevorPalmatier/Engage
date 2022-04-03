@@ -27,6 +27,8 @@ import {
 import { Layout } from "../../Components/Layout";
 import * as CreateBlockAPI from "./CreateBlockAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+import { useEffect, useState } from "react";
+import { isConditionalExpression } from "typescript";
 
 /**
  * A block is an object that holds a prompt and multiple slides and assigned to a study.
@@ -67,14 +69,14 @@ const CreateBlock = () => {
         id: data.id,
       });
 
-      dispatch(cancelMedia());
-      dispatch(cancelBlocks());
-      dispatch(cancelSlides());
-      if (params.blockid == null) {
-        navigate(`../viewstudy/${params.studyid}`); //go back to viewing blocks
-      } else {
+        dispatch(cancelMedia());
+        dispatch(cancelBlocks());
+        dispatch(cancelSlides());
+        if (params.blockid == null) {
+          navigate(`../viewstudy/${params.studyid}`); //go back to viewing blocks
+          return;
+        }
         navigate(`/viewblock/${params.blockid}`);
-      }
     }
   };
 
@@ -88,8 +90,9 @@ const CreateBlock = () => {
         study: studyInfo,
       };
 
-      const info = await CreateBlockAPI.postBlock(blockData);
-      await postSlides(block?.id, info);
+        const res = await CreateBlockAPI.postBlock(blockData);
+        await postSlides(block?.id, res);
+
   };
 
   /**
@@ -97,24 +100,21 @@ const CreateBlock = () => {
    */
   const postSlides = async (blockId, blockInfo) => {
     //loops through all the slides and does a post request for each one
-    slides.forEach(async (slide) => {
-      if (slide.blockId === blockId) {
-          const slideData = {
-            title: slide.title,
-            backgroundText: slide.backgroundText,
-            block: blockInfo,
-            option: slide.option,
-          }; //slide data
-          
-          const info = await CreateBlockAPI.postSlide(slideData);
-          await postSlideMedia(slide.id, info);
-
-        }
-    });
+    await Promise.all(slides.map(async (slide) => {
+        const slideData = {
+          title: slide.title,
+          backgroundText: slide.backgroundText,
+          block: blockInfo,
+          option: slide.option,
+        }; //slide data
+        
+        const info = await CreateBlockAPI.postSlide(slideData);
+        await postSlideMedia(slide.id, info);
+    }));
   };
 
   const postSlideMedia = async (slideId, slideInfo) => {
-    slideMedia?.forEach(async (media) => {
+    await Promise.all(slideMedia?.map(async (media) => {
       if (slideId === media.slideId) {
           const mediaData = {
             imageID: media.imageID,
@@ -125,7 +125,7 @@ const CreateBlock = () => {
           
           await CreateBlockAPI.postSlideMedia(mediaData);
         }
-    });
+    }));
   };
 
   /**
@@ -146,6 +146,7 @@ const CreateBlock = () => {
         try{
           const info = await CloudinaryAPI.uploadSingleImage( reader );
           if(block?.imageID !== ""){
+            console.log("deleting images")
             await CloudinaryAPI.destroyImage(block?.imageID);
           }
           dispatch(
@@ -166,11 +167,16 @@ const CreateBlock = () => {
   const handleCancel = async (e) => {
     e.preventDefault();
 
-    await CloudinaryAPI.destroyImage( block?.imageID);
+    if(block?.imageID !== ""){
+      await CloudinaryAPI.destroyImage( block?.imageID);
+    }
+
     dispatch(cancelled({ id: block?.id }));
-    slideMedia?.forEach(async (media) => {
+
+    await Promise.all(slideMedia?.map(async (media) => {
         await CloudinaryAPI.destroyImage(media.imageID);
-    })
+    }));
+
     slides.forEach((slide) => {
       dispatch(cancelBySlide({ slideId: slide.id }));
     });

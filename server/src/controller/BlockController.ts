@@ -2,22 +2,7 @@ import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
 import { Block } from "../entity/Block";
 import { Slide } from "../entity/Slide";
-import joi from "joi";
-import { Http2ServerRequest } from "http2";
 
-const saveBlockSchema = joi
-	.object({
-		title: joi.string().min(1).required(),
-		imageID: joi.string().min(1).required(),
-		promptTitle: joi.string().min(1),
-		promptText: joi.string().min(1)
-
-	});
-const options = {
-	abortEarly: false,
-	allowUnknown: true,
-	stripUnknown: true
-}
 export class BlockController {
 	private blockRepository = getRepository(Block);
 	private slideRepository = getRepository(Slide);
@@ -60,12 +45,7 @@ export class BlockController {
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
-		const invalid = saveBlockSchema.validate(request.body, options);
-		if(invalid.error){
-			return {status: 400, error: invalid.error.details[0], message: "Missing Fields"}
-		}else{
 			return this.blockRepository.save(request.body);
-		}
 	}
 
 	async remove(request: Request, response: Response, next: NextFunction) {
