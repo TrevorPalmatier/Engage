@@ -35,6 +35,9 @@ const FakeScreen = ({ id }) => {
       );
       setOption(3);
       return;
+    }else if(slide.medias?.length === 0){
+      setOption(4);
+      return;
     }
 
     if (slide.option === 1) {
@@ -62,6 +65,9 @@ const FakeScreen = ({ id }) => {
         <div className="header">
           <h2>{slideData.title}</h2>
         </div>
+        {
+
+        }
         {slideData.medias?.map((media) => {
           if (media.position === 1) {
             if(option === 1){
@@ -122,7 +128,11 @@ const FakeScreen = ({ id }) => {
             );
           }
           return(<div></div>);
-        })}
+        })} : {
+          <div>
+            <p className="text">{slideData.backgroundText}</p>
+          </div>
+        }
       </div>
     </div>
   );

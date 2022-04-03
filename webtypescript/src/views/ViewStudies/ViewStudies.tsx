@@ -12,7 +12,7 @@ const ViewStudies = () => {
     console.log('Component is mounting');
     const abortController = new AbortController();
 
-    fetch("/studies", {
+    fetch("/api/studies", {
       signal: abortController.signal,
     })
       .then((res) => {
