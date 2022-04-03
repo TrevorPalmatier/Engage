@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "./index.tsx",
-  "proxy": "https://ancient-ridge-25388.herokuapp.com",
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -20,7 +20,7 @@
     "@types/react": "^17.0.38",
     "@types/react-router-dom": "^5.3.3",
     "cloudinary-react": "^1.7.1",
-    "http-proxy-middleware": "^2.0.3",
+    "http-proxy-middleware": "^2.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-random-code-generator": "^1.0.2",
@@ -60,6 +60,7 @@
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
     "@types/styled-components": "^5.1.21",
+    "http-proxy-middleware": "^2.0.4",
     "prettier": "2.5.1",
     "sass": "^1.49.9"
   }

@@ -45,7 +45,7 @@ export class BlockController {
 	}
 
 	async save(request: Request, response: Response, next: NextFunction) {
-		return this.blockRepository.save(request.body);
+			return this.blockRepository.save(request.body);
 	}
 
 	async remove(request: Request, response: Response, next: NextFunction) {

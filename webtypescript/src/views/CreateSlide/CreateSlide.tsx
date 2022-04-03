@@ -21,6 +21,7 @@ import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
 const CreateSlide = ({ id }) => {
   const [embedCode, setVideo] = useState("");
   const [position, setPosition] = useState(1);
+  const [errorImages, setError] = useState<string>();
   //set up reducers and redux
   const slide = useAppSelector((state) => state.persistedReducer.slides).find(
     (slide) => slide.id === id
@@ -35,37 +36,37 @@ const CreateSlide = ({ id }) => {
     setPosition(media?.length + 1);
     console.log(position);
     return () => {
-      console.log("unmounting");
+
       abortController.abort(); // cancel pending fetch request on component unmount
     };
-  }, [position])
-  const selectMedia = (event) => {
-    const files = event.target.files;
-    
+  }, [position]);
 
-    [...files].forEach((file, index) => {
-      if (index > 1) {
-        alert("You can only upload a maximum of 2 files");
-        return;
-      } else {
-        let img = file;
-        const reader = new FileReader();
-        reader.readAsDataURL(img);
-        reader.onloadend = async() => {
-          
-            const info = await CloudinaryAPI.uploadSingleImage(reader);
-            dispatch(
-              addMedia({
-                slideId: slide?.id,
-                type: "image",
-                imageID: info.publicId,
-                position: position
-              })
-            )
-            setPosition(position+1);
-        }
-        }
-    });
+  const selectMedia = (event) => {
+    event.preventDefault();
+
+    if(media.length > 2){
+      setError("You cannot upload more than 2 images");
+      return;
+    }
+
+    const img = event.target.files?.[0];
+    if(!img){
+      const reader = new FileReader();
+      reader.readAsDataURL(img);
+      reader.onloadend = async() => {
+        
+          const info = await CloudinaryAPI.uploadSingleImage(reader);
+          dispatch(
+            addMedia({
+              slideId: slide?.id,
+              type: "image",
+              imageID: info.publicId,
+              position: position
+            })
+          )
+          setPosition(position+1);
+      }
+    }
   };
 
   const deleteMedia = async (media) => {
@@ -124,7 +125,6 @@ const deleteSlide = async (e) => {
       </fieldset>
       <fieldset>
         <label>Upload Youtube Videos by inserting Embed Code here: </label>
-        
         <input type="text" name="video" onChange={(e) => setVideo(e.target.value)}/>
         <button type="button" className="buttonText" onClick={(e) => uploadVideo()}>Upload Video</button>
       </fieldset>

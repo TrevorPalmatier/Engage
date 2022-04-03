@@ -16,9 +16,10 @@ const postBlock = async ( blockData ) => {
             method: 'post',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(blockData)
-        });
+        })
 
         return await response.json();
+
     }catch(err){
         console.error(err);
     }
