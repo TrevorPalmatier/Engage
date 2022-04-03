@@ -61,7 +61,7 @@ export class BlockController {
 	async save(request: Request, response: Response, next: NextFunction) {
 		const invalid = saveBlockSchema.validate(request.body, options);
 		if(invalid.error){
-			return response.status(400).json({
+			return response.status(400).send({
 				message: "An error occured when creating this block."
 			});
 		}else{
