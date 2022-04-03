@@ -34,12 +34,17 @@ typeorm_1.createConnection()
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
         app[route.method](route.route, (req, res, next) => {
-            const result = new route.controller()[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
+            try {
+                const result = new route.controller()[route.action](req, res, next);
+                if (result instanceof Promise) {
+                    result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
+                }
+                else if (result !== null && result !== undefined) {
+                    res.json(result);
+                }
             }
-            else if (result !== null && result !== undefined) {
-                res.json(result);
+            catch (error) {
+                res.send(error);
             }
         });
     });
