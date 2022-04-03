@@ -44,7 +44,23 @@ typeorm_1.createConnection()
                 }
             }
             catch (error) {
-                res.send(error);
+                if (error.details[0].type === "string.emptry") {
+                    if (error.details[0].path.contains("title")) {
+                        res.status(400).send("Title is Required");
+                    }
+                    else if (error.details[0].path.contains("imageID")) {
+                        res.status(400).send("Image is Required");
+                    }
+                    else if (error.details[0].path.contains("promptTitle")) {
+                        res.status(400).send("Prompt Title is Required");
+                    }
+                    else if (error.details[0].path.contains("promptText")) {
+                        res.status(400).send("Prompt Text is Required");
+                    }
+                    else {
+                        res.status(400).send("Unknown error");
+                    }
+                }
             }
         });
     });

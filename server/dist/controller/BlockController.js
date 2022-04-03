@@ -20,7 +20,7 @@ const saveBlockSchema = joi_1.default
     title: joi_1.default.string().min(1).required(),
     imageID: joi_1.default.string().min(1).required(),
     promptTitle: joi_1.default.string().min(1),
-    promtText: joi_1.default.string().min(1)
+    promptText: joi_1.default.string().min(1)
 });
 const options = {
     abortEarly: false,

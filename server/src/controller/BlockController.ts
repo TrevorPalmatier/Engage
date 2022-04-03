@@ -9,7 +9,7 @@ const saveBlockSchema = joi
 		title: joi.string().min(1).required(),
 		imageID: joi.string().min(1).required(),
 		promptTitle: joi.string().min(1),
-		promtText: joi.string().min(1)
+		promptText: joi.string().min(1)
 
 	});
 const options = {
