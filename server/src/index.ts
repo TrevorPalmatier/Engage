@@ -8,7 +8,7 @@ import { Request, Response } from "express";
 import { Routes } from "./routes";
 import { createConnection } from "typeorm";
 import dotenv from "dotenv";
-import { UploadStream } from "cloudinary";
+import { validationResult } from "express-validator";
 dotenv.config();
 
 function authCheck(req: Request, res: Response, next: NextFunction) {
@@ -42,13 +42,21 @@ createConnection()
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
-			(app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
+			(app as any)[route.method](route.route, ...route.validation, (req: Request, res: Response, next: Function) => {
+				try{
+					const errors = validationResult(req);
+					if(!errors.isEmpty) {
+						return res.status(400).json({errors: errors.array()});
+					}
 					const result = new (route.controller as any)()[route.action](req, res, next);
 					if (result instanceof Promise) {
 						result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
 					} else if (result !== null && result !== undefined) {
 						res.json(result);
 					}
+				}catch(err){
+					next(err);
+				}
 			});
 		});
 

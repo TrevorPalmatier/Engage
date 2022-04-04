@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Slide = void 0;
 const typeorm_1 = require("typeorm");
 const Block_1 = require("./Block");
 const SlideMedia_1 = require("./SlideMedia");

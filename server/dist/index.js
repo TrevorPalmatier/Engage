@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -20,6 +21,7 @@ const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
+const express_validator_1 = require("express-validator");
 dotenv_1.default.config();
 function authCheck(req, res, next) {
     console.log(req.path);
@@ -35,7 +37,7 @@ function authCheck(req, res, next) {
     }
 }
 typeorm_1.createConnection()
-    .then((connection) => __awaiter(this, void 0, void 0, function* () {
+    .then((connection) => __awaiter(void 0, void 0, void 0, function* () {
     // create express app
     const app = express_1.default();
     // const port = 3000; // default port to listen
@@ -47,13 +49,22 @@ typeorm_1.createConnection()
     app.use(body_parser_1.default.urlencoded({ limit: "100mb", extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
-        app[route.method](route.route, (req, res, next) => {
-            const result = new route.controller()[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
+        app[route.method](route.route, ...route.validation, (req, res, next) => {
+            try {
+                const errors = express_validator_1.validationResult(req);
+                if (!errors.isEmpty) {
+                    return res.status(400).json({ errors: errors.array() });
+                }
+                const result = new route.controller()[route.action](req, res, next);
+                if (result instanceof Promise) {
+                    result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
+                }
+                else if (result !== null && result !== undefined) {
+                    res.json(result);
+                }
             }
-            else if (result !== null && result !== undefined) {
-                res.json(result);
+            catch (err) {
+                next(err);
             }
         });
     });
@@ -85,7 +96,7 @@ typeorm_1.createConnection()
             res.status(500).json({ err: "Could not upload" + req.body.file.toString() });
         }
     }));
-    app.post("/deleteimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/deleteimage", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const public_id = req.body.public_id;
             const deleteResponse = yield cloudinary_1.cloudinary2.uploader.destroy(public_id);
@@ -95,7 +106,7 @@ typeorm_1.createConnection()
             res.status(500).json({ err: "Could not delete" });
         }
     }));
-    app.get("/getimageurl/:publicid", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/getimageurl/:publicid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const publicId = req.params.publicid;
             console.log(publicId);
@@ -109,7 +120,7 @@ typeorm_1.createConnection()
         }
     }));
     // start express server
-    app.listen(process.env.PORT || 80, () => __awaiter(this, void 0, void 0, function* () {
+    app.listen(process.env.PORT || 80, () => __awaiter(void 0, void 0, void 0, function* () {
         // tslint:disable-next-line:no-console
         console.log("Express server on https://ancient-ridge-25388.herokuapp.com/");
     }));
