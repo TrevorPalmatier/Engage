@@ -21,7 +21,6 @@ const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
-const express_validator_1 = require("express-validator");
 dotenv_1.default.config();
 function authCheck(req, res, next) {
     console.log(req.path);
@@ -49,25 +48,13 @@ typeorm_1.createConnection()
     app.use(body_parser_1.default.urlencoded({ limit: "100mb", extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
-        app[route.method](route.route, ...route.validation, (req, res, next) => {
-            try {
-                const errors = express_validator_1.validationResult(req);
-                if (!errors.isEmpty()) {
-                    console.log("error has occurred");
-                    console.log(errors);
-                    res.status(400).json({ errors: errors.array() });
-                    return;
-                }
-                const result = new route.controller()[route.action](req, res, next);
-                if (result instanceof Promise) {
-                    result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
-                }
-                else if (result !== null && result !== undefined) {
-                    res.json(result);
-                }
+        app[route.method](route.route, (req, res, next) => {
+            const result = new route.controller()[route.action](req, res, next);
+            if (result instanceof Promise) {
+                result.then((result) => (result !== null && result !== undefined ? res.send(result) : undefined));
             }
-            catch (err) {
-                next(err);
+            else if (result !== null && result !== undefined) {
+                res.json(result);
             }
         });
     });

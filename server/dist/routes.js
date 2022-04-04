@@ -7,84 +7,72 @@ const SlideController_1 = require("./controller/SlideController");
 const BlockController_1 = require("./controller/BlockController");
 const EntryController_1 = require("./controller/EntryController");
 const SlideMediaController_1 = require("./controller/SlideMediaController");
-const express_validator_1 = require("express-validator");
 exports.Routes = [
     {
         method: "get",
         route: "/users",
         controller: UserController_1.UserController,
         action: "all",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/users/:id",
         controller: UserController_1.UserController,
         action: "one",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/users/studies/:id",
         controller: UserController_1.UserController,
         action: "studies",
-        validation: new Array(),
     },
     {
         method: "post",
         route: "/users",
         controller: UserController_1.UserController,
         action: "save",
-        validation: new Array(),
     },
     {
         method: "delete",
         route: "/users/:id",
         controller: UserController_1.UserController,
         action: "remove",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/studies",
         controller: StudyController_1.StudyController,
         action: "all",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/studies/:id",
         controller: StudyController_1.StudyController,
         action: "one",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/studies/blocks/:id",
         controller: StudyController_1.StudyController,
         action: "blocks",
-        validation: new Array(),
     },
     {
         method: "post",
         route: "/studies",
         controller: StudyController_1.StudyController,
         action: "save",
-        validation: new Array(),
     },
     {
         method: "delete",
         route: "/studies/:id",
         controller: StudyController_1.StudyController,
         action: "remove",
-        validation: new Array(),
     },
     {
         method: "put",
         route: "/studies/:id",
         controller: StudyController_1.StudyController,
         action: "update",
-        validation: new Array(),
     },
     {
         method: "post",
@@ -97,28 +85,24 @@ exports.Routes = [
         route: "/slides",
         controller: SlideController_1.SlideController,
         action: "all",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/slides/:id",
         controller: SlideController_1.SlideController,
         action: "one",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/slides/media/:id",
         controller: SlideController_1.SlideController,
         action: "media",
-        validation: new Array(),
     },
     {
         method: "post",
         route: "/slides",
         controller: SlideController_1.SlideController,
         action: "save",
-        validation: new Array(),
     },
     {
         method: "delete",
@@ -137,39 +121,30 @@ exports.Routes = [
         route: "/blocks",
         controller: BlockController_1.BlockController,
         action: "all",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/blocks/:id",
         controller: BlockController_1.BlockController,
         action: "one",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/blocks/slides/:id",
         controller: BlockController_1.BlockController,
         action: "slides",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/blocks/entries/:id",
         controller: BlockController_1.BlockController,
         action: "oneEntries",
-        validation: new Array(),
     },
     {
         method: "post",
         route: "/blocks",
         controller: BlockController_1.BlockController,
         action: "save",
-        validation: [
-            express_validator_1.body('title').isInt().withMessage("Title is required"),
-            express_validator_1.body('promptTitle').isLength({ min: 1 }).withMessage("Prompt Title is required"),
-            express_validator_1.body('promptText').isLength({ min: 1 }).withMessage("Prompt is required"),
-        ],
     },
     {
         method: "delete",
@@ -188,14 +163,12 @@ exports.Routes = [
         route: "/entries",
         controller: EntryController_1.EntryController,
         action: "all",
-        validation: new Array(),
     },
     {
         method: "get",
         route: "/entries/:id",
         controller: EntryController_1.EntryController,
         action: "one",
-        validation: new Array(),
     },
     {
         method: "get",
@@ -208,7 +181,6 @@ exports.Routes = [
         route: "/entries",
         controller: EntryController_1.EntryController,
         action: "save",
-        validation: new Array(),
     },
     {
         method: "delete",
