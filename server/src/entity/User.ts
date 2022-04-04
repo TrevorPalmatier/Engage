@@ -13,7 +13,7 @@ export class User {
 	@Column()
 	password: string;
 
-	@Column()
+	@Column({default: false})
 	admin: boolean;
 
 	// a user can sumbit multiple entries

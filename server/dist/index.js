@@ -65,7 +65,7 @@ typeorm_1.createConnection()
     app.post("/login/admin", auth_1.loginAdmin);
     app.post("/signup", auth_1.signup);
     app.get("/private", auth_1.isAuth);
-    app.post("/uploadimage", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    app.post("/uploadimage", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(req.body);
         try {
             const fileStr = req.body.file;
