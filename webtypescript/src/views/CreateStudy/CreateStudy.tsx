@@ -61,7 +61,6 @@ const CreateStudy = () => {
     navigate(`/createblock`);
   };
   //is called when the study want to be create with the "submit" button
-  // *** Still have to figure out how to make it synchronous
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -125,7 +124,7 @@ const CreateStudy = () => {
    */
   const postSlides = async (blockId, blockInfo) => {
     //loops through all the slides and does a post request for each one
-    slides.forEach( async (slide) => {
+    await Promise.all(slides.map( async (slide) => {
       if (slide.blockId === blockId) {
         const slideData = {
           title: slide.title,
@@ -137,11 +136,11 @@ const CreateStudy = () => {
           const info = await CreateStudyAPI.postSlide(slideData);
           await postSlideMedia(slide.id, info);
       }
-    });
+    }));
   };
 
   const postSlideMedia = async (slideId, slideInfo) => {
-    slideMedia.forEach(async (media) => {
+    await Promise.all(slideMedia.map(async (media) => {
       if (media.slideId === slideId) {
         const mediaData = {
           imageID: media.imageID,
@@ -152,7 +151,7 @@ const CreateStudy = () => {
         
         await CreateStudyAPI.postSlideMedia(mediaData);
       }
-    });
+    }));
   }
 
   /**
@@ -185,12 +184,12 @@ const CreateStudy = () => {
     if(!params.edit) {
         await CloudinaryAPI.destroyImage(study.imageID);
 
-      slideMedia?.forEach(async (media) => {
+      await Promise.all(slideMedia?.map(async (media) => {
           await CloudinaryAPI.destroyImage(media.imageID);
-      })
-      blocks?.forEach(async (block) => {
+      }));
+      await Promise.all(blocks?.map(async (block) => {
         await CloudinaryAPI.destroyImage(block.imageID);
-      })
+      }));
     }
 
     if(study.imageID !== study.originalImage){
@@ -215,7 +214,6 @@ const CreateStudy = () => {
       <div className="viewHeader">
         {params.edit === 'true' ? <h1>Edit Study: {study.title}</h1>
          : <h1>Create a Study</h1>
-          
         }
       </div>
 

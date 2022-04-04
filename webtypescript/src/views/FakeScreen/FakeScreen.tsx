@@ -65,8 +65,10 @@ const FakeScreen = ({ id }) => {
         <div className="header">
           <h2>{slideData.title}</h2>
         </div>
-        {
-
+        {option === 4 &&
+          <div>
+            <p className="text">{slideData.backgroundText}</p>
+          </div>
         }
         {slideData.medias?.map((media) => {
           if (media.position === 1) {
@@ -128,11 +130,7 @@ const FakeScreen = ({ id }) => {
             );
           }
           return(<div></div>);
-        })} : {
-          <div>
-            <p className="text">{slideData.backgroundText}</p>
-          </div>
-        }
+        })} 
       </div>
     </div>
   );

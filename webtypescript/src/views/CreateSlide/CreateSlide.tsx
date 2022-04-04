@@ -51,6 +51,8 @@ const CreateSlide = ({ id }) => {
 
     const img = event.target.files?.[0];
     if(!img){
+      return;
+    }
       const reader = new FileReader();
       reader.readAsDataURL(img);
       reader.onloadend = async() => {
@@ -65,7 +67,6 @@ const CreateSlide = ({ id }) => {
             })
           )
           setPosition(position+1);
-      }
     }
   };
 

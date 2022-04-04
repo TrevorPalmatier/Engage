@@ -38,6 +38,7 @@ import { isConditionalExpression } from "typescript";
  * @returns a rendering of a block
  */
 const CreateBlock = () => {
+  const [errorMsg, setError] = useState("");
   //set up redux for the block and slides
   const dispatch = useAppDispatch(); //calls on reducers actions
   const block = useAppSelector(selectBlock); //selects data to be persisted from a block
@@ -49,12 +50,11 @@ const CreateBlock = () => {
   //allows navigation
   const navigate = useNavigate();
   const params = useParams();
-
   /**
    * Method is called when the user pushes the "Create" button
    */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    
 
     if (!params.studyid) {
       navigate("../createstudy");
@@ -69,6 +69,7 @@ const CreateBlock = () => {
         id: data.id,
       });
 
+      if(errorMsg === ""){
         dispatch(cancelMedia());
         dispatch(cancelBlocks());
         dispatch(cancelSlides());
@@ -77,6 +78,7 @@ const CreateBlock = () => {
           return;
         }
         navigate(`/viewblock/${params.blockid}`);
+      }
     }
   };
 
@@ -90,9 +92,15 @@ const CreateBlock = () => {
         study: studyInfo,
       };
 
-        const res = await CreateBlockAPI.postBlock(blockData);
-        await postSlides(block?.id, res);
-
+        try{
+          const res = await CreateBlockAPI.postBlock(blockData);
+          setError("");
+          await postSlides(block?.id, res);
+        }catch(error: any){
+          console.log(error.message);
+          await setError(error.message);
+          console.log(errorMsg);
+        }
   };
 
   /**
@@ -137,6 +145,7 @@ const CreateBlock = () => {
     event.preventDefault();
     let img = event.target.files?.[0];
     if (!img) {
+      console.log("not uploaded");
       return;
     }
 
@@ -146,7 +155,6 @@ const CreateBlock = () => {
         try{
           const info = await CloudinaryAPI.uploadSingleImage( reader );
           if(block?.imageID !== ""){
-            console.log("deleting images")
             await CloudinaryAPI.destroyImage(block?.imageID);
           }
           dispatch(
@@ -271,6 +279,10 @@ const CreateBlock = () => {
           >
             + Create New Slide
           </button>
+          {errorMsg !== "" &&
+            <p>{errorMsg}</p>
+
+          }
           <div className="submitButtons">
             <button className="buttonText" type="submit">
               Save

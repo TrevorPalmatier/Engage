@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "./index.tsx",
-
+  "proxy":  "https://ancient-ridge-25388.herokuapp.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -26,7 +26,7 @@
     "react-random-code-generator": "^1.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "5.0.0",
+    "react-scripts": "^5.0.0",
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",

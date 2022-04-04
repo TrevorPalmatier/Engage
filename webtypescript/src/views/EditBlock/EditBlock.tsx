@@ -60,7 +60,6 @@ const EditBlock = () => {
     
     try{
       await postBlocks();
-      console.log("posted");
       dispatch(cancelBlocks());
       dispatch(cancelSlides());
       dispatch(cancelMedia());
@@ -99,10 +98,9 @@ const EditBlock = () => {
     })
 
     //delete slide media
-    await toDelete.reduce(async (a, slide) => {
-      await a;
+    await Promise.all(toDelete.map(async (slide) => {
       await EditBlockAPI.deleteSlide(slide.id);
-    }, Promise.resolve())
+    }));
   }
   
   /**
@@ -110,8 +108,7 @@ const EditBlock = () => {
    */
   const postSlides = async (blockInfo) => {
     //loops through all the slides and does a post request for each one
-    await slides.reduce(async (a, slide) => {
-      await a;
+    await Promise.all(slides.map(async (slide) => {
         if (!slide.new) {
           const slideData = {
             title: slide.title,
@@ -132,10 +129,8 @@ const EditBlock = () => {
           
             const info = await EditBlockAPI.postSlide(slideData);
             await postNewSlideMedia(slide.id, info);
-            console.log("start2"); 
         }
-      }, Promise.resolve()
-    )
+      }));
   };
 
   const deleteMediaForSlide = async (oldSlideMedia) => {
@@ -145,15 +140,13 @@ const EditBlock = () => {
       toDelete = toDelete.filter((media1) => media.mediaId !== media1.id);
     });
 
-    await toDelete.reduce(async (a, media) => {
-      await a;
+    await Promise.all(toDelete.map(async (media) => {
       await EditBlockAPI.deleteMedia(media);
-    }, Promise.resolve())
+    }));
   }
 
   const postSlideMedia = async ( slideInfo) => {
-    await slideMedia?.reduce( async (a, media) => {
-      await a;
+    await Promise.all(slideMedia?.map( async ( media) => {
       if (slideInfo.id === media.slideId) {
         if (media.mediaId === -1) {
             const mediaData = {
@@ -170,16 +163,14 @@ const EditBlock = () => {
             position: media.position
           };
 
-          await EditBlockAPI.updateSlideMedia(media.mediaId, mediaData);
-            console.log("start4");   
+          await EditBlockAPI.updateSlideMedia(media.mediaId, mediaData);  
         }  
       }
-    }, Promise.resolve());
+    }));
   };
 
   const postNewSlideMedia = async (id,  slideInfo) => {
-    await slideMedia?.reduce( async (a, media) => {
-      await a;
+    await Promise.all(slideMedia?.map( async (media) => {
       if (id === media.slideId) {
             const mediaData = {
                 imageID: media.imageID,
@@ -188,9 +179,8 @@ const EditBlock = () => {
                 position: media.position
               };
              await EditBlockAPI.postSlideMedia(mediaData);   
-        
       }
-    }, Promise.resolve());
+    }));
   };
 
   /**
@@ -238,11 +228,11 @@ const EditBlock = () => {
       await CloudinaryAPI.destroyImage(block?.imageID);
     }
     
-    slideMedia?.forEach(async (media) => {
+    await Promise.all(slideMedia?.map(async (media) => {
       if(!media.original){
         await CloudinaryAPI.destroyImage(media.imageID);
       }
-    })
+    }));
     
     dispatch(cancelled({ id: block?.id }));
     slides.forEach((slide) => {

@@ -148,18 +148,22 @@ const ViewBlock = () => {
   };
 
   const deleteBlock = async () => {
-    await CloudinaryAPI.destroyImage(block.imageID);
-    block.slides.forEach(async (slide) => {
+    if(block.imageID !== ""){
+      await CloudinaryAPI.destroyImage(block.imageID);
+    }
+    await Promise.all(block.slides.map(async (slide) => {
       const slideInfo = await ViewBlockAPI.fetchSlides(slide.id);
-      slideInfo.medias.forEach(async (media) => {
+      await Promise.all(slideInfo.medias.map(async (media) => {
         if(media.type === "image"){
           await CloudinaryAPI.destroyImage(media.imageID);
         }
-      })
-    })
-    entries.forEach( async (entry) => {
+        return;
+      }));
+    }));
+    
+    await Promise.all(entries.map( async (entry) => {
       await CloudinaryAPI.destroyImage(entry.imageID);
-    })
+    }));
     await ViewBlockAPI.deleteBlock(params.id);
     navigate(`/viewstudy/${block.study.id}`);
   }

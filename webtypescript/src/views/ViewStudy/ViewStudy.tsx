@@ -17,7 +17,6 @@ const ViewStudy = () => {
   const [study, setStudy] = useState<any>({});
   const [blockData, setBlockData] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
-  const [completeUsers, setCompleteUsers] = useState<any>([]);
  
   const dispatch = useAppDispatch();
 
@@ -29,12 +28,11 @@ const ViewStudy = () => {
         const response = await fetch(`/studies/${params.id}`, {
         signal: abortController.signal,
         });
-        const data = await response.json();
-        
+        const data = await response.json();    
           setStudy(data);
           setBlockData(data.blocks);
           setUsers(data.users);
-          setCompleteUsers(organizeUsers(data.users));
+
         }catch(error) {
              console.error(error)
         };
@@ -46,24 +44,6 @@ const ViewStudy = () => {
     };
   }, [params.id]);
 
-  const organizeUsers = async (usersList) => {
-    let complete = usersList;
-    blockData.forEach(async (block) => {
-      let incompleteblock = complete;
-      const entries = await StudyAPI.fetchEntries(block.id);
-      entries.forEach((entry)=>{
-        incompleteblock = incompleteblock.filter((user) => user.id !== entry.user.id);
-      })
-      console.log(incompleteblock);
-      incompleteblock.forEach((user)=>{
-        complete = complete.filter((complete) => complete.id !== user.id);
-      })
-      console.log(incompleteblock);
-    })
-
-    console.log(complete);
-    return await complete;
-  }
   const createBlock = () => {
     dispatch(addBlock());
     navigate(`/createblock/${study.id}`);
@@ -83,22 +63,25 @@ const ViewStudy = () => {
   const deleteStudy = async (e) => {
     e.preventDefault();
 
-    //destroy images in cloudinary that are associated with the study
-    await CloudinaryAPI.destroyImage(study.imageID);
+    if(study.imageID !== ""){
+      //destroy images in cloudinary that are associated with the study
+      await CloudinaryAPI.destroyImage(study.imageID);
+    }
 
-    await blockData.forEach(async (block) => {
+    await Promise.all(blockData.map(async (block) => {
       const entries = await StudyAPI.fetchEntries(block.id);
-      await entries.forEach( async (entry) => {
+      await Promise.all(entries.map( async (entry) => {
         await CloudinaryAPI.destroyImage(entry.imageID);
-      });
+      }));
+
       const slides = await StudyAPI.fetchSlides(block.id);
-      await slides.forEach(async (slide) => {
+      await Promise.all(slides.map(async (slide) => {
         const medias = await StudyAPI.fetchMedia(slide.id);
-        await medias.forEach(async (media) => {
+        await Promise.all(medias.map(async (media) => {
           await CloudinaryAPI.destroyImage(media.imageID);
-        })
-      })
-    })
+        }));
+      }));
+    }));
     
     await StudyAPI.deleteOneStudy(study.id);
 
