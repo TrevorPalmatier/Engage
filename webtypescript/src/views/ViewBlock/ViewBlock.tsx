@@ -15,6 +15,7 @@ import { Layout } from "../../Components/Layout";
 import * as ViewBlockAPI from "./ViewBlockAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
 import * as XLSX from 'xlsx';
+import BaseModalWrapper from "../../ModalPopup/BaseModalWrapper";
 
 const ViewBlock = () => {
   const [block, setData] = useState<any>({});
@@ -168,6 +169,18 @@ const ViewBlock = () => {
     await ViewBlockAPI.deleteBlock(params.id);
     navigate(`/viewstudy/${block.study.id}`);
   }
+
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+ 
+  const toggleModal = () => {
+    setIsModalVisible(wasModalVisible => !wasModalVisible)
+  }
+
+  const onBackdropClick = () => {
+    setIsModalVisible(false)
+  }
+
   return (
     <Layout>
       <div className="viewHeader">
@@ -199,6 +212,11 @@ const ViewBlock = () => {
         <button className="buttonText" onClick={(e) => { downloadData(e);
           }}>Download Data</button>
       </div>
+      <div>
+          <h2 >Participants</h2>
+            <button className="buttonText" onClick={toggleModal}>Email Text Helper</button>
+            <BaseModalWrapper isModalVisible={isModalVisible} onBackdropClick={toggleModal} />
+        </div>
       <div className="maincomponent">
       <div >
         <h2>Slides</h2>

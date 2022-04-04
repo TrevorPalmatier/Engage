@@ -120,9 +120,7 @@ const deleteSlide = async (e) => {
         />
       </fieldset>
       <label>Upload 1-2 images/videos to display on the slide: </label>
-      <fieldset>
-        <input type="file" onChange={(event) => selectMedia(event)} />
-      </fieldset>
+          <input type="file" name="image" onChange={selectMedia} />
       <fieldset>
         <label>Upload Youtube Videos by inserting Embed Code here: </label>
         <input type="text" name="video" onChange={(e) => setVideo(e.target.value)}/>
@@ -130,7 +128,7 @@ const deleteSlide = async (e) => {
       </fieldset>
       <div className="flex">
         <p>Example: </p> 
-        <img src="youtubeex.jpg"/>
+        <img src='youtubeex.jpg'/>
       </div>
       <div className="slideMedia">
         {media?.map((media1, index) => {
@@ -167,7 +165,7 @@ const deleteSlide = async (e) => {
           />
           <span>Select Option 1</span>
           <p>
-          <img src="pic/slide1.JPG" />
+          <img className="smallerImage" src="pic/slide1.JPG" />
           </p>
         </label>
         <label>
@@ -177,7 +175,7 @@ const deleteSlide = async (e) => {
         />
           <span>Select Option 2</span>
           <p>
-          <img src="pic/slide2.JPG" />
+          <img className="smallerImage" src={"pic/slide2.JPG"} />
           </p>
         </label>
         <label className='radio'>
@@ -188,7 +186,7 @@ const deleteSlide = async (e) => {
           />
           <span>Select Option 3</span>
           <p>
-          <img src="pic/slide3.JPG"/>
+            <img className="smallerImage" src="pic/slide3.JPG" />
           </p>
         </label>
         

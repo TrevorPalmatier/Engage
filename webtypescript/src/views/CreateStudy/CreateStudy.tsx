@@ -202,7 +202,7 @@ const CreateStudy = () => {
     dispatch(cancelMedia());
 
     if (!params.edit) {
-      navigate(-1);
+      navigate("../viewstudies");
     } else {
       navigate(`../viewstudy/${params.studyid}`);
     }
@@ -275,7 +275,7 @@ const CreateStudy = () => {
             <button type="submit" className="buttonText">
               Save
             </button>
-            <button onClick={(e) => cancel(e)} className="buttonText">
+            <button type="button" onClick={(e) => cancel(e)} className="buttonText">
               Cancel
             </button>
           </div>
