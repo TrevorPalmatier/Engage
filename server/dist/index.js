@@ -21,6 +21,7 @@ const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
+// import { validationResult } from "express-validator";
 dotenv_1.default.config();
 function authCheck(req, res, next) {
     console.log(req.path);
@@ -43,7 +44,7 @@ typeorm_1.createConnection()
     app.use(cors_1.default({
         origin: "*",
     }));
-    app.use(authCheck);
+    // app.use(authCheck);
     app.use(body_parser_1.default.json({ limit: "50mb" }));
     app.use(body_parser_1.default.urlencoded({ limit: "100mb", extended: true }));
     // register express routes from defined application routes
