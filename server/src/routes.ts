@@ -4,7 +4,7 @@ import { SlideController } from "./controller/SlideController";
 import { BlockController } from "./controller/BlockController";
 import { EntryController } from "./controller/EntryController";
 import { SlideMediaController } from "./controller/SlideMediaController";
-import { body  } from "express-validator";
+import { body} from "express-validator";
 
 export const Routes = [
 	{

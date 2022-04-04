@@ -49,7 +49,7 @@ typeorm_1.createConnection()
     app.use(body_parser_1.default.urlencoded({ limit: "100mb", extended: true }));
     // register express routes from defined application routes
     routes_1.Routes.forEach((route) => {
-        app[route.method](route.route, ...route.validation, (req, res, next) => {
+        app[route.method](route.route, route.validation, (req, res, next) => {
             try {
                 const errors = express_validator_1.validationResult(req);
                 console.log(errors);
