@@ -10,6 +10,7 @@ import { Layout } from "../../Components/Layout";
 import { Image } from "cloudinary-react";
 import * as StudyAPI from "./ViewStudyAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+import BaseModalWrapper from "../../ModalPopup/BaseModalWrapper";
 
 const ViewStudy = () => {
   const params = useParams();
@@ -88,6 +89,17 @@ const ViewStudy = () => {
     navigate(`/viewstudies`);   
   }
   
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+ 
+  const toggleModal = () => {
+    setIsModalVisible(wasModalVisible => !wasModalVisible)
+  }
+
+  const onBackdropClick = () => {
+    setIsModalVisible(false)
+  }
+  
   return (
     <Layout>
       <div className="viewHeader">
@@ -107,6 +119,8 @@ const ViewStudy = () => {
             deleteStudy(e);
           }
         }}>Delete Study</button>
+        <button className="buttonText" onClick={toggleModal}>Email Text Helper</button>
+        <BaseModalWrapper code={study.code} isModalVisible={isModalVisible} onBackdropClick={toggleModal} />
       </div>
       <div>
         <h3>Access Code: {study.code}</h3>
@@ -115,7 +129,7 @@ const ViewStudy = () => {
         <div>
         <h2>Blocks</h2>
         </div>
-        <div>
+        <div className="flex">
           <h2 >Participants</h2>
         </div> 
       </div>

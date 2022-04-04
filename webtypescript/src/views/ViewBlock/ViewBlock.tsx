@@ -15,6 +15,7 @@ import { Layout } from "../../Components/Layout";
 import * as ViewBlockAPI from "./ViewBlockAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
 import * as XLSX from 'xlsx';
+import BaseModalWrapper from "../../ModalPopup/BaseModalWrapper";
 
 const ViewBlock = () => {
   const [block, setData] = useState<any>({});
@@ -96,6 +97,7 @@ const ViewBlock = () => {
     e.preventDefault();
 
     await dispatchData();
+    navigate(`/editblock/${block.study.id}/${block.id}`);
   };
 
   const dispatchData = async () => {
@@ -144,7 +146,7 @@ const ViewBlock = () => {
       );
     });
     console.log(mediaApp);
-    navigate(`/editblock/${block.study.id}/${block.id}`);
+    
   };
 
   const deleteBlock = async () => {
@@ -167,6 +169,18 @@ const ViewBlock = () => {
     await ViewBlockAPI.deleteBlock(params.id);
     navigate(`/viewstudy/${block.study.id}`);
   }
+
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+ 
+  const toggleModal = () => {
+    setIsModalVisible(wasModalVisible => !wasModalVisible)
+  }
+
+  const onBackdropClick = () => {
+    setIsModalVisible(false)
+  }
+
   return (
     <Layout>
       <div className="viewHeader">
