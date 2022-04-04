@@ -166,7 +166,7 @@ exports.Routes = [
         controller: BlockController_1.BlockController,
         action: "save",
         validation: [
-            express_validator_1.body('title').isString().isLength({ min: 1 }).withMessage("Title is required"),
+            express_validator_1.body('title').isInt().isLength({ min: 1 }).withMessage("Title is required"),
             express_validator_1.body('promptTitle').isLength({ min: 1 }).withMessage("Prompt Title is required"),
             express_validator_1.body('promptText').isLength({ min: 1 }).withMessage("Prompt is required"),
         ],
