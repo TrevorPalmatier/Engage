@@ -45,6 +45,7 @@ createConnection()
 			(app as any)[route.method](route.route, ...route.validation, (req: Request, res: Response, next: Function) => {
 				try{
 					const errors = validationResult(req);
+					console.log(errors);
 					if(!errors.isEmpty) {
 						return res.status(400).json({errors: errors.array()});
 					}
