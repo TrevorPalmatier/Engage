@@ -17,13 +17,13 @@ export default function AddStudies({ navigation }) {
 			headerLeft: () => (
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					<Icon name='chevron-left' size={16} />
-					<Button
-						color='black'
-						title='Back'
+					<Pressable
+						style={{ paddingLeft: 10, paddingRight: 20 }}
 						onPress={() => {
 							navigation.pop();
-						}}
-					/>
+						}}>
+						<Text style={{ color: "black", fontSize: 18, fontWeight: "400" }}>Back</Text>
+					</Pressable>
 				</View>
 			),
 		});

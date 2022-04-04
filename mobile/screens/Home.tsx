@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Button, Dimensions, ScrollView } from "react-native";
+import { View, StyleSheet, Pressable, Dimensions, ScrollView, Text } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/store";
 import { logout, selectCurrentUser } from "../features/auth/authSlice";
 import { useBlocksQuery, useUserEntriesQuery } from "../app/services/engage";
@@ -22,13 +22,12 @@ export default function home({ route, navigation }) {
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
-				<Button
-					color='black'
-					title='Sign Out'
+				<Pressable
 					onPress={() => {
 						dispatch(logout());
-					}}
-				/>
+					}}>
+					<Text style={{ color: "black", fontSize: 18, fontWeight: "400" }}>Sign Out</Text>
+				</Pressable>
 			),
 			title: name,
 		});
@@ -72,6 +71,7 @@ export default function home({ route, navigation }) {
 		const completed = item.hasSubmit;
 		return (
 			<Block
+				key={item.id}
 				id={item.id}
 				complete={completed as boolean}
 				title={title as String}

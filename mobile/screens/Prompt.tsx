@@ -41,7 +41,25 @@ export default function Prompt({ route, navigation }) {
 		let result = await PhotoPicker.launchImageLibraryAsync({
 			mediaTypes: PhotoPicker.MediaTypeOptions.All,
 			allowsEditing: true,
-			aspect: [4, 3],
+			// aspect: [4, 3],
+			quality: 1,
+			base64: true,
+		});
+
+		if (!result.cancelled) {
+			setImage((result as ImageInfo).uri);
+			const photo = result as ImageInfo;
+			// console.log(photo);
+			const base64 = `data:image/jpg;base64,${photo.base64}`;
+			navigation.navigate("Submit", { photo });
+		}
+	};
+
+	const captureImage = async () => {
+		let result = await PhotoPicker.launchCameraAsync({
+			mediaTypes: PhotoPicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			// aspect: [4, 3],
 			quality: 1,
 			base64: true,
 		});
@@ -84,7 +102,7 @@ export default function Prompt({ route, navigation }) {
 					<Pressable
 						style={({ pressed }) => [{ backgroundColor: pressed ? "#1199DD" : "#33BBFF" }, styles.button]}
 						onPress={() => {
-							navigation.navigate("Camera");
+							captureImage();
 						}}>
 						<Text style={[styles.text, { color: "white" }]}>Take Photo</Text>
 					</Pressable>

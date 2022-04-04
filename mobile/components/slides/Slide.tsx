@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSlideMediaQuery } from "../../app/services/engage";
 import { useHeaderHeight } from "@react-navigation/elements";
 import SlideType1 from "./SlideType1";
+import SlideVideo from "./SlideVideo";
 
 export default function Slide({ slideId, title, text }) {
 	const { data = [], isFetching } = useSlideMediaQuery(slideId);
@@ -22,7 +23,8 @@ export default function Slide({ slideId, title, text }) {
 			) : (
 				<View style={[styles.main]}>
 					{/* <Button title='check' onPress={() => console.log(pid)} /> */}
-					<SlideType1 title={title} text={text} pid={pid} />
+					{/* <SlideType1 title={title} text={text} pid={pid} /> */}
+					<SlideVideo title={title} text={text} embed={pid} />
 				</View>
 			)}
 		</>
@@ -31,7 +33,7 @@ export default function Slide({ slideId, title, text }) {
 
 const styles = StyleSheet.create({
 	main: {
-		// flex: 1,
+		flex: 1,
 		height: Dimensions.get("screen").height,
 		// height: 500,
 		width: Dimensions.get("screen").width,

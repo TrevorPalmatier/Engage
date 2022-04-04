@@ -16,13 +16,19 @@ export default function CharacterSelectScreen({ navigation }) {
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
-				<Button
-					color='black'
-					title='Sign Out'
+				<Pressable
 					onPress={() => {
 						dispatch(logout());
-					}}
-				/>
+					}}>
+					<Text style={{ color: "black", fontSize: 18, fontWeight: "400" }}>Sign Out</Text>
+				</Pressable>
+				// <Button
+				// 	color='black'
+				// 	title='Sign Out'
+				// 	onPress={() => {
+				// 		dispatch(logout());
+				// 	}}
+				// />
 			),
 		});
 	}, [navigation]);
@@ -72,7 +78,7 @@ export default function CharacterSelectScreen({ navigation }) {
 			)}
 			<View style={styles.main}>
 				<FlatList
-					ItemSeparatorComponent={Platform.OS !== "android" && (() => <View style={[styles.separator]} />)}
+					ItemSeparatorComponent={() => <View style={[styles.separator]} />}
 					style={{ width: "100%" }}
 					// contentContainerStyle={styles.container}
 					showsVerticalScrollIndicator={false}
