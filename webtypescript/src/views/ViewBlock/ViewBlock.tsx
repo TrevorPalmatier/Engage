@@ -212,11 +212,6 @@ const ViewBlock = () => {
         <button className="buttonText" onClick={(e) => { downloadData(e);
           }}>Download Data</button>
       </div>
-      <div>
-          <h2 >Participants</h2>
-            <button className="buttonText" onClick={toggleModal}>Email Text Helper</button>
-            <BaseModalWrapper isModalVisible={isModalVisible} onBackdropClick={toggleModal} />
-        </div>
       <div className="maincomponent">
       <div >
         <h2>Slides</h2>

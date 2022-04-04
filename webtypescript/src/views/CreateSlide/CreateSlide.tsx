@@ -18,6 +18,10 @@ import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
  * It uses the slideSlice to persist data when page is refreshed or new slides are added
  */
 const CreateSlide = ({ id }) => {
+  const [option1, setOption1] = useState(true);
+  const [option2, setOption2] = useState(false);
+  const [option3, setOption3] = useState(false);
+
   const [embedCode, setVideo] = useState("");
   const [position, setPosition] = useState(1);
   const [errorImages, setError] = useState<string>();
@@ -128,7 +132,7 @@ const deleteSlide = async (e) => {
       </fieldset>
       <div className="flex">
         <p>Example: </p> 
-        <img src='youtubeex.jpg'/>
+        <img src='/youtubeex.jpg'/>
       </div>
       <div className="slideMedia">
         {media?.map((media1, index) => {
@@ -159,34 +163,34 @@ const deleteSlide = async (e) => {
       <div className="submitButtons">
         <label>
           <input
-            type="radio"
-            onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 1 }))}
-            name="selectOption"
+            type="checkbox"
+            onClick={() => {dispatch(setSlideOption({ id: slide?.id, option: 1 })); setOption1(true); setOption2(false); setOption3(false)}}
+            name="selectOption" checked={option1}
           />
           <span>Select Option 1</span>
           <p>
-          <img className="smallerImage" src="pic/slide1.JPG" />
+          <img className="smallerImage" src="/pic/slide1.JPG" />
           </p>
         </label>
         <label>
-          <input type="radio"
-          onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 2 }))}
-          name="selectOption"
+          <input type="checkbox"
+          onClick={() => {dispatch(setSlideOption({ id: slide?.id, option: 2 })); setOption1(false); setOption2(true); setOption3(false)}}
+          name="selectOption" checked={option2}
         />
           <span>Select Option 2</span>
           <p>
-          <img className="smallerImage" src={"pic/slide2.JPG"} />
+          <img className="smallerImage" src="/pic/slide2.JPG"/>
           </p>
         </label>
-        <label className='radio'>
+        <label>
           <input
-          type="radio"
-          onClick={() => dispatch(setSlideOption({ id: slide?.id, option: 3 }))}
-          name="selectOption"
+          type="checkbox"
+          onClick={() =>{ dispatch(setSlideOption({ id: slide?.id, option: 3 })); setOption1(false); setOption2(false); setOption3(true)}}
+          name="selectOption" checked={option3}
           />
           <span>Select Option 3</span>
           <p>
-            <img className="smallerImage" src="pic/slide3.JPG" />
+            <img className="smallerImage" src="/pic/slide3.JPG" />
           </p>
         </label>
         

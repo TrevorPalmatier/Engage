@@ -119,6 +119,8 @@ const ViewStudy = () => {
             deleteStudy(e);
           }
         }}>Delete Study</button>
+        <button className="buttonText" onClick={toggleModal}>Email Text Helper</button>
+        <BaseModalWrapper code={study.code} isModalVisible={isModalVisible} onBackdropClick={toggleModal} />
       </div>
       <div>
         <h3>Access Code: {study.code}</h3>
@@ -127,10 +129,8 @@ const ViewStudy = () => {
         <div>
         <h2>Blocks</h2>
         </div>
-        <div>
+        <div className="flex">
           <h2 >Participants</h2>
-          <button className="buttonText" onClick={toggleModal}>Email Text Helper</button>
-          <BaseModalWrapper isModalVisible={isModalVisible} onBackdropClick={toggleModal} />
         </div> 
       </div>
       <div className="blockparticipantGrid">

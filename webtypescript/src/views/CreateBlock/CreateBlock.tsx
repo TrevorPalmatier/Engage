@@ -186,6 +186,7 @@ const CreateBlock = () => {
     //cancel the block and any slide
     if (params.studyid) {
       navigate(`../viewstudy/${params.studyid}`);
+      return;
     }
 
     navigate("../createstudy"); //redirects to "Create Study" page
