@@ -54,7 +54,7 @@ const CreateBlock = () => {
    * Method is called when the user pushes the "Create" button
    */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    
+    e.preventDefault();
 
     if (!params.studyid) {
       navigate("../createstudy");
@@ -69,7 +69,6 @@ const CreateBlock = () => {
         id: data.id,
       });
 
-      if(errorMsg === ""){
         dispatch(cancelMedia());
         dispatch(cancelBlocks());
         dispatch(cancelSlides());
@@ -77,8 +76,8 @@ const CreateBlock = () => {
           navigate(`../viewstudy/${params.studyid}`); //go back to viewing blocks
           return;
         }
+        console.log("navigating");
         navigate(`/viewblock/${params.blockid}`);
-      }
     }
   };
 
@@ -92,15 +91,9 @@ const CreateBlock = () => {
         study: studyInfo,
       };
 
-        try{
           const res = await CreateBlockAPI.postBlock(blockData);
-          setError("");
           await postSlides(block?.id, res);
-        }catch(error: any){
-          console.log(error.message);
-          await setError(error.message);
-          console.log(errorMsg);
-        }
+
   };
 
   /**
@@ -193,7 +186,6 @@ const CreateBlock = () => {
     //cancel the block and any slide
     if (params.studyid) {
       navigate(`../viewstudy/${params.studyid}`);
-      return;
     }
 
     navigate("../createstudy"); //redirects to "Create Study" page

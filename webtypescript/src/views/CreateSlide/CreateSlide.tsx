@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "../../App.scss";
 import "./CreateSlide.scss";
 import { Image } from "cloudinary-react";
-import example from "./youtubeex.jpg";
 import {
   setText,
   setTitle,
@@ -131,7 +130,7 @@ const deleteSlide = async (e) => {
       </fieldset>
       <div className="flex">
         <p>Example: </p> 
-        <img src={example}/>
+        <img src="youtubeex.jpg"/>
       </div>
       <div className="slideMedia">
         {media?.map((media1, index) => {
@@ -167,6 +166,9 @@ const deleteSlide = async (e) => {
             name="selectOption"
           />
           <span>Select Option 1</span>
+          <p>
+          <img src="pic/slide1.JPG" />
+          </p>
         </label>
         <label>
           <input type="radio"
@@ -174,6 +176,9 @@ const deleteSlide = async (e) => {
           name="selectOption"
         />
           <span>Select Option 2</span>
+          <p>
+          <img src="pic/slide2.JPG" />
+          </p>
         </label>
         <label className='radio'>
           <input
@@ -182,6 +187,9 @@ const deleteSlide = async (e) => {
           name="selectOption"
           />
           <span>Select Option 3</span>
+          <p>
+          <img src="pic/slide3.JPG"/>
+          </p>
         </label>
         
       </div>

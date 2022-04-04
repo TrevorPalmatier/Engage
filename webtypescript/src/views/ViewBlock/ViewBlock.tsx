@@ -96,6 +96,7 @@ const ViewBlock = () => {
     e.preventDefault();
 
     await dispatchData();
+    navigate(`/editblock/${block.study.id}/${block.id}`);
   };
 
   const dispatchData = async () => {
@@ -144,7 +145,7 @@ const ViewBlock = () => {
       );
     });
     console.log(mediaApp);
-    navigate(`/editblock/${block.study.id}/${block.id}`);
+    
   };
 
   const deleteBlock = async () => {

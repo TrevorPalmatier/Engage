@@ -10,6 +10,7 @@ import { Layout } from "../../Components/Layout";
 import { Image } from "cloudinary-react";
 import * as StudyAPI from "./ViewStudyAPI";
 import * as CloudinaryAPI from "../../SharedAPI/CloudinaryAPI";
+import BaseModalWrapper from "../../ModalPopup/BaseModalWrapper";
 
 const ViewStudy = () => {
   const params = useParams();
@@ -88,6 +89,17 @@ const ViewStudy = () => {
     navigate(`/viewstudies`);   
   }
   
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+ 
+  const toggleModal = () => {
+    setIsModalVisible(wasModalVisible => !wasModalVisible)
+  }
+
+  const onBackdropClick = () => {
+    setIsModalVisible(false)
+  }
+  
   return (
     <Layout>
       <div className="viewHeader">
@@ -117,6 +129,8 @@ const ViewStudy = () => {
         </div>
         <div>
           <h2 >Participants</h2>
+          <button className="buttonText" onClick={toggleModal}>Email Text Helper</button>
+          <BaseModalWrapper isModalVisible={isModalVisible} onBackdropClick={toggleModal} />
         </div> 
       </div>
       <div className="blockparticipantGrid">
