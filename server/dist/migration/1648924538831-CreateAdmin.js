@@ -16,7 +16,7 @@ class CreateAdmin1648924538831 {
     }
     up(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield queryRunner.query(`ALTER TABLE "user" ADD "admin" boolean NOT NULL`);
+            yield queryRunner.query(`ALTER TABLE "user" ADD "admin" boolean NOT NULL DEFAULT false`);
         });
     }
     down(queryRunner) {
