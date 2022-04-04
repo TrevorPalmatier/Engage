@@ -164,7 +164,7 @@ export const Routes = [
 		controller: BlockController,
 		action: "save",
 		validation: [
-			body('title').isInt().isLength({min: 1}).withMessage("Title is required"),
+			body('title').isInt().withMessage("Title is required"),
 			body('promptTitle').isLength({min: 1}).withMessage("Prompt Title is required"),
 			body('promptText').isLength({min: 1}).withMessage("Prompt is required"),
 		],

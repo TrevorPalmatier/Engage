@@ -42,12 +42,14 @@ createConnection()
 
 		// register express routes from defined application routes
 		Routes.forEach((route) => {
-			(app as any)[route.method](route.route, route.validation, (req: Request, res: Response, next: Function) => {
+			(app as any)[route.method](route.route, ...route.validation, (req: Request, res: Response, next: Function) => {
 				try{
 					const errors = validationResult(req);
-					console.log(errors);
 					if(!errors.isEmpty) {
-						return res.status(400).json({errors: errors.array()});
+						console.log("error has occurred");
+						console.log(errors)
+						res.status(400).json({errors: errors.array()});
+						return;
 					}
 					const result = new (route.controller as any)()[route.action](req, res, next);
 					if (result instanceof Promise) {
