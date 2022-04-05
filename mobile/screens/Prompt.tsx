@@ -83,7 +83,13 @@ export default function Prompt({ route, navigation }) {
 				{(data as any[]).map((slide) => {
 					if (slide.id !== -1)
 						return (
-							<Slide key={slide.id} slideId={slide.id} title={slide.title} text={slide.backgroundText} />
+							<Slide
+								key={slide.id}
+								slideId={slide.id}
+								slideType={slide.option}
+								title={slide.title}
+								text={slide.backgroundText}
+							/>
 						);
 				})}
 				<View style={[styles.center, styles.container]}>

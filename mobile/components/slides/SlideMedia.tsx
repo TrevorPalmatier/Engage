@@ -6,28 +6,55 @@ import { useImageURIQuery } from "../../app/services/engage";
 const img = require("../../assets/landscape.jpg");
 const imgURI = Image.resolveAssetSource(img).uri;
 
-export default function SlideType1({ embed, title, text }) {
+export default function SlideMedia({ type, pid }) {
+	const { data, isFetching } = useImageURIQuery(pid);
+	const [uri, setUri] = useState(undefined);
 	const playerHeight = Dimensions.get("screen").width * 0.53;
+	const maxWidth = Dimensions.get("window").width * 0.9;
+	const baseHeight = (maxWidth / 4) * 3;
+	const [imgSize, setSize] = useState({ width: maxWidth, height: baseHeight });
+	useEffect(() => {
+		if (isFetching) return;
+		if (data === undefined) return;
+		setUri(data.url);
+		Image.getSize(data.url, (w, h) => {
+			setSize({ width: w, height: h });
+		});
+	}, [data]);
+	const ratio = imgSize.height / imgSize.width;
+	const imgWidth = Math.min(imgSize.width, maxWidth);
+	const imgHeight = Math.min(imgSize.height, maxWidth * ratio);
 
-	return (
-		<ScrollView
-			style={{ flex: 1 }}
-			nestedScrollEnabled
-			showsVerticalScrollIndicator={false}
-			contentContainerStyle={{ flexGrow: 1, paddingBottom: 300 }}>
-			<View style={{ flex: 1, alignItems: "center" }}>
-				<View style={[styles.titleContainer]}>
-					<Text style={[styles.titleText]}>{title}</Text>
-				</View>
-				<View style={[{ flex: 1, width: "100%" }]}>
-					<YouTubePlayer height={playerHeight} play={false} videoId={embed} />
-					<View style={[styles.textContainer]}>
-						<Text style={[styles.text2]}>{text}</Text>
-					</View>
-				</View>
+	if (isFetching) {
+		return null;
+	}
+
+	if (type === "image") {
+		return <Image style={{ height: imgHeight, width: imgWidth, marginTop: 20 }} source={{ uri }} />;
+	} else if (type === "video") {
+		return (
+			// <ScrollView
+			// 	style={{ flex: 1 }}
+			// 	nestedScrollEnabled
+			// 	showsVerticalScrollIndicator={false}
+			// 	contentContainerStyle={{ flexGrow: 1, paddingBottom: 300 }}>
+			// 	<View style={{ flex: 1, alignItems: "center" }}>
+			// 		<View style={[styles.titleContainer]}>
+			// 			<Text style={[styles.titleText]}>{title}</Text>
+			// 		</View>
+
+			<View style={[{ flex: 1, width: "100%", marginTop: 20 }]}>
+				<YouTubePlayer height={playerHeight} play={false} videoId={pid} />
+				{/* <View style={[styles.textContainer]}>
+					<Text style={[styles.text2]}>{text}</Text>
+				</View> */}
 			</View>
-		</ScrollView>
-	);
+			// 	</View>
+			// </ScrollView>
+		);
+	}
+
+	return null;
 }
 
 const styles = StyleSheet.create({

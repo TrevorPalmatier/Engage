@@ -1,27 +1,11 @@
 import { View, Text, ScrollView, StyleSheet, Dimensions, Image } from "react-native";
 import React, { useState, useEffect } from "react";
+import SlideMedia from "./SlideMedia";
 import { useImageURIQuery } from "../../app/services/engage";
 const img = require("../../assets/landscape.jpg");
 const imgURI = Image.resolveAssetSource(img).uri;
 
-export default function SlideType1({ pid, title, text }) {
-	const { data, isFetching } = useImageURIQuery(pid);
-	// const data = [{ mediaUrl: imgURI }];
-	const [uri, setUri] = useState(undefined);
-	const maxWidth = Dimensions.get("window").width * 0.9;
-	const baseHeight = (maxWidth / 4) * 3;
-	const [imgSize, setSize] = useState({ width: maxWidth, height: baseHeight });
-	useEffect(() => {
-		if (isFetching) return;
-		setUri(data.url);
-		Image.getSize(data.url, (w, h) => {
-			setSize({ width: w, height: h });
-		});
-	}, [data]);
-	const ratio = imgSize.height / imgSize.width;
-	const imgWidth = Math.min(imgSize.width, maxWidth);
-	const imgHeight = Math.min(imgSize.height, maxWidth * ratio);
-
+export default function SlideType1({ media, title, text }) {
 	return (
 		<ScrollView
 			style={{ flex: 1 }}
@@ -32,11 +16,8 @@ export default function SlideType1({ pid, title, text }) {
 				<Text style={[styles.titleText]}>{title}</Text>
 			</View>
 			<View style={[{ width: "100%", alignItems: "center" }]}>
-				{isFetching ? (
-					<></>
-				) : (
-					<Image style={{ height: imgHeight, width: imgWidth, marginTop: 20 }} source={{ uri }} />
-				)}
+				{media[0] !== undefined ? <SlideMedia type={media[0].type} pid={media[0].imageID} /> : <></>}
+				{media[1] !== undefined ? <SlideMedia type={media[1].type} pid={media[1].imageID} /> : <></>}
 				<View style={[styles.textContainer]}>
 					<Text style={[styles.text2]}>{text}</Text>
 				</View>

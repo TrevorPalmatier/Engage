@@ -3,32 +3,43 @@ import React, { useEffect, useState } from "react";
 import { useSlideMediaQuery } from "../../app/services/engage";
 import { useHeaderHeight } from "@react-navigation/elements";
 import SlideType1 from "./SlideType1";
-import SlideVideo from "./SlideVideo";
+import SlideVideo from "./SlideMedia";
 
-export default function Slide({ slideId, title, text }) {
+export default function Slide({ slideId, slideType, title, text }) {
 	const { data = [], isFetching } = useSlideMediaQuery(slideId);
-	const [pid, setPid] = useState(undefined);
+	const [media, setMedia] = useState(undefined);
 	useEffect(() => {
 		if (isFetching) return;
-		const res = data[0];
-		if (res) {
-			setPid(res.imageID);
-		}
+		setMedia(data as Array<any>);
 	}, [data]);
 
-	return (
-		<>
-			{isFetching || pid === undefined ? (
-				<></>
-			) : (
-				<View style={[styles.main]}>
-					{/* <Button title='check' onPress={() => console.log(pid)} /> */}
-					{/* <SlideType1 title={title} text={text} pid={pid} /> */}
-					<SlideVideo title={title} text={text} embed={pid} />
-				</View>
-			)}
-		</>
-	);
+	if (isFetching || media === undefined) {
+		return <></>;
+	}
+
+	if (slideType === 1) {
+		return (
+			<View style={[styles.main]}>
+				{/* <Button title='check' onPress={() => console.log(pid)} /> */}
+				<SlideType1 title={title} text={text} media={media} />
+				{/* <SlideVideo title={title} text={text} embed={pid} /> */}
+			</View>
+		);
+	} else if (slideType === 2) {
+		<View style={[styles.main]}>
+			{/* <Button title='check' onPress={() => console.log(pid)} /> */}
+			<SlideType1 title={title} text={text} media={media} />
+			{/* <SlideVideo title={title} text={text} embed={pid} /> */}
+		</View>;
+	} else if (slideType === 3) {
+		<View style={[styles.main]}>
+			{/* <Button title='check' onPress={() => console.log(pid)} /> */}
+			<SlideType1 title={title} text={text} media={media} />
+			{/* <SlideVideo title={title} text={text} embed={pid} /> */}
+		</View>;
+	} else {
+		return <></>;
+	}
 }
 
 const styles = StyleSheet.create({
