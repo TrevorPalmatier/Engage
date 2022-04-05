@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-	View,
-	Text,
-	StyleSheet,
-	ImageBackground,
-	Dimensions,
-	ScrollView,
-	Pressable,
-	Platform,
-	Image,
-} from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable, Platform, Image } from "react-native";
 import * as PhotoPicker from "expo-image-picker";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -25,6 +15,12 @@ export default function Prompt({ route, navigation }) {
 	const { data = [], isFetching } = usePromptAndSlidesQuery(blockId);
 
 	const help = useHeaderHeight();
+
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			title: route.params.title,
+		});
+	}, [navigation]);
 
 	useEffect(() => {
 		(async () => {
@@ -51,7 +47,7 @@ export default function Prompt({ route, navigation }) {
 			const photo = result as ImageInfo;
 			// console.log(photo);
 			const base64 = `data:image/jpg;base64,${photo.base64}`;
-			navigation.navigate("Submit", { photo });
+			navigation.navigate("Submit", { photo, blockId });
 		}
 	};
 
@@ -59,7 +55,6 @@ export default function Prompt({ route, navigation }) {
 		let result = await PhotoPicker.launchCameraAsync({
 			mediaTypes: PhotoPicker.MediaTypeOptions.All,
 			allowsEditing: true,
-			// aspect: [4, 3],
 			quality: 1,
 			base64: true,
 		});
@@ -67,9 +62,8 @@ export default function Prompt({ route, navigation }) {
 		if (!result.cancelled) {
 			setImage((result as ImageInfo).uri);
 			const photo = result as ImageInfo;
-			// console.log(photo);
 			const base64 = `data:image/jpg;base64,${photo.base64}`;
-			navigation.navigate("Submit", { photo });
+			navigation.navigate("Submit", { photo, blockId });
 		}
 	};
 
@@ -126,7 +120,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	background: {
-		// paddingTop: 75,
 		width: Dimensions.get("screen").width,
 		height: "100%",
 		justifyContent: "center",

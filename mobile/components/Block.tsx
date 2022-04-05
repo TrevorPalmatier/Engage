@@ -13,7 +13,7 @@ export default function Block({ id, complete, title, image, navigation }) {
 					<Pressable
 						style={styles.center}
 						onPress={() => {
-							navigation.navigate("PromptTabs", { title, blockId: id });
+							navigation.navigate("Prompt", { title, blockId: id });
 						}}>
 						{isFetching ? (
 							<></>
@@ -35,7 +35,7 @@ export default function Block({ id, complete, title, image, navigation }) {
 					<Pressable
 						style={styles.center}
 						onPress={() => {
-							navigation.navigate("PromptTabs", { title, blockId: id });
+							navigation.navigate("Prompt", { title, blockId: id });
 						}}>
 						{isFetching ? (
 							<></>

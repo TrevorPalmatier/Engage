@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useAppDispatch, useAppSelector } from "./hooks/store";
 import { selectCurrentUser } from "./features/auth/authSlice";
 
@@ -12,7 +11,6 @@ import Home from "./screens/Home";
 import Landing from "./screens/Landing";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
-import CameraScreen from "./screens/CameraScreen";
 import Caption from "./screens/Caption";
 import Prompt from "./screens/Prompt";
 import Studies from "./screens/Studies";
@@ -31,9 +29,7 @@ export default function App() {
 }
 
 /** Things Still to do:
- * merge Lydia's style changes
- * Remove Capture, CameraScreen and the sub-navigation used within that. Only prompt and caption are needed now and that can set in the app wide navigator.
- * Think about user submitted video. How do we handle or pevent it.
+ * merge Lydia's style changes.
  */
 
 function Main() {
@@ -51,7 +47,8 @@ function Main() {
 							options={{ presentation: "modal", title: "Join Study" }}
 						/>
 						<Stack.Screen name='Home' component={Home} />
-						<Stack.Screen name='PromptTabs' component={PromptTabScreens} />
+						<Stack.Screen name='Prompt' component={Prompt} />
+						<Stack.Screen name='Submit' component={Caption} />
 					</>
 				) : (
 					<>
@@ -62,23 +59,5 @@ function Main() {
 				)}
 			</Stack.Navigator>
 		</NavigationContainer>
-	);
-}
-
-function PromptTabScreens({ route, navigation }) {
-	React.useLayoutEffect(() => {
-		navigation.setOptions({
-			title: route.params.title,
-		});
-	}, [navigation]);
-	return (
-		<PromptStack.Navigator
-			screenOptions={{
-				headerShown: false,
-			}}>
-			<PromptStack.Screen name='Select' component={Prompt} initialParams={{ blockId: route.params.blockId }} />
-			<PromptStack.Screen name='Camera' component={CameraScreen} />
-			<PromptStack.Screen name='Submit' component={Caption} initialParams={{ blockId: route.params.blockId }} />
-		</PromptStack.Navigator>
 	);
 }

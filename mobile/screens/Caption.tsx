@@ -5,7 +5,6 @@ import * as Progress from "react-native-progress";
 import { EntryRequest, useSumbitEntryMutation } from "../app/services/engage";
 import { selectCurrentUser } from "../features/auth/authSlice";
 import { useAppSelector } from "../hooks/store";
-// import { uploadImage } from "../app/services/images";
 
 export default function Caption({ route, navigation }) {
 	const [description, setDescription] = useState("");
@@ -39,7 +38,7 @@ export default function Caption({ route, navigation }) {
 					.then((res) => {
 						setUploading(false);
 						Alert.alert("Success", "Your entry was submited.");
-						navigation.navigate("Select");
+						navigation.pop();
 					})
 					.catch((err) => {
 						setUploading(false);
@@ -98,7 +97,7 @@ export default function Caption({ route, navigation }) {
 								styles.button,
 							]}
 							onPress={() => {
-								navigation.navigate("Select");
+								navigation.pop();
 							}}>
 							<Text style={[styles.text, { color: "white" }]}>Cancel</Text>
 						</Pressable>
