@@ -6,11 +6,11 @@ import { useImageURIQuery } from "../../app/services/engage";
 const img = require("../../assets/landscape.jpg");
 const imgURI = Image.resolveAssetSource(img).uri;
 
-export default function SlideMedia({ type, pid }) {
+export default function SlideMedia({ type, pid, width }) {
 	const { data, isFetching } = useImageURIQuery(pid);
 	const [uri, setUri] = useState(undefined);
-	const playerHeight = Dimensions.get("screen").width * 0.53;
-	const maxWidth = Dimensions.get("window").width * 0.9;
+	const playerHeight = (Dimensions.get("window").width * 0.53) / width;
+	const maxWidth = (Dimensions.get("window").width * 0.9) / width;
 	const baseHeight = (maxWidth / 4) * 3;
 	const [imgSize, setSize] = useState({ width: maxWidth, height: baseHeight });
 	useEffect(() => {

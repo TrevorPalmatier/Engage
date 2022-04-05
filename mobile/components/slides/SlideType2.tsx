@@ -6,6 +6,15 @@ const img = require("../../assets/landscape.jpg");
 const imgURI = Image.resolveAssetSource(img).uri;
 
 export default function SlideType1({ media, title, text }) {
+	const firstThrid = (text as string).slice(0, (text as string).indexOf(" ", (text as string).length / 3) + 1);
+	const secondThrid = (text as string).slice(
+		(text as string).indexOf(" ", (text as string).length / 3) + 1,
+		(text as string).indexOf(" ", ((text as string).length * 2) / 3) + 1
+	);
+	const lastThrid = (text as string).slice(
+		(text as string).indexOf(" ", ((text as string).length * 2) / 3) + 1,
+		(text as string).length
+	);
 	return (
 		<ScrollView
 			style={{ flex: 1 }}
@@ -20,10 +29,16 @@ export default function SlideType1({ media, title, text }) {
 				<Text style={[styles.titleText]}>{title}</Text>
 			</View>
 			<View style={[{ width: "100%", alignItems: "center" }]}>
+				<View style={[styles.textContainer]}>
+					<Text style={[styles.text2]}>{firstThrid}</Text>
+				</View>
 				{media[0] !== undefined ? <SlideMedia type={media[0].type} pid={media[0].imageID} width={1} /> : <></>}
+				<View style={[styles.textContainer]}>
+					<Text style={[styles.text2]}>{secondThrid}</Text>
+				</View>
 				{media[1] !== undefined ? <SlideMedia type={media[1].type} pid={media[1].imageID} width={1} /> : <></>}
 				<View style={[styles.textContainer]}>
-					<Text style={[styles.text2]}>{text}</Text>
+					<Text style={[styles.text2]}>{lastThrid}</Text>
 				</View>
 			</View>
 		</ScrollView>

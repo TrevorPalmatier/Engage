@@ -31,7 +31,6 @@ export default function App() {
 }
 
 /** Things Still to do:
- * Finish the different types of slides
  * merge Lydia's style changes
  * Remove Capture, CameraScreen and the sub-navigation used within that. Only prompt and caption are needed now and that can set in the app wide navigator.
  * Think about user submitted video. How do we handle or pevent it.

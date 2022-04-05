@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useSlideMediaQuery } from "../../app/services/engage";
 import { useHeaderHeight } from "@react-navigation/elements";
 import SlideType1 from "./SlideType1";
-import SlideVideo from "./SlideMedia";
+import SlideType2 from "./SlideType2";
+import SlideType3 from "./SlideType3";
 
 export default function Slide({ slideId, slideType, title, text }) {
 	const { data = [], isFetching } = useSlideMediaQuery(slideId);
@@ -14,7 +15,7 @@ export default function Slide({ slideId, slideType, title, text }) {
 	}, [data]);
 
 	if (isFetching || media === undefined) {
-		return <></>;
+		return null;
 	}
 
 	if (slideType === 1) {
@@ -26,19 +27,23 @@ export default function Slide({ slideId, slideType, title, text }) {
 			</View>
 		);
 	} else if (slideType === 2) {
-		<View style={[styles.main]}>
-			{/* <Button title='check' onPress={() => console.log(pid)} /> */}
-			<SlideType1 title={title} text={text} media={media} />
-			{/* <SlideVideo title={title} text={text} embed={pid} /> */}
-		</View>;
+		return (
+			<View style={[styles.main]}>
+				{/* <Button title='check' onPress={() => console.log(pid)} /> */}
+				<SlideType2 title={title} text={text} media={media} />
+				{/* <SlideVideo title={title} text={text} embed={pid} /> */}
+			</View>
+		);
 	} else if (slideType === 3) {
-		<View style={[styles.main]}>
-			{/* <Button title='check' onPress={() => console.log(pid)} /> */}
-			<SlideType1 title={title} text={text} media={media} />
-			{/* <SlideVideo title={title} text={text} embed={pid} /> */}
-		</View>;
+		return (
+			<View style={[styles.main]}>
+				{/* <Button title='check' onPress={() => console.log(pid)} /> */}
+				<SlideType3 title={title} text={text} media={media} />
+				{/* <SlideVideo title={title} text={text} embed={pid} /> */}
+			</View>
+		);
 	} else {
-		return <></>;
+		return null;
 	}
 }
 
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
 	},
 	textContainer: {
 		marginTop: 20,
-		marginBottom: 80,
+		// marginBottom: 80,
 		padding: 10,
 		width: "95%",
 		justifyContent: "center",
